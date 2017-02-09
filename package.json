@@ -1,0 +1,31 @@
+{
+  "name": "iltis-api",
+  "version": "0.0.1",
+  "description": "REST Server Backend for ILTIS",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fmalcher/node-iltis.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fmalcher/node-iltis/issues"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node server.js",
+    "startForever": "tsc && forever --minUptime 1000 --spinSleepTime 1000 server.js"
+  },
+  "author": {
+    "name": "HfTL Club",
+    "email": "club@hftl.de"
+  },
+  "dependencies": {
+    "restify": "4.3.0",
+    "forever": "~0.15.3",
+    "lodash": "~4.17.2",
+    "typescript": "2.1.4",
+    "@types/node": "6.0.53",
+    "@types/restify": "2.0.38",
+    "@types/lodash": "4.14.44"
+  },
+  "keywords": ["rest", "crud", "restify", "backend"]
+}
