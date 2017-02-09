@@ -1,6 +1,6 @@
 # ILTIS Backend
 
-REST Server Backend for ILTIS (Internes Lagertransaktions- und Informationssystem. 
+REST Server Backend for ILTIS (Internes Lagertransaktions- und Informationssystem). 
 
 ## Development
 
