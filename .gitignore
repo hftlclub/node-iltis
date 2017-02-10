@@ -5,6 +5,8 @@ server.d.ts
 server.js.map
 server.js
 
+config.js
+
 src/**/*.d.ts
 src/**/*.js.map
 src/**/*.js

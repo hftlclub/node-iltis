@@ -1,8 +1,8 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
 
-import { Product } from './shared/product';
-import { ProductFactory } from './shared/product-factory';
-import { ProductStore } from './product-store';
+import { Product } from '../models/product';
+import { ProductFactory } from '../models/product-factory';
+import { ProductStore } from '../services/product-service';
 
 export class ProductStoreController {
 

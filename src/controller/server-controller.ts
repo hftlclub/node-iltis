@@ -1,4 +1,4 @@
-let pjson = require('../package.json');
+let pjson = require('../../package.json');
 let fs = require('fs');
 
 export class ServerController {

@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 
-import { Product } from './shared/product';
-import { ProductFactory } from './shared/product-factory';
-import { SomeProducts } from './some-products';
+import { Product } from '../models/product';
+import { ProductFactory } from '../models/product-factory';
+import { SomeProducts } from '../some-products';
 
 export class ProductStore {
 

@@ -3,7 +3,7 @@ import { Product } from './product';
 export class ProductFactory {
 
   static empty(): Product {
-    return new Product(0, 0, 0, '', '', 0, '', true, new Date());
+    return new Product(0, 0, 0, '', '', 0, '', true, false, new Date());
   }
 
   static fromJson(json: any): Product {

@@ -1,7 +1,7 @@
 import { createServer, bodyParser, CORS, queryParser, serveStatic } from 'restify';
-import { ProductStoreController } from './src/product-store-controller';
-import { ProductStore } from './src/product-store';
-import { ServerController } from './src/server-controller';
+import { ProductStoreController } from './src/controller/product-controller';
+import { ProductStore } from './src/services/product-service';
+import { ServerController } from './src/controller/server-controller';
 
 let port = 3000;
 let productStoreController = new ProductStoreController(new ProductStore());
@@ -14,6 +14,7 @@ var server = createServer({
     }
   }
 });
+
 server.use(bodyParser());
 server.use(CORS({}));
 server.use(queryParser());
@@ -35,6 +36,7 @@ server.get('/product/:productId', productStoreController.getById.bind(productSto
 server.put('/product/:productId', productStoreController.update.bind(productStoreController));
 server.del('/product/:productId', productStoreController.delete.bind(productStoreController));
 server.get('/info', serverController.info.bind(serverController));
+
 // start server
 server.listen(port, function () {
   console.log('ILTIS API server on %s', server.url);

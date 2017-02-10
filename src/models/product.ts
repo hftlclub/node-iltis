@@ -7,6 +7,7 @@ export class Product {
     public priceIntern: number,
     public imgFilename: string,
     public active: boolean,
+    public deleted: boolean,
     public timestamp: Date) {
   }
 }
