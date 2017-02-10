@@ -3,7 +3,7 @@ import { ProductStoreController } from './src/controller/product-controller';
 import { ProductStore } from './src/services/product-service';
 import { ServerController } from './src/controller/server-controller';
 
-let port = 3000;
+var config = require('./config');
 let productStoreController = new ProductStoreController(new ProductStore());
 let serverController = new ServerController();
 
@@ -38,6 +38,6 @@ server.del('/product/:productId', productStoreController.delete.bind(productStor
 server.get('/info', serverController.info.bind(serverController));
 
 // start server
-server.listen(port, function () {
+server.listen(config.port, function () {
   console.log('ILTIS API server on %s', server.url);
 });
