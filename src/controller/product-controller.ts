@@ -2,11 +2,11 @@ import { NotFoundError, BadRequestError, ConflictError } from 'restify';
 
 import { Product } from '../models/product';
 import { ProductFactory } from '../models/product-factory';
-import { ProductStore } from '../services/product-service';
+import { ProductService } from '../services/product-service';
 
-export class ProductStoreController {
+export class ProductController {
 
-  constructor(private store: ProductStore) { }
+  constructor(private store: ProductService) { }
 
   getAll(req, res, next) {
     res.send(this.store.getAll(), { 'Content-Type': 'application/json; charset=utf-8' });
@@ -23,15 +23,6 @@ export class ProductStoreController {
     }
 
     res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
-    next();
-  };
-
-  checkId(req, res, next) {
-
-    let id = parseInt(req.params.productId);
-    let productExist = this.store.idExists(id);
-
-    res.send(productExist, { 'Content-Type': 'application/json; charset=utf-8' });
     next();
   };
 

@@ -4,7 +4,7 @@ import { Product } from '../models/product';
 import { ProductFactory } from '../models/product-factory';
 import { SomeProducts } from '../some-products';
 
-export class ProductStore {
+export class ProductService {
 
   private products: Product[];
 
@@ -21,10 +21,6 @@ export class ProductStore {
   getById(id: number) {
     return this.products.find(product => product.id === id)
   };
-
-  idExists(id: number) {
-    return !!this.getById(id);
-  }
 
   create(product: Product) {
     this.products.push(product);

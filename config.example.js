@@ -7,6 +7,9 @@ exports.abspath = require('path').dirname(process.mainModule.filename);
 //session secret (random string)
 exports.tokensecret = require('crypto').randomBytes(20).toString('hex');
 
+//path to image-files (product icons)
+exports.imgpath = "";
+
 //LDAP settings
 exports.ldap = {
     "server": "10.12.114.138",
@@ -26,22 +29,6 @@ exports.dbcred = {
     "password": "",
     "database": ""
 }
-
-//SMTP settings
-exports.smtp = {
-    "host": "securemail.hft-leipzig.de",
-    "port": 465,
-    "secure": true,
-    "auth": {
-        "user": "",
-        "pass": ""
-    }
-};
-
-exports.mailsettings = {
-    "from": "HfTL Club <club@hft-leipzig.de>",
-    "tplpath": exports.abspath + "/templates/email/"
-};
 
 //recipient for feedback emails
 exports.feedbackmail = "mail@ferdinand-malcher.de, kontakt@robert-weisse.de.de";
