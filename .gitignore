@@ -11,5 +11,8 @@ src/**/*.d.ts
 src/**/*.js.map
 src/**/*.js
 
+!src/modules/log.js
+!src/modules/mysql.js
+
 .DS_Store
 debug.log

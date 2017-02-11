@@ -38,6 +38,20 @@ export class ProductFactory {
       product.imgFilename = json.imgFilename.trim();
     }
 
+    if (this.validNumber(json.active)) {
+      if(json.active == 0) product.active = false;
+      else product.active = true;
+    } else if (this.validBoolean(json.active)) {
+      product.active = json.active;
+    }
+
+    if (this.validNumber(json.deleted)) {
+      if(json.deleted == 0) product.deleted = false;
+      else product.deleted = true;
+    } else if (this.validBoolean(json.deleted)) {
+      product.deleted = json.deleted;
+    }
+
     if (this.validString(json.timestamp) &&
         this.validDate(json.published)) {
       product.timestamp = new Date(json.timestamp);
@@ -48,6 +62,10 @@ export class ProductFactory {
 
   private static validNumber(no: string) {
     return no && typeof no == 'number';
+  }
+
+  private static validBoolean(bo: string) {
+    return bo && typeof bo == 'boolean';
   }
 
   private static validString(str: string) {

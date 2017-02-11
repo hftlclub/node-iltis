@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var config = require('../../config');
-var log = require('.log');
+var log = require('../modules/log');
 
 function handleDBError() {
     exports.conn = mysql.createConnection(config.dbcred);

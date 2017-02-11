@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
-
 import { Product } from '../models/product';
 import { ProductFactory } from '../models/product-factory';
 import { SomeProducts } from '../some-products';
+var mysql = require('../modules/mysql');
+
 
 export class ProductService {
 
@@ -12,15 +13,27 @@ export class ProductService {
     this.products = SomeProducts.get();
   }
 
-  getAll(): Product[] {
-    return _(this.products)
-      .sortBy(b => b.id)
-      .value();
-  };
 
+  getAll(callback:(err:any, rows?:any)=>void) {
+    var query = 'SELECT * FROM products;';
+    mysql.conn.query(query, (err, rows, fields) => {
+      if (err) {
+        return callback(err);
+      }
+      if (!rows.length) {
+        return callback(null, false);
+      }
+      return callback(null, rows);
+    });
+  };
+  
   getById(id: number) {
     return this.products.find(product => product.id === id)
   };
+
+  idExists(id: number) {
+    return !!this.getById(id);
+  }
 
   create(product: Product) {
     this.products.push(product);
