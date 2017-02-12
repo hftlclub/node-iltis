@@ -38,6 +38,6 @@ server.put('/product/:productId', productController.update.bind(productControlle
 server.del('/product/:productId', productController.delete.bind(productController));
 
 // start server
-server.listen(config.port, function () {
+server.listen(config.port, () => {
   console.log('ILTIS API server on %s', server.url);
 });

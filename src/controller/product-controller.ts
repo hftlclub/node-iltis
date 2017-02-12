@@ -15,9 +15,8 @@ export class ProductController {
         // Todo: Implementet correct feedback (error 204)
         res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
       }
-      else {       
-        for (var productObj of rows)
-          products.push(ProductFactory.fromJson(productObj));
+      else { 
+        products = rows.map(row => ProductFactory.fromJson(row));
         res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
       }
     });

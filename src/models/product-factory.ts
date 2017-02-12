@@ -39,22 +39,19 @@ export class ProductFactory {
     }
 
     if (this.validNumber(json.active)) {
-      if(json.active == 0) product.active = false;
-      else product.active = true;
-    } else if (this.validBoolean(json.active)) {
-      product.active = json.active;
+      product.active = !!json.active;
     }
 
     if (this.validNumber(json.deleted)) {
-      if(json.deleted == 0) product.deleted = false;
-      else product.deleted = true;
-    } else if (this.validBoolean(json.deleted)) {
-      product.deleted = json.deleted;
+      product.deleted = !!json.deleted;
     }
 
-    if (this.validString(json.timestamp) &&
-        this.validDate(json.published)) {
-      product.timestamp = new Date(json.timestamp);
+    if (json.timestamp) {
+      if(this.validDate(json.timestamp)) {
+        product.timestamp = json.timestamp;
+      } else {
+        product.timestamp = new Date(json.timestamp);
+      }
     }
 
     return product;
@@ -64,16 +61,12 @@ export class ProductFactory {
     return no && typeof no == 'number';
   }
 
-  private static validBoolean(bo: string) {
-    return bo && typeof bo == 'boolean';
-  }
-
   private static validString(str: string) {
     return str && typeof str == 'string';
   }
 
   private static validDate(date: string) {
-    return (new Date(date)).toString() != 'Invalid Date';
+    return (new Date(date)).toString() !== 'Invalid Date';
   }
   
 }
