@@ -1,9 +1,10 @@
+//import { DefaultSqlService } from './default-sql-service';
 var mysql = require('../modules/mysql');
 
-export class ProductService {
+export class CategoryService {
 
     getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM products;';
+        var query = 'SELECT * FROM product_categories;';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -14,9 +15,9 @@ export class ProductService {
             return callback(null, rows);
         });
     };
-  
+
     getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM products WHERE productId = ?;';
+        var query = 'SELECT * FROM product_categories WHERE categoryId = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -27,27 +28,4 @@ export class ProductService {
             return callback(null, rows[0]);
         });
     };
-
-    /*
-    idExists(id: number, callback:(err:any, rows?:any)=>void) {
-        return !!this.getById(id, callback);
-    }
-    
-    create(product: Product) {
-        this.products.push(product);
-    };
-
-    update(product: Product) {
-        this.delete(product.id);
-        this.create(product);
-    };
-
-    delete(id: number) {
-        return this.products = this.products.filter(product => product.id !== id);
-    };
-
-    reset() {
-        this.products = SomeProducts.get();
-    };
-    */
 }

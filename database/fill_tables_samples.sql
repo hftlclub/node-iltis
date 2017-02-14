@@ -1,0 +1,64 @@
+-- Data of these insert-commands are just samples.
+-- Therefore prices and products are not equal with the operational systems data.
+
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (0.2,'Flasche',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (0.33,'Flasche',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (0.5,'Flasche',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (0.7,'Flasche',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (1.0,'Flasche',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (1.5,'Flasche',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (1,'Dose',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (1,'Packung',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (1,'Stück',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (5,'Beutel',false);
+INSERT INTO `size_types`(`amount`, `description`, `deleted`) VALUES (2,'Beutel',false);
+
+INSERT INTO `product_units`(`short`, `full`) VALUES (null,null);
+INSERT INTO `product_units`(`short`, `full`) VALUES ('l','Liter');
+INSERT INTO `product_units`(`short`, `full`) VALUES ('kg','Kilogramm');
+
+INSERT INTO `event_types`(`description`, `intern`, `deleted`) VALUES ('Afterwork',false,false);
+INSERT INTO `event_types`(`description`, `intern`, `deleted`) VALUES ('Privatparty',false,false);
+INSERT INTO `event_types`(`description`, `intern`, `deleted`) VALUES ('Clubsitzung',true,false);
+INSERT INTO `event_types`(`description`, `intern`, `deleted`) VALUES ('Spontanentnahme',true,false);
+
+INSERT INTO `product_categories`(`name`, `description`, `deleted`) VALUES ('Bier','Bier, Mischbier, und alkoholfreies Bier',false);
+INSERT INTO `product_categories`(`name`, `description`, `deleted`) VALUES ('AFG','Alkoholfreie Getränke',false);
+INSERT INTO `product_categories`(`name`, `description`, `deleted`) VALUES ('Wein und Sekt','Wein, Sekt, Glühwein, Bowle',false);
+INSERT INTO `product_categories`(`name`, `description`, `deleted`) VALUES ('Snacks','Salzstangen, Erdnüsse, ...',false);
+INSERT INTO `product_categories`(`name`, `description`, `deleted`) VALUES ('Obst und Gemüse','Limetten, Gurken, ...',false);
+INSERT INTO `product_categories`(`name`, `description`, `deleted`) VALUES ('Sonstiges','Sonstige Lebensmittel',false);
+
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (1,2,'Ur-Krostitzer','Sächsiches Bier',0.80,'/pictures/uri.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (1,2,'Augustiner','Bayrisches Bier',0.90,'/pictures/augustiner.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (2,2,'Fanta','Softdrink',2.00,'/pictures/fanta.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (2,2,'Cola','Softdrink',2.00,'/pictures/cola.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (3,2,'Sekt',null,3.00,'/pictures/sekt.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (3,2,'Glühwein','Wintergetränk',2.00,'/pictures/gluehwein.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (4,1,'Salzstangen',null,1.2,'/pictures/salzstangen.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (4,1,'Erdnüsse',null,1.2,'/pictures/erdnuesse.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (5,1,'Limetten','Für Cocktails',0.7,'/pictures/limetten.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (5,1,'Gurken','Für Cocktails',1.50,'/pictures/gurken.jpg',true,false,now());
+INSERT INTO `products`(`refCategory`, `refUnit`, `name`, `description`, `priceIntern`, `imgFilename`, `active`, `deleted`, `timestamp`) VALUES (6,3,'Eis','Für Cocktails',4.00,'/pictures/eis.jpg',true,false,now());
+
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (1,3);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (2,3);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (3,5);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (4,6);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (5,1);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (5,4);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (6,5);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (7,9);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (8,10);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (9,9);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (10,9);
+INSERT INTO `product_sizes`(`refProduct`, `refSize`) VALUES (11,10);
+
+INSERT INTO `crate_types`(`refSize`, `slots`) VALUES (2,24);
+INSERT INTO `crate_types`(`refSize`, `slots`) VALUES (3,20);
+INSERT INTO `crate_types`(`refSize`, `slots`) VALUES (5,12);
+
+INSERT INTO `product_crates`(`refProduct`, `refCrateType`) VALUES (1,2);
+INSERT INTO `product_crates`(`refProduct`, `refCrateType`) VALUES (2,2);
+INSERT INTO `product_crates`(`refProduct`, `refCrateType`) VALUES (3,3);
+INSERT INTO `product_crates`(`refProduct`, `refCrateType`) VALUES (4,3);

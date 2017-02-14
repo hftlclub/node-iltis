@@ -1,9 +1,9 @@
 var mysql = require('../modules/mysql');
 
-export class ProductService {
+export class SizeTypeService {
 
     getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM products;';
+        var query = 'SELECT * FROM size_types;';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -14,9 +14,9 @@ export class ProductService {
             return callback(null, rows);
         });
     };
-  
+
     getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM products WHERE productId = ?;';
+        var query = 'SELECT * FROM size_types WHERE sizeTypeId = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -28,26 +28,16 @@ export class ProductService {
         });
     };
 
-    /*
-    idExists(id: number, callback:(err:any, rows?:any)=>void) {
-        return !!this.getById(id, callback);
-    }
-    
-    create(product: Product) {
-        this.products.push(product);
+    joinCrateTypes(callback:(err:any, rows?:any)=>void) {
+        var query = 'SELECT sizeTypeId, amount, description, deleted FROM size_types INNER JOIN crate_types ON(sizeTypeId = refSize);';
+        mysql.conn.query(query, (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows.length) {
+                return callback(null, false);
+            }
+            return callback(null, rows);
+        });
     };
-
-    update(product: Product) {
-        this.delete(product.id);
-        this.create(product);
-    };
-
-    delete(id: number) {
-        return this.products = this.products.filter(product => product.id !== id);
-    };
-
-    reset() {
-        this.products = SomeProducts.get();
-    };
-    */
 }

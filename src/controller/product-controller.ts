@@ -1,100 +1,107 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Product } from '../models/product';
-import { ProductFactory } from '../models/product-factory';
+import { Product } from '../models/product/product';
+import { ProductFactory } from '../models/product/product-factory';
 import { ProductService } from '../services/product-service';
+import { Validator } from '../modules/validator';
 
 export class ProductController {
 
-  constructor(private productService: ProductService) { }
+    constructor(private productService : ProductService) { }
 
-  getAll(req, res, next) {
-    let products : Product[] = [];
-    this.productService.getAll((err, rows)=>{
-      if (err) return next(err);
-      if (!rows.length) {
-        // Todo: Implementet correct feedback (error 204)
-        res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
-      }
-      else { 
-        products = rows.map(row => ProductFactory.fromJson(row));
-        res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
-      }
-    });
-  };
+    getAll(req, res, next) {
+        let products : Product[] = [];
+        this.productService.getAll((err, rows)=>{
+            if (err) return next(err);
+            if (!rows.length) {
+                // Todo: Implementet correct feedback (error 204)
+                res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+            else { 
+                products = rows.map(row => ProductFactory.fromJson(row));
+                res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+        });
+    };
 
-  getById(req, res, next) {
+    getById(req, res, next) {
 
-    let id = parseInt(req.params.productId);
-    let product = this.productService.getById(id);
+        let id = parseInt(req.params.productId);
+        let product : Product = ProductFactory.empty();
+        this.productService.getById(id, (err, row)=>{
+            if (err) return next(err);
+            if (!row) {
+                // Todo: Implementet correct feedback (error 204)
+                res.send(new NotFoundError('Product does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+            else { 
+                product = ProductFactory.fromJson(row);
+                res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+        });
+    };
 
-    if (!product) {
-      return next(new NotFoundError('Product does not exist'));
-    }
+    /*
+    create(req, res, next) {
 
-    res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
-    next();
-  };
+        let productJson = req.body;
+        let id = productJson.id;
 
-  create(req, res, next) {
+        if (!id) {
+        return next(new BadRequestError('Invalid data: Id number is mandatory'));
+        }
 
-    let productJson = req.body;
-    let id = productJson.id;
+        if (this.productService.idExists(id)) {
+        return next(new ConflictError('Product does already exist'));
+        }
 
-    if (!id) {
-      return next(new BadRequestError('Invalid data: Id number is mandatory'));
-    }
+        let product = ProductFactory.fromJson(productJson);
+        this.productService.create(product)
 
-    if (this.productService.idExists(id)) {
-      return next(new ConflictError('Product does already exist'));
-    }
+        res.send(201); // 201 Created
+        next();
+    };
 
-    let product = ProductFactory.fromJson(productJson);
-    this.productService.create(product)
+    update(req, res, next) {
 
-    res.send(201); // 201 Created
-    next();
-  };
+        let productJson = req.body;
+        let id = productJson.id;
 
-  update(req, res, next) {
+        if (!id) {
+        return next(new BadRequestError('Invalid data: Id number is mandatory'));
+        }
 
-    let productJson = req.body;
-    let id = productJson.id;
+        if (parseInt(req.params.productId) != id) {
+        return next(new BadRequestError('Invalid data: Id from query and body must match'));
+        }
 
-    if (!id) {
-      return next(new BadRequestError('Invalid data: Id number is mandatory'));
-    }
+        if (!this.productService.idExists(id)) {
+        return next(new NotFoundError('Product does not exist'));
+        }
 
-    if (parseInt(req.params.productId) != id) {
-      return next(new BadRequestError('Invalid data: Id from query and body must match'));
-    }
+        let product = ProductFactory.fromJson(productJson);
+        this.productService.update(product)
 
-    if (!this.productService.idExists(id)) {
-      return next(new NotFoundError('Product does not exist'));
-    }
+        res.send(200);
+        next();
+    };
 
-    let product = ProductFactory.fromJson(productJson);
-    this.productService.update(product)
+    delete(req, res, next) {
 
-    res.send(200);
-    next();
-  };
+        let id = parseInt(req.params.productId);
+        this.productService.delete(id);
 
-  delete(req, res, next) {
+        res.send(200);
+        next();
+    };
 
-    let id = parseInt(req.params.productId);
-    this.productService.delete(id);
+    reset(req, res, next) {
 
-    res.send(200);
-    next();
-  };
+        this.productService.reset();
 
-  reset(req, res, next) {
-
-    this.productService.reset();
-
-    if (res && next) {
-      res.send(200);
-      next();
-    }
-  };
+        if (res && next) {
+        res.send(200);
+        next();
+        }
+    };
+    */
 }
