@@ -23,22 +23,18 @@ export class CrateTypeController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else {
-                crateTypes = rows1.map(row => CrateTypeFactory.fromObj(row));
-                this.sizeTypeService.joinCrateTypes((err, rows2) => {
-                    if (err) return next(err);
-                    else { 
-                        var sizeTypes : SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
+            crateTypes = rows1.map(row => CrateTypeFactory.fromObj(row));
+            this.sizeTypeService.joinCrateTypes((err, rows2) => {
+                if (err) return next(err);
+                var sizeTypes : SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
 
-                        crateTypes = crateTypes.map(c => {
-                            c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
-                            return c;
-                        });
-
-                        res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
-                    }
+                crateTypes = crateTypes.map(c => {
+                    c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
+                    return c;
                 });
-            }
+
+                res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
+            });
         });
     };
 
@@ -51,16 +47,12 @@ export class CrateTypeController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('CrateType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                crateType = CrateTypeFactory.fromObj(row1);
-                this.sizeTypeService.getById(row1.refSize, (err, row2)=>{
-                    if (err) return next(err);
-                    else {
-                        crateType.sizeType = SizeTypeFactory.fromObj(row2);
-                        res.send(crateType, { 'Content-Type': 'application/json; charset=utf-8' });
-                    }
-                });
-            }
+            crateType = CrateTypeFactory.fromObj(row1);
+            this.sizeTypeService.getById(row1.refSize, (err, row2)=>{
+                if (err) return next(err);
+                crateType.sizeType = SizeTypeFactory.fromObj(row2);
+                res.send(crateType, { 'Content-Type': 'application/json; charset=utf-8' });
+            });
         });
     };
 }

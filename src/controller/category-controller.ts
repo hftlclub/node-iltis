@@ -17,10 +17,8 @@ export class CategoryController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(categories, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                categories = rows.map(row => CategoryFactory.fromObj(row));
-                res.send(categories, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            categories = rows.map(row => CategoryFactory.fromObj(row));
+            res.send(categories, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -34,10 +32,8 @@ export class CategoryController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('Category does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                category = CategoryFactory.fromObj(row);
-                res.send(category, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            category = CategoryFactory.fromObj(row);
+            res.send(category, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 }

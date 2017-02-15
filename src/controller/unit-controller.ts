@@ -17,10 +17,8 @@ export class UnitController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(units, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                units = rows.map(row => UnitFactory.fromObj(row));
-                res.send(units, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            units = rows.map(row => UnitFactory.fromObj(row));
+            res.send(units, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -33,10 +31,8 @@ export class UnitController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('Unit does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                unit = UnitFactory.fromObj(row);
-                res.send(unit, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            unit = UnitFactory.fromObj(row);
+            res.send(unit, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 }

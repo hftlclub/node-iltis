@@ -1,6 +1,6 @@
 export class Validator {
 
-    static validNumber(no: string) {
+    static validNumber(no: number) {
         return no && typeof no == 'number';
     }
 

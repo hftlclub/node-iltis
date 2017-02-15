@@ -17,10 +17,8 @@ export class EventTypeController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(eventTypes, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                eventTypes = rows.map(row => EventTypeFactory.fromObj(row));
-                res.send(eventTypes, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            eventTypes = rows.map(row => EventTypeFactory.fromObj(row));
+            res.send(eventTypes, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -33,10 +31,8 @@ export class EventTypeController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('EventType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                eventType = EventTypeFactory.fromObj(row);
-                res.send(eventType, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            eventType = EventTypeFactory.fromObj(row);
+            res.send(eventType, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 }

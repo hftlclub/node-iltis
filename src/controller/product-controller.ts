@@ -42,59 +42,49 @@ export class ProductController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                products = rows.map(row => ProductFactory.fromObj(row));
-                this.categoryService.joinProducts((err, rows2) => {
-                    if (err) return next(err);
-                    else {
-                        var categories : Category[] = rows2.map(row => CategoryFactory.fromObj(row));
+            products = rows.map(row => ProductFactory.fromObj(row));
+            this.categoryService.joinProducts((err, rows2) => {
+                if (err) return next(err);
+                var categories : Category[] = rows2.map(row => CategoryFactory.fromObj(row));
 
-                        products = products.map(p => {
-                            p.category = categories.find(f => f.id === p.category.id);
-                            return p;
-                        });
-
-                        this.unitService.joinProducts((err, rows3) => {
-                            if (err) return next(err);
-                            else {
-                                var units : Unit[] = rows3.map(row => UnitFactory.fromObj(row));
-
-                                products = products.map(p => {
-                                    p.unit = units.find(f => f.id === p.unit.id);
-                                    return p;
-                                });
-
-                                this.crateTypeService.joinProductCrates((err, rows5) => {
-                                    if (err) return next(err);
-                                    else {
-                                        var crateTypesProducts : CrateTypeProduct[] = rows5.map(row => {
-                                            return {refProduct : row.refProduct, crateType : CrateTypeFactory.fromObj(row)};
-                                        });
-                                        
-                                        this.sizeTypeService.joinCrateTypes((err, rows5) => {
-                                            if (err) return next(err);
-                                            else { 
-                                                var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
-
-                                                crateTypesProducts = crateTypesProducts.map(c => {
-                                                    c.crateType.sizeType = sizeTypes.find(f => f.id === c.crateType.sizeType.id);
-                                                    return c;
-                                                });
-                                                
-                                                crateTypesProducts.forEach(crateTypeProduct => {
-                                                    products.find(f => f.id === crateTypeProduct.refProduct).crateTypes.push(crateTypeProduct.crateType);
-                                                });
-
-                                                res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
+                products = products.map(p => {
+                    p.category = categories.find(f => f.id === p.category.id);
+                    return p;
                 });
-            }
+
+                this.unitService.joinProducts((err, rows3) => {
+                    if (err) return next(err);
+                    var units : Unit[] = rows3.map(row => UnitFactory.fromObj(row));
+
+                    products = products.map(p => {
+                        p.unit = units.find(f => f.id === p.unit.id);
+                        return p;
+                    });
+
+                    this.crateTypeService.joinProductCrates((err, rows5) => {
+                        if (err) return next(err);
+                        var crateTypesProducts : CrateTypeProduct[] = rows5.map(row => {
+                            return {refProduct : row.refProduct, crateType : CrateTypeFactory.fromObj(row)};
+                        });
+                        
+                        this.sizeTypeService.joinCrateTypes((err, rows5) => {
+                            if (err) return next(err);
+                            var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
+
+                            crateTypesProducts = crateTypesProducts.map(c => {
+                                c.crateType.sizeType = sizeTypes.find(f => f.id === c.crateType.sizeType.id);
+                                return c;
+                            });
+                            
+                            crateTypesProducts.forEach(crateTypeProduct => {
+                                products.find(f => f.id === crateTypeProduct.refProduct).crateTypes.push(crateTypeProduct.crateType);
+                            });
+
+                            res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+                        });
+                    });
+                });
+            });
         });
     };
 
@@ -107,41 +97,31 @@ export class ProductController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('Product does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                product = ProductFactory.fromObj(row1);
-                this.categoryService.getById(row1.refCategory, (err, row2) => {
+            product = ProductFactory.fromObj(row1);
+            this.categoryService.getById(row1.refCategory, (err, row2) => {
+                if (err) return next(err);
+                product.category = CategoryFactory.fromObj(row2);
+                this.unitService.getById(row1.refUnit, (err, row3) => {
                     if (err) return next(err);
-                    else {
-                        product.category = CategoryFactory.fromObj(row2);
-                        this.unitService.getById(row1.refUnit, (err, row3) => {
+                    product.unit = UnitFactory.fromObj(row3);
+                    this.crateTypeService.joinProductCratesByProductId(product.id, (err, rows4) => {
+                        if (err) return next(err);
+                        var crateTypes : CrateType[] = rows4.map(row => CrateTypeFactory.fromObj(row));
+                        this.sizeTypeService.joinCrateTypes((err, rows5) => {
                             if (err) return next(err);
-                            else {
-                                product.unit = UnitFactory.fromObj(row3);
-                                this.crateTypeService.joinProductCratesByProductId(product.id, (err, rows4) => {
-                                    if (err) return next(err);
-                                    else {
-                                        var crateTypes : CrateType[] = rows4.map(row => CrateTypeFactory.fromObj(row));
-                                        this.sizeTypeService.joinCrateTypes((err, rows5) => {
-                                            if (err) return next(err);
-                                            else { 
-                                                var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
+                            var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
 
-                                                crateTypes = crateTypes.map(c => {
-                                                    c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
-                                                    return c;
-                                                });
-                                                
-                                                product.crateTypes = crateTypes;
-                                                res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
+                            crateTypes = crateTypes.map(c => {
+                                c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
+                                return c;
+                            });
+                            
+                            product.crateTypes = crateTypes;
+                            res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
                         });
-                    }
+                    });
                 });
-            }
+            });
         });
     };
 }

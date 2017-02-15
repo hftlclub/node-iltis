@@ -23,22 +23,18 @@ export class EventController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else {
-                events = rows1.map(row => EventFactory.fromObj(row));
-                this.eventTypeService.joinEvents((err, rows2) => {
-                    if (err) return next(err);
-                    else { 
-                        var eventTypes : EventType[] = rows2.map(row => EventTypeFactory.fromObj(row));
+            events = rows1.map(row => EventFactory.fromObj(row));
+            this.eventTypeService.joinEvents((err, rows2) => {
+                if (err) return next(err);
+                var eventTypes : EventType[] = rows2.map(row => EventTypeFactory.fromObj(row));
 
-                        events = events.map(e => {
-                            e.eventType = eventTypes.find(f => f.id === e.eventType.id);
-                            return e;
-                        });
-
-                        res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
-                    }
+                events = events.map(e => {
+                    e.eventType = eventTypes.find(f => f.id === e.eventType.id);
+                    return e;
                 });
-            }
+
+                res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
+            });
         });
     };
 
@@ -51,16 +47,12 @@ export class EventController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('Event does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                event = EventFactory.fromObj(row1);
-                this.eventTypeService.getById(row1.refEventType, (err, row2)=>{
-                    if (err) return next(err);
-                    else {
-                        event.eventType = EventTypeFactory.fromObj(row2);
-                        res.send(event, { 'Content-Type': 'application/json; charset=utf-8' });
-                    }
-                });
-            }
+            event = EventFactory.fromObj(row1);
+            this.eventTypeService.getById(row1.refEventType, (err, row2)=>{
+                if (err) return next(err);
+                event.eventType = EventTypeFactory.fromObj(row2);
+                res.send(event, { 'Content-Type': 'application/json; charset=utf-8' });
+            });
         });
     };
 }

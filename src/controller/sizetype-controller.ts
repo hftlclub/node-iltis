@@ -17,10 +17,8 @@ export class SizeTypeController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(sizeTypes, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                sizeTypes = rows.map(row => SizeTypeFactory.fromObj(row));
-                res.send(sizeTypes, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            sizeTypes = rows.map(row => SizeTypeFactory.fromObj(row));
+            res.send(sizeTypes, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -33,10 +31,8 @@ export class SizeTypeController {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('SizeType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            else { 
-                sizeType = SizeTypeFactory.fromObj(row);
-                res.send(sizeType, { 'Content-Type': 'application/json; charset=utf-8' });
-            }
+            sizeType = SizeTypeFactory.fromObj(row);
+            res.send(sizeType, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 }
