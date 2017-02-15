@@ -1,7 +1,7 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
 import { Validator } from '../modules/validator';
 import { CrateType } from '../models/crateType/cratetype';
-import { SizeType } from '../models/sizeType/sizetype';
+import { SizeType } from '../models/sizetype/sizetype';
 import { CrateTypeFactory } from '../models/cratetype/cratetype-factory';
 import { CrateTypeService } from '../services/cratetype-service';
 import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';

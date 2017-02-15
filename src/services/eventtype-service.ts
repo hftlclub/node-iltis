@@ -1,9 +1,9 @@
 var mysql = require('../modules/mysql');
 
-export class CrateTypeService {
+export class EventTypeService {
 
     getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM crate_types;';
+        var query = 'SELECT * FROM event_types;';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -16,7 +16,7 @@ export class CrateTypeService {
     };
 
     getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM crate_types WHERE crateTypeId = ?;';
+        var query = 'SELECT * FROM event_types WHERE eventTypeId = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -28,22 +28,9 @@ export class CrateTypeService {
         });
     };
 
-    joinProductCrates(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT pc.refProduct, ct.crateTypeId, ct.refSize, ct.slots FROM crate_types ct INNER JOIN product_crates pc ON (crateTypeId = refCrateType);';
+    joinEvents(callback:(err:any, rows?:any)=>void) {
+        var query = 'SELECT et.eventTypeId, et.description, et.intern, et.deleted FROM event_types et INNER JOIN events ON(eventTypeId = refEventType) GROUP BY eventTypeId;';
         mysql.conn.query(query, (err, rows, fields) => {
-            if (err) {
-                return callback(err);
-            }
-            if (!rows.length) {
-                return callback(null, false);
-            }
-            return callback(null, rows);
-        });
-    };
-
-    joinProductCratesByProductId(id : number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT ct.crateTypeId, ct.refSize, ct.slots FROM crate_types ct INNER JOIN product_crates pc ON (crateTypeId = refCrateType) WHERE pc.refProduct = ? GROUP BY crateTypeId;';
-        mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

@@ -91,7 +91,7 @@ CREATE TABLE size_types (
 );
 
 CREATE TABLE transactions (
-    transactionId int NOT NULL,
+    transactionId int NOT NULL AUTO_INCREMENT,
     refEvent int NOT NULL,
     refProduct int NOT NULL,
     refSize int NOT NULL,

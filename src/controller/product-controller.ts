@@ -16,6 +16,10 @@ import { CrateTypeService } from '../services/cratetype-service';
 import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
 
+interface CrateTypeProduct {
+    refProduct: number;
+    crateType: CrateType;
+}
 
 export class ProductController {
     private categoryService : CategoryService;
@@ -60,7 +64,32 @@ export class ProductController {
                                     return p;
                                 });
 
-                                res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+                                this.crateTypeService.joinProductCrates((err, rows5) => {
+                                    if (err) return next(err);
+                                    else {
+                                        var crateTypesProducts : CrateTypeProduct[] = rows5.map(row => {
+                                            return {refProduct : row.refProduct, crateType : CrateTypeFactory.fromObj(row)};
+                                        });
+                                        
+                                        this.sizeTypeService.joinCrateTypes((err, rows5) => {
+                                            if (err) return next(err);
+                                            else { 
+                                                var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
+
+                                                crateTypesProducts = crateTypesProducts.map(c => {
+                                                    c.crateType.sizeType = sizeTypes.find(f => f.id === c.crateType.sizeType.id);
+                                                    return c;
+                                                });
+                                                
+                                                crateTypesProducts.forEach(crateTypeProduct => {
+                                                    products.find(f => f.id === crateTypeProduct.refProduct).crateTypes.push(crateTypeProduct.crateType);
+                                                });
+
+                                                res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                     }
@@ -88,7 +117,7 @@ export class ProductController {
                             if (err) return next(err);
                             else {
                                 product.unit = UnitFactory.fromObj(row3);
-                                this.crateTypeService.joinProductCratesById(product.id, (err, rows4) => {
+                                this.crateTypeService.joinProductCratesByProductId(product.id, (err, rows4) => {
                                     if (err) return next(err);
                                     else {
                                         var crateTypes : CrateType[] = rows4.map(row => CrateTypeFactory.fromObj(row));
