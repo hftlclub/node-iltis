@@ -1,57 +1,64 @@
 import { Validator } from '../../modules/validator';
 import { Product } from './product';
+import { CategoryFactory } from '../category/category-factory';
+import { UnitFactory } from '../unit/unit-factory';
+import { CrateTypeFactory } from '../cratetype/cratetype-factory';
 
 export class ProductFactory {
 
     static empty(): Product {
-        return new Product(0, 0, 0, '', '', 0, '', true, false, new Date());
+        return new Product(0, CategoryFactory.empty(), UnitFactory.empty(), [], '', '', 0, '', true, false, new Date());
     }
 
-    static fromJson(json: any): Product {
+    static fromObj(obj: any): Product {
 
         let product = ProductFactory.empty();
 
-        if (Validator.validNumber(json.productId)) {
-            product.id = json.productId;
+        if (Validator.validNumber(obj.productId)) {
+            product.id = obj.productId;
         }
 
-        if (Validator.validNumber(json.refCategory)) {
-            product.refCategory = json.refCategory;
+        if(obj.category) product.category = CategoryFactory.fromObj(obj.category);
+        else if (Validator.validNumber(obj.refCategory)) {
+            product.category.id = obj.refCategory;
         }
 
-        if (Validator.validNumber(json.refUnit)) {
-            product.refUnit = json.refUnit;
+        if(obj.unit) product.unit = UnitFactory.fromObj(obj.unit);
+        else if (Validator.validNumber(obj.refUnit)) {
+            product.unit.id = obj.refUnit;
         }
 
-        if (Validator.validString(json.name)) {
-            product.name = json.name.trim();
+        if(obj.crateTypes) product.crateTypes = obj.crateTypes.map(crateType => CrateTypeFactory.fromObj(crateType));
+
+        if (Validator.validString(obj.name)) {
+            product.name = obj.name.trim();
         }
 
-        if (Validator.validString(json.description)) {
-            product.description = json.description.trim();
+        if (Validator.validString(obj.description)) {
+            product.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(json.priceIntern)) {
-            product.priceIntern = json.priceIntern;
+        if (Validator.validNumber(obj.priceIntern)) {
+            product.priceIntern = obj.priceIntern;
         }
 
-        if (Validator.validString(json.imgFilename)) {
-            product.imgFilename = json.imgFilename.trim();
+        if (Validator.validString(obj.imgFilename)) {
+            product.imgFilename = obj.imgFilename.trim();
         }
 
-        if (Validator.validNumber(json.active)) {
-            product.active = !!json.active;
+        if (Validator.validNumber(obj.active)) {
+            product.active = !!obj.active;
         }
 
-        if (Validator.validNumber(json.deleted)) {
-            product.deleted = !!json.deleted;
+        if (Validator.validNumber(obj.deleted)) {
+            product.deleted = !!obj.deleted;
         }
 
-        if (json.timestamp) {
-            if(Validator.validDate(json.timestamp)) {
-                product.timestamp = json.timestamp;
+        if (obj.timestamp) {
+            if(Validator.validDate(obj.timestamp)) {
+                product.timestamp = obj.timestamp;
             } else {
-                product.timestamp = new Date(json.timestamp);
+                product.timestamp = new Date(obj.timestamp);
             }
         }
 

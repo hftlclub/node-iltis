@@ -1,8 +1,9 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
+import { Validator } from '../modules/validator';
 import { Unit } from '../models/unit/unit';
 import { UnitFactory } from '../models/unit/unit-factory';
 import { UnitService } from '../services/unit-service';
-import { Validator } from '../modules/validator';
+
 
 export class UnitController {
 
@@ -17,7 +18,7 @@ export class UnitController {
                 res.send(units, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             else { 
-                units = rows.map(row => UnitFactory.fromJson(row));
+                units = rows.map(row => UnitFactory.fromObj(row));
                 res.send(units, { 'Content-Type': 'application/json; charset=utf-8' });
             }
         });
@@ -33,7 +34,7 @@ export class UnitController {
                 res.send(new NotFoundError('Unit does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
             else { 
-                unit = UnitFactory.fromJson(row);
+                unit = UnitFactory.fromObj(row);
                 res.send(unit, { 'Content-Type': 'application/json; charset=utf-8' });
             }
         });

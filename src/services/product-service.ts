@@ -27,27 +27,4 @@ export class ProductService {
             return callback(null, rows[0]);
         });
     };
-
-    /*
-    idExists(id: number, callback:(err:any, rows?:any)=>void) {
-        return !!this.getById(id, callback);
-    }
-    
-    create(product: Product) {
-        this.products.push(product);
-    };
-
-    update(product: Product) {
-        this.delete(product.id);
-        this.create(product);
-    };
-
-    delete(id: number) {
-        return this.products = this.products.filter(product => product.id !== id);
-    };
-
-    reset() {
-        this.products = SomeProducts.get();
-    };
-    */
 }

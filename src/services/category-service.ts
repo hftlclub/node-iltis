@@ -28,4 +28,17 @@ export class CategoryService {
             return callback(null, rows[0]);
         });
     };
+
+    joinProducts(callback:(err:any, rows?:any)=>void) {
+        var query = 'SELECT pc.categoryId, pc.name, pc.description, pc.deleted FROM product_categories pc INNER JOIN products ON(categoryId = refCategory) GROUP BY categoryId;';
+        mysql.conn.query(query, (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows.length) {
+                return callback(null, false);
+            }
+            return callback(null, rows);
+        });
+    };
 }

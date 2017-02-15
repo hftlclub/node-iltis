@@ -7,24 +7,24 @@ export class EventTypeFactory {
         return new EventType(0, '', false, false);
     }
 
-    static fromJson(json: any): EventType {
+    static fromObj(obj: any): EventType {
 
         let eventtype = EventTypeFactory.empty();
 
-        if (Validator.validNumber(json.eventTypeId)) {
-            eventtype.id = json.eventTypeId;
+        if (Validator.validNumber(obj.eventTypeId)) {
+            eventtype.id = obj.eventTypeId;
         }
 
-        if (Validator.validString(json.description)) {
-            eventtype.description = json.description.trim();
+        if (Validator.validString(obj.description)) {
+            eventtype.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(json.intern)) {
-            eventtype.intern = !!json.intern;
+        if (Validator.validNumber(obj.intern)) {
+            eventtype.intern = !!obj.intern;
         }
 
-        if (Validator.validNumber(json.deleted)) {
-            eventtype.deleted = !!json.deleted;
+        if (Validator.validNumber(obj.deleted)) {
+            eventtype.deleted = !!obj.deleted;
         }
 
         return eventtype;

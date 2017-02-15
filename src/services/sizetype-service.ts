@@ -29,7 +29,7 @@ export class SizeTypeService {
     };
 
     joinCrateTypes(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT sizeTypeId, amount, description, deleted FROM size_types INNER JOIN crate_types ON(sizeTypeId = refSize);';
+        var query = 'SELECT st.sizeTypeId, st.amount, st.description, st.deleted FROM size_types st INNER JOIN crate_types ON(sizeTypeId = refSize) GROUP BY sizeTypeId;';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);

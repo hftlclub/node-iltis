@@ -8,48 +8,53 @@ export class EventFactory {
         return new Event(0, EventTypeFactory.empty(), '', 0, 0, 0, new Date(), new Date(), true);
     }
 
-    static fromJson(json: any): Event {
+    static fromObj(obj: any): Event {
 
         let event = EventFactory.empty();
 
-        if (Validator.validNumber(json.eventId)) {
-            event.id = json.eventId;
+        if (Validator.validNumber(obj.eventId)) {
+            event.id = obj.eventId;
         }
 
-        if (Validator.validString(json.description)) {
-            event.description = json.description.trim();
+        if(obj.eventType) event.eventType = EventTypeFactory.fromObj(obj.eventType);
+        else if (Validator.validNumber(obj.refEventType)) {
+            event.eventType.id = obj.refEventType;
         }
 
-        if (Validator.validNumber(json.cashBefore)) {
-            event.cashBefore = json.cashBefore;
+        if (Validator.validString(obj.description)) {
+            event.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(json.cashAfter)) {
-            event.cashAfter = json.cashAfter;
+        if (Validator.validNumber(obj.cashBefore)) {
+            event.cashBefore = obj.cashBefore;
         }
 
-        if (Validator.validNumber(json.tip)) {
-            event.tip = json.tip;
+        if (Validator.validNumber(obj.cashAfter)) {
+            event.cashAfter = obj.cashAfter;
         }
 
-        if (json.datetime) {
-            if(Validator.validDate(json.datetime)) {
-                event.datetime = json.datetime;
+        if (Validator.validNumber(obj.tip)) {
+            event.tip = obj.tip;
+        }
+
+        if (obj.datetime) {
+            if(Validator.validDate(obj.datetime)) {
+                event.datetime = obj.datetime;
             } else {
-                event.datetime = new Date(json.datetime);
+                event.datetime = new Date(obj.datetime);
             }
         }
 
-        if (json.timestamp) {
-            if(Validator.validDate(json.timestamp)) {
-                event.timestamp = json.timestamp;
+        if (obj.timestamp) {
+            if(Validator.validDate(obj.timestamp)) {
+                event.timestamp = obj.timestamp;
             } else {
-                event.timestamp = new Date(json.timestamp);
+                event.timestamp = new Date(obj.timestamp);
             }
         }
 
-        if (Validator.validNumber(json.active)) {
-            event.active = !!json.active;
+        if (Validator.validNumber(obj.active)) {
+            event.active = !!obj.active;
         }
 
         return event;

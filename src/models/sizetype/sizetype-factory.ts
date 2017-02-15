@@ -7,24 +7,24 @@ export class SizeTypeFactory {
         return new SizeType(0, 0, '', false);
     }
 
-    static fromJson(json: any): SizeType {
+    static fromObj(obj: any): SizeType {
 
         let sizeType = SizeTypeFactory.empty();
 
-        if (Validator.validNumber(json.sizeTypeId)) {
-            sizeType.id = json.sizeTypeId;
+        if (Validator.validNumber(obj.sizeTypeId)) {
+            sizeType.id = obj.sizeTypeId;
         }
 
-        if (Validator.validNumber(json.amount)) {
-            sizeType.amount = json.amount;
+        if (Validator.validNumber(obj.amount)) {
+            sizeType.amount = obj.amount;
         }
 
-        if (Validator.validString(json.description)) {
-            sizeType.description = json.description.trim();
+        if (Validator.validString(obj.description)) {
+            sizeType.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(json.deleted)) {
-            sizeType.deleted = !!json.deleted;
+        if (Validator.validNumber(obj.deleted)) {
+            sizeType.deleted = !!obj.deleted;
         }
 
         return sizeType;

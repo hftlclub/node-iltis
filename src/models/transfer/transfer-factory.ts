@@ -10,23 +10,38 @@ export class TransferFactory {
         return new Transfer(0, EventFactory.empty(), ProductFactory.empty(), SizeTypeFactory.empty(), 0, new Date());
     }
 
-    static fromJson(json: any): Transfer {
+    static fromObj(obj: any): Transfer {
 
         let transfer = TransferFactory.empty();
 
-        if (Validator.validNumber(json.transferId)) {
-            transfer.id = json.transferId;
+        if (Validator.validNumber(obj.transferId)) {
+            transfer.id = obj.transferId;
         }
 
-        if (Validator.validNumber(json.change)) {
-            transfer.change = json.change;
+        if(obj.event) transfer.event = EventFactory.fromObj(obj.event);
+        else if (Validator.validNumber(obj.refEvent)) {
+            transfer.event.id = obj.refEvent;
         }
 
-        if (json.timestamp) {
-            if(Validator.validDate(json.timestamp)) {
-                transfer.timestamp = json.timestamp;
+        if(obj.product) transfer.product = ProductFactory.fromObj(obj.product);
+        else if (Validator.validNumber(obj.refProduct)) {
+            transfer.product.id = obj.refProduct;
+        }
+
+        if(obj.sizeType) transfer.sizeTyoe = SizeTypeFactory.fromObj(obj.sizeType);
+        else if (Validator.validNumber(obj.refSize)) {
+            transfer.sizeTyoe.id = obj.refSize;
+        }
+
+        if (Validator.validNumber(obj.change)) {
+            transfer.change = obj.change;
+        }
+
+        if (obj.timestamp) {
+            if(Validator.validDate(obj.timestamp)) {
+                transfer.timestamp = obj.timestamp;
             } else {
-                transfer.timestamp = new Date(json.timestamp);
+                transfer.timestamp = new Date(obj.timestamp);
             }
         }
 

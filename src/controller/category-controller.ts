@@ -1,8 +1,9 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
+import { Validator } from '../modules/validator';
 import { Category } from '../models/category/category';
 import { CategoryFactory } from '../models/category/category-factory';
 import { CategoryService } from '../services/category-service';
-import { Validator } from '../modules/validator';
+
 
 export class CategoryController {
 
@@ -17,7 +18,7 @@ export class CategoryController {
                 res.send(categories, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             else { 
-                categories = rows.map(row => CategoryFactory.fromJson(row));
+                categories = rows.map(row => CategoryFactory.fromObj(row));
                 res.send(categories, { 'Content-Type': 'application/json; charset=utf-8' });
             }
         });
@@ -34,7 +35,7 @@ export class CategoryController {
                 res.send(new NotFoundError('Category does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
             else { 
-                category = CategoryFactory.fromJson(row);
+                category = CategoryFactory.fromObj(row);
                 res.send(category, { 'Content-Type': 'application/json; charset=utf-8' });
             }
         });

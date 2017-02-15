@@ -10,20 +10,35 @@ export class TransactionFactory {
         return new Transaction(0, EventFactory.empty(), ProductFactory.empty(), SizeTypeFactory.empty(), 0, 0, new Date());
     }
 
-    static fromJson(json: any): Transaction {
+    static fromObj(obj: any): Transaction {
 
         let transaction = TransactionFactory.empty();
 
-        if (Validator.validNumber(json.transactionId)) {
-            transaction.id = json.transactionId;
+        if (Validator.validNumber(obj.transactionId)) {
+            transaction.id = obj.transactionId;
         }
 
-        if (Validator.validNumber(json.changeTotal)) {
-            transaction.changeTotal = json.changeTotal;
+        if(obj.event) transaction.event = EventFactory.fromObj(obj.event);
+        else if (Validator.validNumber(obj.refEvent)) {
+            transaction.event.id = obj.refEvent;
         }
 
-        if (Validator.validNumber(json.changeCounter)) {
-            transaction.changeCounter = json.changeCounter;
+        if(obj.product) transaction.product = ProductFactory.fromObj(obj.product);
+        else if (Validator.validNumber(obj.refProduct)) {
+            transaction.product.id = obj.refProduct;
+        }
+
+        if(obj.sizeType) transaction.sizeTyoe = SizeTypeFactory.fromObj(obj.sizeType);
+        else if (Validator.validNumber(obj.refSize)) {
+            transaction.sizeTyoe.id = obj.refSize;
+        }
+
+        if (Validator.validNumber(obj.changeTotal)) {
+            transaction.changeTotal = obj.changeTotal;
+        }
+
+        if (Validator.validNumber(obj.changeCounter)) {
+            transaction.changeCounter = obj.changeCounter;
         }
 
         return transaction;

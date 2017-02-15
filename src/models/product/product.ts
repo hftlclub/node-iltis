@@ -1,8 +1,13 @@
+import { Category } from '../category/category';
+import { Unit } from '../unit/unit';
+import { CrateType } from '../cratetype/cratetype';
+
 export class Product {
   constructor(
     public id : number,
-    public refCategory : number,
-    public refUnit : number,
+    public category : Category,
+    public unit : Unit,
+    public crateTypes : CrateType[],
     public name : string,
     public description : string,
     public priceIntern : number,

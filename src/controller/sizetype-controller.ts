@@ -1,8 +1,9 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
+import { Validator } from '../modules/validator';
 import { SizeType } from '../models/sizetype/sizetype';
 import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
-import { Validator } from '../modules/validator';
+
 
 export class SizeTypeController {
 
@@ -17,7 +18,7 @@ export class SizeTypeController {
                 res.send(sizeTypes, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             else { 
-                sizeTypes = rows.map(row => SizeTypeFactory.fromJson(row));
+                sizeTypes = rows.map(row => SizeTypeFactory.fromObj(row));
                 res.send(sizeTypes, { 'Content-Type': 'application/json; charset=utf-8' });
             }
         });
@@ -33,7 +34,7 @@ export class SizeTypeController {
                 res.send(new NotFoundError('SizeType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
             else { 
-                sizeType = SizeTypeFactory.fromJson(row);
+                sizeType = SizeTypeFactory.fromObj(row);
                 res.send(sizeType, { 'Content-Type': 'application/json; charset=utf-8' });
             }
         });

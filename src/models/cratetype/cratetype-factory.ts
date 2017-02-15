@@ -8,20 +8,21 @@ export class CrateTypeFactory {
         return new CrateType(0, SizeTypeFactory.empty(), 0);
     }
 
-    static fromJson(json: any): CrateType {
+    static fromObj(obj: any): CrateType {
 
         let crateType = CrateTypeFactory.empty();
 
-        if (Validator.validNumber(json.crateTypeId)) {
-            crateType.id = json.crateTypeId;
+        if (Validator.validNumber(obj.crateTypeId)) {
+            crateType.id = obj.crateTypeId;
         }
 
-        if (Validator.validNumber(json.refSize)) {
-            crateType.sizeType.id = json.refSize;
+        if(obj.sizeType) crateType.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
+        else if (Validator.validNumber(obj.refSize)) {
+            crateType.sizeType.id = obj.refSize;
         }
 
-        if (Validator.validNumber(json.slots)) {
-            crateType.slots = json.slots;
+        if (Validator.validNumber(obj.slots)) {
+            crateType.slots = obj.slots;
         }
 
         return crateType;

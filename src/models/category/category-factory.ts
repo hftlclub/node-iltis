@@ -7,24 +7,24 @@ export class CategoryFactory {
         return new Category(0, '', '', false);
     }
 
-    static fromJson(json: any): Category {
+    static fromObj(obj: any): Category {
 
         let category = CategoryFactory.empty();
 
-        if (Validator.validNumber(json.categoryId)) {
-            category.id = json.categoryId;
+        if (Validator.validNumber(obj.categoryId)) {
+            category.id = obj.categoryId;
         }
 
-        if (Validator.validString(json.name)) {
-            category.name = json.name.trim();
+        if (Validator.validString(obj.name)) {
+            category.name = obj.name.trim();
         }
 
-        if (Validator.validString(json.description)) {
-            category.description = json.description.trim();
+        if (Validator.validString(obj.description)) {
+            category.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(json.deleted)) {
-            category.deleted = !!json.deleted;
+        if (Validator.validNumber(obj.deleted)) {
+            category.deleted = !!obj.deleted;
         }
 
         return category;

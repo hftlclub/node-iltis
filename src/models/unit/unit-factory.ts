@@ -7,20 +7,20 @@ export class UnitFactory {
         return new Unit(0, '', '');
     }
 
-    static fromJson(json: any): Unit {
+    static fromObj(obj: any): Unit {
 
         let unit = UnitFactory.empty();
 
-        if (Validator.validNumber(json.unitId)) {
-            unit.id = json.unitId;
+        if (Validator.validNumber(obj.unitId)) {
+            unit.id = obj.unitId;
         }
 
-        if (Validator.validString(json.short)) {
-            unit.short = json.short.trim();
+        if (Validator.validString(obj.short)) {
+            unit.short = obj.short.trim();
         }
 
-        if (Validator.validString(json.full)) {
-            unit.full = json.full.trim();
+        if (Validator.validString(obj.full)) {
+            unit.full = obj.full.trim();
         }
 
         return unit;
