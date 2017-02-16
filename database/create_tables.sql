@@ -12,7 +12,7 @@ CREATE TABLE event_transfers (
     refSize int NOT NULL,
     changeStorage int NOT NULL,
     changeCounter int NOT NULL,
-    timestamp timestamp NOT NULL,
+    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT event_transfers_pk PRIMARY KEY (transferId)
 );
 
@@ -20,6 +20,7 @@ CREATE TABLE event_types (
     eventTypeId int NOT NULL AUTO_INCREMENT,
     description varchar(255) NOT NULL,
     intern bool NOT NULL,
+    realEvent bool NOT NULL,
     deleted bool NOT NULL,
     CONSTRAINT event_types_pk PRIMARY KEY (eventTypeId)
 );
@@ -31,8 +32,8 @@ CREATE TABLE events (
     cashBefore decimal(8,2) NOT NULL,
     cashAfter decimal(8,2) NOT NULL,
     tip decimal(6,2) NULL,
+    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     datetime timestamp NOT NULL,
-    timestamp timestamp NOT NULL,
     active bool NOT NULL,
     CONSTRAINT events_pk PRIMARY KEY (eventId)
 );
@@ -77,7 +78,7 @@ CREATE TABLE products (
     imgFilename varchar(255) NOT NULL,
     active bool NOT NULL,
     deleted bool NOT NULL,
-    timestamp timestamp NOT NULL,
+    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE INDEX nameUnique (name),
     CONSTRAINT products_pk PRIMARY KEY (productId)
 );
@@ -97,7 +98,7 @@ CREATE TABLE transactions (
     refSize int NOT NULL,
     changeTotal int NOT NULL,
     changeCounter int NOT NULL,
-    timestamp timestamp NOT NULL,
+    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE INDEX uniques (refEvent,refProduct,refSize),
     CONSTRAINT transactions_pk PRIMARY KEY (transactionId)
 );

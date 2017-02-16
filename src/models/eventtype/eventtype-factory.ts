@@ -4,7 +4,7 @@ import { EventType } from './eventtype';
 export class EventTypeFactory {
 
     static empty(): EventType {
-        return new EventType(0, '', false, false);
+        return new EventType(0, '', false, true, false);
     }
 
     static fromObj(obj: any): EventType {
@@ -19,13 +19,11 @@ export class EventTypeFactory {
             eventtype.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(obj.intern)) {
-            eventtype.intern = !!obj.intern;
-        }
+        eventtype.intern = !!Validator.validNumber(obj.intern);
 
-        if (Validator.validNumber(obj.deleted)) {
-            eventtype.deleted = !!obj.deleted;
-        }
+        eventtype.realEvent = !!Validator.validNumber(obj.realEvent);
+
+        eventtype.deleted = !!Validator.validNumber(obj.deleted);
 
         return eventtype;
     }

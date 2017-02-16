@@ -23,9 +23,7 @@ export class SizeTypeFactory {
             sizeType.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(obj.deleted)) {
-            sizeType.deleted = !!obj.deleted;
-        }
+        sizeType.deleted = !!Validator.validNumber(obj.deleted);
 
         return sizeType;
     }

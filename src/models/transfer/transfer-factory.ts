@@ -1,13 +1,12 @@
 import { Validator } from '../../modules/validator';
 import { Transfer } from './transfer';
-import { EventFactory } from '../event/event-factory';
 import { ProductFactory } from '../product/product-factory';
 import { SizeTypeFactory } from '../sizetype/sizetype-factory';
 
 export class TransferFactory {
 
     static empty(): Transfer {
-        return new Transfer(0, EventFactory.empty(), ProductFactory.empty(), SizeTypeFactory.empty(), 0, new Date());
+        return new Transfer(0, ProductFactory.empty(), SizeTypeFactory.empty(), 0, null);
     }
 
     static fromObj(obj: any): Transfer {
@@ -16,11 +15,6 @@ export class TransferFactory {
 
         if (Validator.validNumber(obj.transferId)) {
             transfer.id = obj.transferId;
-        }
-
-        if(obj.event) transfer.event = EventFactory.fromObj(obj.event);
-        else if (Validator.validNumber(obj.refEvent)) {
-            transfer.event.id = obj.refEvent;
         }
 
         if(obj.product) transfer.product = ProductFactory.fromObj(obj.product);

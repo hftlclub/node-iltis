@@ -23,9 +23,7 @@ export class CategoryFactory {
             category.description = obj.description.trim();
         }
 
-        if (Validator.validNumber(obj.deleted)) {
-            category.deleted = !!obj.deleted;
-        }
+        category.deleted = !!Validator.validNumber(obj.deleted);
 
         return category;
     }

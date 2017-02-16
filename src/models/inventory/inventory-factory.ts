@@ -7,17 +7,12 @@ import { SizeTypeFactory } from '../sizetype/sizetype-factory';
 export class InventoryFactory {
 
     static empty(): Inventory {
-        return new Inventory(EventFactory.empty(), ProductFactory.empty(), SizeTypeFactory.empty(), 0);
+        return new Inventory(ProductFactory.empty(), SizeTypeFactory.empty(), 0, 0);
     }
 
     static fromObj(obj: any): Inventory {
 
         let inventory = InventoryFactory.empty();
-
-        if(obj.event) inventory.event = EventFactory.fromObj(obj.event);
-        else if (Validator.validNumber(obj.refEvent)) {
-            inventory.event.id = obj.refEvent;
-        }
 
         if(obj.product) inventory.product = ProductFactory.fromObj(obj.product);
         else if (Validator.validNumber(obj.refProduct)) {
@@ -29,8 +24,12 @@ export class InventoryFactory {
             inventory.sizeTyoe.id = obj.refSize;
         }
 
-        if (Validator.validNumber(obj.count)) {
-            inventory.count = obj.count;
+        if (Validator.validNumber(obj.storage)) {
+            inventory.storage = obj.storage;
+        }
+
+        if (Validator.validNumber(obj.counter)) {
+            inventory.counter = obj.counter;
         }
 
         return inventory;

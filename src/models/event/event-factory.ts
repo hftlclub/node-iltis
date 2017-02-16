@@ -5,7 +5,7 @@ import { EventTypeFactory } from '../eventtype/eventtype-factory';
 export class EventFactory {
 
     static empty(): Event {
-        return new Event(0, EventTypeFactory.empty(), '', 0, 0, 0, new Date(), new Date(), true);
+        return new Event(0, EventTypeFactory.empty(), '', 0, 0, 0, new Date(), null, true);
     }
 
     static fromObj(obj: any): Event {
@@ -53,9 +53,7 @@ export class EventFactory {
             }
         }
 
-        if (Validator.validNumber(obj.active)) {
-            event.active = !!obj.active;
-        }
+        event.active = !!Validator.validNumber(obj.active);
 
         return event;
     }

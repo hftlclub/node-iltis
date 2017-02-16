@@ -7,7 +7,7 @@ import { CrateTypeFactory } from '../cratetype/cratetype-factory';
 export class ProductFactory {
 
     static empty(): Product {
-        return new Product(0, CategoryFactory.empty(), UnitFactory.empty(), [], '', '', 0, '', true, false, new Date());
+        return new Product(0, CategoryFactory.empty(), UnitFactory.empty(), [], '', '', 0, '', true, false, null);
     }
 
     static fromObj(obj: any): Product {
@@ -46,13 +46,9 @@ export class ProductFactory {
             product.imgFilename = obj.imgFilename.trim();
         }
 
-        if (Validator.validNumber(obj.active)) {
-            product.active = !!obj.active;
-        }
+        product.active = !!Validator.validNumber(obj.active);
 
-        if (Validator.validNumber(obj.deleted)) {
-            product.deleted = !!obj.deleted;
-        }
+        product.deleted = !!Validator.validNumber(obj.deleted);
 
         if (obj.timestamp) {
             if(Validator.validDate(obj.timestamp)) {

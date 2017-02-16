@@ -1,13 +1,12 @@
 import { Validator } from '../../modules/validator';
 import { Transaction } from './transaction';
-import { EventFactory } from '../event/event-factory';
 import { ProductFactory } from '../product/product-factory';
 import { SizeTypeFactory } from '../sizetype/sizetype-factory';
 
 export class TransactionFactory {
 
     static empty(): Transaction {
-        return new Transaction(0, EventFactory.empty(), ProductFactory.empty(), SizeTypeFactory.empty(), 0, 0, new Date());
+        return new Transaction(0, ProductFactory.empty(), SizeTypeFactory.empty(), 0, 0, null);
     }
 
     static fromObj(obj: any): Transaction {
@@ -16,11 +15,6 @@ export class TransactionFactory {
 
         if (Validator.validNumber(obj.transactionId)) {
             transaction.id = obj.transactionId;
-        }
-
-        if(obj.event) transaction.event = EventFactory.fromObj(obj.event);
-        else if (Validator.validNumber(obj.refEvent)) {
-            transaction.event.id = obj.refEvent;
         }
 
         if(obj.product) transaction.product = ProductFactory.fromObj(obj.product);
