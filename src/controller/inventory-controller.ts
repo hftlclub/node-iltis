@@ -25,7 +25,7 @@ export class InventoryController {
 
     constructor(private inventoryService : InventoryService) {
         this.productService = new ProductService();
-        this.sizeTypeService = new ProductService();
+        this.sizeTypeService = new SizeTypeService();
         this.categoryService = new CategoryService();
         this.unitService = new UnitService();
     }

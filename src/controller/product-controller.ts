@@ -17,8 +17,13 @@ import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
 
 interface CrateTypeProduct {
-    refProduct: number;
-    crateType: CrateType;
+    refProduct : number;
+    crateType : CrateType;
+}
+
+interface SizeTypeProduct {
+    refProduct : number;
+    sizeType : SizeType;
 }
 
 export class ProductController {
@@ -46,41 +51,46 @@ export class ProductController {
             this.categoryService.joinProducts((err, rows2) => {
                 if (err) return next(err);
                 var categories : Category[] = rows2.map(row => CategoryFactory.fromObj(row));
-
-                products = products.map(p => {
-                    p.category = categories.find(f => f.id === p.category.id);
-                    return p;
-                });
-
                 this.unitService.joinProducts((err, rows3) => {
                     if (err) return next(err);
                     var units : Unit[] = rows3.map(row => UnitFactory.fromObj(row));
-
-                    products = products.map(p => {
-                        p.unit = units.find(f => f.id === p.unit.id);
-                        return p;
-                    });
-
                     this.crateTypeService.joinProductCrates((err, rows5) => {
                         if (err) return next(err);
                         var crateTypesProducts : CrateTypeProduct[] = rows5.map(row => {
                             return {refProduct : row.refProduct, crateType : CrateTypeFactory.fromObj(row)};
                         });
-                        
-                        this.sizeTypeService.joinCrateTypes((err, rows5) => {
+                        this.sizeTypeService.joinProductSizes((err, rows5) => {
                             if (err) return next(err);
-                            var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
-
-                            crateTypesProducts = crateTypesProducts.map(c => {
-                                c.crateType.sizeType = sizeTypes.find(f => f.id === c.crateType.sizeType.id);
-                                return c;
+                            var sizeTypesProducts : SizeTypeProduct[] = rows5.map(row => {
+                                return {refProduct : row.refProduct, sizeType : SizeTypeFactory.fromObj(row)};
                             });
-                            
-                            crateTypesProducts.forEach(crateTypeProduct => {
-                                products.find(f => f.id === crateTypeProduct.refProduct).crateTypes.push(crateTypeProduct.crateType);
-                            });
+                            this.sizeTypeService.getAll((err, rows5) => {
+                                if (err) return next(err);
+                                var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
 
-                            res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+                                products = products.map(p => {
+                                    p.category = categories.find(f => f.id === p.category.id);
+                                    return p;
+                                }).map(p => {
+                                    p.unit = units.find(f => f.id === p.unit.id);
+                                    return p;
+                                });
+
+                                crateTypesProducts = crateTypesProducts.map(c => {
+                                    c.crateType.sizeType = sizeTypes.find(f => f.id === c.crateType.sizeType.id);
+                                    return c;
+                                });
+                                
+                                crateTypesProducts.forEach(crateTypeProduct => {
+                                    products.find(f => f.id === crateTypeProduct.refProduct).crateTypes.push(crateTypeProduct.crateType);
+                                });
+                                
+                                sizeTypesProducts.forEach(sizeTypeProduct => {
+                                    products.find(f => f.id === sizeTypeProduct.refProduct).sizeTypes.push(sizeTypeProduct.sizeType);
+                                });
+
+                                res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+                            });
                         });
                     });
                 });
@@ -104,21 +114,27 @@ export class ProductController {
                 this.unitService.getById(row1.refUnit, (err, row3) => {
                     if (err) return next(err);
                     product.unit = UnitFactory.fromObj(row3);
-                    this.crateTypeService.joinProductCratesByProductId(product.id, (err, rows4) => {
+                    this.sizeTypeService.joinProductByProductId(product.id, (err, rows5) => {
                         if (err) return next(err);
-                        var crateTypes : CrateType[] = rows4.map(row => CrateTypeFactory.fromObj(row));
-                        this.sizeTypeService.joinCrateTypes((err, rows5) => {
+                        product.sizeTypes = rows5.map(row => SizeTypeFactory.fromObj(row));
+                        this.crateTypeService.joinProductCratesByProductId(product.id, (err, rows4) => {
                             if (err) return next(err);
-                            var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
-
-                            crateTypes = crateTypes.map(c => {
-                                c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
-                                return c;
+                            if (!rows4.length) {
+                                res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
+                            }
+                            var crateTypes : CrateType[] = rows4.map(row => CrateTypeFactory.fromObj(row));
+                            this.sizeTypeService.joinCrateTypes((err, rows6) => {
+                            if (err) return next(err);
+                                var sizeTypes : SizeType[] = rows6.map(row => SizeTypeFactory.fromObj(row));
+                                crateTypes = crateTypes.map(c => {
+                                    c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
+                                    return c;
+                                });
+                                product.crateTypes = crateTypes;
+                                res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
                             });
-                            
-                            product.crateTypes = crateTypes;
-                            res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
                         });
+                        
                     });
                 });
             });
