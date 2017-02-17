@@ -23,7 +23,6 @@ export class CategoryController {
     };
 
     getById(req, res, next) {
-
         let id = parseInt(req.params.categoryId);
         let category : Category = CategoryFactory.empty();
         this.categoryService.getById(id, (err, row)=>{

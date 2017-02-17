@@ -14,8 +14,11 @@ import { EventService } from './src/services/event-service';
 import { EventController } from './src/controller/event-controller';
 import { EventTypeService } from './src/services/eventtype-service';
 import { EventTypeController } from './src/controller/eventtype-controller';
+import { InventoryService } from './src/services/inventory-service';
+import { InventoryController } from './src/controller/inventory-controller';
 
 var config = require('./config');
+
 let serverController = new ServerController();
 let productController = new ProductController(new ProductService());
 let categoryController = new CategoryController(new CategoryService());
@@ -24,6 +27,8 @@ let sizeTypeController = new SizeTypeController(new SizeTypeService());
 let crateTypeController = new CrateTypeController(new CrateTypeService());
 let eventController = new EventController(new EventService());
 let eventTypeController = new EventTypeController(new EventTypeService());
+let inventoryController = new InventoryController(new InventoryService());
+let inventoryTypeController = new InventoryController(new InventoryService());
 
 var server = createServer({
     formatters: {
@@ -62,6 +67,8 @@ server.get('/sizetypes', sizeTypeController.getAll.bind(sizeTypeController));
 server.get('/sizetype/:sizeTypeId', sizeTypeController.getById.bind(sizeTypeController));
 server.get('/cratetypes', crateTypeController.getAll.bind(crateTypeController));
 server.get('/cratetype/:crateTypeId', crateTypeController.getById.bind(crateTypeController));
+server.get('/inventory', inventoryController.getCurrent.bind(inventoryController));
+server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
 // start server
 server.listen(config.port, () => {

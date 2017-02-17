@@ -19,9 +19,9 @@ export class InventoryFactory {
             inventory.product.id = obj.refProduct;
         }
 
-        if(obj.sizeType) inventory.sizeTyoe = SizeTypeFactory.fromObj(obj.sizeType);
+        if(obj.sizeType) inventory.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (Validator.validNumber(obj.refSize)) {
-            inventory.sizeTyoe.id = obj.refSize;
+            inventory.sizeType.id = obj.refSize;
         }
 
         if (Validator.validNumber(obj.storage)) {
