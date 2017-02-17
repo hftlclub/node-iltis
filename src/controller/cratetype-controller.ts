@@ -9,14 +9,14 @@ import { SizeTypeService } from '../services/sizetype-service';
 
 
 export class CrateTypeController {
-    private sizeTypeService : SizeTypeService;
+    private sizeTypeService: SizeTypeService;
 
-    constructor(private crateTypeService : CrateTypeService) {
+    constructor(private crateTypeService: CrateTypeService) {
         this.sizeTypeService = new SizeTypeService();
     }
 
     getAll(req, res, next) {
-        let crateTypes : CrateType[] = [];
+        let crateTypes: CrateType[] = [];
         this.crateTypeService.getAll((err, rows1)=>{
             if (err) return next(err);
             if (!rows1.length) {
@@ -26,7 +26,7 @@ export class CrateTypeController {
             crateTypes = rows1.map(row => CrateTypeFactory.fromObj(row));
             this.sizeTypeService.joinCrateTypes((err, rows2) => {
                 if (err) return next(err);
-                var sizeTypes : SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
+                var sizeTypes: SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
 
                 crateTypes = crateTypes.map(c => {
                     c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
@@ -40,7 +40,7 @@ export class CrateTypeController {
 
     getById(req, res, next) {
         let id = parseInt(req.params.crateTypeId);
-        let crateType : CrateType = CrateTypeFactory.empty();
+        let crateType: CrateType = CrateTypeFactory.empty();
         this.crateTypeService.getById(id, (err, row1) => {
             if (err) return next(err);
             if (!row1) {

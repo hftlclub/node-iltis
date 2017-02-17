@@ -9,14 +9,14 @@ import { EventTypeService } from '../services/eventtype-service';
 
 
 export class EventController {
-    private eventTypeService : EventTypeService;
+    private eventTypeService: EventTypeService;
 
-    constructor(private eventService : EventService) {
+    constructor(private eventService: EventService) {
         this.eventTypeService = new EventTypeService();
     }
 
     getAll(req, res, next) {
-        let events : Event[] = [];
+        let events: Event[] = [];
         this.eventService.getAll((err, rows1)=>{
             if (err) return next(err);
             if (!rows1.length) {
@@ -26,7 +26,7 @@ export class EventController {
             events = rows1.map(row => EventFactory.fromObj(row));
             this.eventTypeService.joinEvents((err, rows2) => {
                 if (err) return next(err);
-                var eventTypes : EventType[] = rows2.map(row => EventTypeFactory.fromObj(row));
+                var eventTypes: EventType[] = rows2.map(row => EventTypeFactory.fromObj(row));
 
                 events = events.map(e => {
                     e.eventType = eventTypes.find(f => f.id === e.eventType.id);
@@ -40,7 +40,7 @@ export class EventController {
 
     getById(req, res, next) {
         let id = parseInt(req.params.eventId);
-        let event : Event = EventFactory.empty();
+        let event: Event = EventFactory.empty();
         this.eventService.getById(id, (err, row1) => {
             if (err) return next(err);
             if (!row1) {

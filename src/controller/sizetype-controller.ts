@@ -7,10 +7,10 @@ import { SizeTypeService } from '../services/sizetype-service';
 
 export class SizeTypeController {
 
-    constructor(private sizeTypeService : SizeTypeService) { }
+    constructor(private sizeTypeService: SizeTypeService) { }
 
     getAll(req, res, next) {
-        let sizeTypes : SizeType[] = [];
+        let sizeTypes: SizeType[] = [];
         this.sizeTypeService.getAll((err, rows)=>{
             if (err) return next(err);
             if (!rows.length) {
@@ -24,7 +24,7 @@ export class SizeTypeController {
 
     getById(req, res, next) {
         let id = parseInt(req.params.sizeTypeId);
-        let sizeType : SizeType = SizeTypeFactory.empty();
+        let sizeType: SizeType = SizeTypeFactory.empty();
         this.sizeTypeService.getById(id, (err, row)=>{
             if (err) return next(err);
             if (!row) {

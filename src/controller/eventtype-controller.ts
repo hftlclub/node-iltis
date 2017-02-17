@@ -7,10 +7,10 @@ import { EventTypeService } from '../services/eventtype-service';
 
 export class EventTypeController {
 
-    constructor(private eventTypeService : EventTypeService) { }
+    constructor(private eventTypeService: EventTypeService) { }
 
     getAll(req, res, next) {
-        let eventTypes : EventType[] = [];
+        let eventTypes: EventType[] = [];
         this.eventTypeService.getAll((err, rows)=>{
             if (err) return next(err);
             if (!rows.length) {
@@ -24,7 +24,7 @@ export class EventTypeController {
 
     getById(req, res, next) {
         let id = parseInt(req.params.eventTypeId);
-        let eventType : EventType = EventTypeFactory.empty();
+        let eventType: EventType = EventTypeFactory.empty();
         this.eventTypeService.getById(id, (err, row)=>{
             if (err) return next(err);
             if (!row) {

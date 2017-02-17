@@ -17,22 +17,22 @@ import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
 
 interface CrateTypeProduct {
-    refProduct : number;
-    crateType : CrateType;
+    refProduct: number;
+    crateType: CrateType;
 }
 
 interface SizeTypeProduct {
-    refProduct : number;
-    sizeType : SizeType;
+    refProduct: number;
+    sizeType: SizeType;
 }
 
 export class ProductController {
-    private categoryService : CategoryService;
-    private unitService : UnitService;
-    private crateTypeService : CrateTypeService;
-    private sizeTypeService : SizeTypeService;
+    private categoryService: CategoryService;
+    private unitService: UnitService;
+    private crateTypeService: CrateTypeService;
+    private sizeTypeService: SizeTypeService;
 
-    constructor(private productService : ProductService) {
+    constructor(private productService: ProductService) {
         this.categoryService = new CategoryService();
         this.unitService = new UnitService();
         this.crateTypeService = new CrateTypeService();
@@ -40,7 +40,7 @@ export class ProductController {
     }
 
     getAll(req, res, next) {
-        let products : Product[] = [];
+        let products: Product[] = [];
         this.productService.getAll((err, rows)=>{
             if (err) return next(err);
             if (!rows.length) {
@@ -50,23 +50,23 @@ export class ProductController {
             products = rows.map(row => ProductFactory.fromObj(row));
             this.categoryService.joinProducts((err, rows2) => {
                 if (err) return next(err);
-                var categories : Category[] = rows2.map(row => CategoryFactory.fromObj(row));
+                var categories: Category[] = rows2.map(row => CategoryFactory.fromObj(row));
                 this.unitService.joinProducts((err, rows3) => {
                     if (err) return next(err);
-                    var units : Unit[] = rows3.map(row => UnitFactory.fromObj(row));
+                    var units: Unit[] = rows3.map(row => UnitFactory.fromObj(row));
                     this.crateTypeService.joinProductCrates((err, rows5) => {
                         if (err) return next(err);
-                        var crateTypesProducts : CrateTypeProduct[] = rows5.map(row => {
-                            return {refProduct : row.refProduct, crateType : CrateTypeFactory.fromObj(row)};
+                        var crateTypesProducts: CrateTypeProduct[] = rows5.map(row => {
+                            return {refProduct: row.refProduct, crateType: CrateTypeFactory.fromObj(row)};
                         });
                         this.sizeTypeService.joinProductSizes((err, rows5) => {
                             if (err) return next(err);
-                            var sizeTypesProducts : SizeTypeProduct[] = rows5.map(row => {
-                                return {refProduct : row.refProduct, sizeType : SizeTypeFactory.fromObj(row)};
+                            var sizeTypesProducts: SizeTypeProduct[] = rows5.map(row => {
+                                return {refProduct: row.refProduct, sizeType: SizeTypeFactory.fromObj(row)};
                             });
                             this.sizeTypeService.getAll((err, rows5) => {
                                 if (err) return next(err);
-                                var sizeTypes : SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
+                                var sizeTypes: SizeType[] = rows5.map(row => SizeTypeFactory.fromObj(row));
 
                                 products = products.map(p => {
                                     p.category = categories.find(f => f.id === p.category.id);
@@ -100,7 +100,7 @@ export class ProductController {
 
     getById(req, res, next) {
         let id = parseInt(req.params.productId);
-        let product : Product = ProductFactory.empty();
+        let product: Product = ProductFactory.empty();
         this.productService.getById(id, (err, row1)=>{
             if (err) return next(err);
             if (!row1) {
@@ -122,10 +122,10 @@ export class ProductController {
                             if (!rows4.length) {
                                 res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
                             }
-                            var crateTypes : CrateType[] = rows4.map(row => CrateTypeFactory.fromObj(row));
+                            var crateTypes: CrateType[] = rows4.map(row => CrateTypeFactory.fromObj(row));
                             this.sizeTypeService.joinCrateTypes((err, rows6) => {
                             if (err) return next(err);
-                                var sizeTypes : SizeType[] = rows6.map(row => SizeTypeFactory.fromObj(row));
+                                var sizeTypes: SizeType[] = rows6.map(row => SizeTypeFactory.fromObj(row));
                                 crateTypes = crateTypes.map(c => {
                                     c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
                                     return c;

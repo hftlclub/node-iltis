@@ -18,12 +18,12 @@ import { UnitService } from '../services/unit-service';
 
 
 export class InventoryController {
-    private productService : ProductService;
-    private sizeTypeService : ProductService;
-    private categoryService : CategoryService;
-    private unitService : UnitService;
+    private productService: ProductService;
+    private sizeTypeService: ProductService;
+    private categoryService: CategoryService;
+    private unitService: UnitService;
 
-    constructor(private inventoryService : InventoryService) {
+    constructor(private inventoryService: InventoryService) {
         this.productService = new ProductService();
         this.sizeTypeService = new SizeTypeService();
         this.categoryService = new CategoryService();
@@ -31,7 +31,7 @@ export class InventoryController {
     }
 
     getCurrent(req, res, next) {
-        let inventory : Inventory[] = [];
+        let inventory: Inventory[] = [];
         this.inventoryService.getCurrent((err, rows1)=>{
             if (err) return next(err);
             if (!rows1.length) {
@@ -41,16 +41,16 @@ export class InventoryController {
             inventory = rows1.map(row => InventoryFactory.fromObj(row));
             this.sizeTypeService.getAll((err, rows2) => {
                 if (err) return next(err);
-                var sizeTypes : SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
+                var sizeTypes: SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
                 this.productService.getAll((err, rows3)=>{
                     if (err) return next(err);
                     var products = rows3.map(row => ProductFactory.fromObj(row));
                     this.categoryService.joinProducts((err, rows4) => {
                         if (err) return next(err);
-                        var categories : Category[] = rows4.map(row => CategoryFactory.fromObj(row));
+                        var categories: Category[] = rows4.map(row => CategoryFactory.fromObj(row));
                         this.unitService.joinProducts((err, rows5) => {
                             if (err) return next(err);
-                            var units : Unit[] = rows5.map(row => UnitFactory.fromObj(row));
+                            var units: Unit[] = rows5.map(row => UnitFactory.fromObj(row));
 
                             products = products.map(p => {
                                 p.category = categories.find(f => f.id === p.category.id);
@@ -78,7 +78,7 @@ export class InventoryController {
 
     getByEventId(req, res, next) {
         let id = parseInt(req.params.eventId);
-        let inventory : Inventory[] = [];
+        let inventory: Inventory[] = [];
         this.inventoryService.getByEventId(id, (err, rows1)=>{
             if (err) return next(err);
             if (!rows1.length) {
@@ -88,16 +88,16 @@ export class InventoryController {
             inventory = rows1.map(row => InventoryFactory.fromObj(row));
             this.sizeTypeService.getAll((err, rows2) => {
                 if (err) return next(err);
-                var sizeTypes : SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
+                var sizeTypes: SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
                 this.productService.getAll((err, rows3)=>{
                     if (err) return next(err);
                     var products = rows3.map(row => ProductFactory.fromObj(row));
                     this.categoryService.joinProducts((err, rows4) => {
                         if (err) return next(err);
-                        var categories : Category[] = rows4.map(row => CategoryFactory.fromObj(row));
+                        var categories: Category[] = rows4.map(row => CategoryFactory.fromObj(row));
                         this.unitService.joinProducts((err, rows5) => {
                             if (err) return next(err);
-                            var units : Unit[] = rows5.map(row => UnitFactory.fromObj(row));
+                            var units: Unit[] = rows5.map(row => UnitFactory.fromObj(row));
 
                             products = products.map(p => {
                                 p.category = categories.find(f => f.id === p.category.id);

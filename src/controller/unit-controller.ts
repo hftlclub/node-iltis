@@ -7,10 +7,10 @@ import { UnitService } from '../services/unit-service';
 
 export class UnitController {
 
-    constructor(private unitService : UnitService) { }
+    constructor(private unitService: UnitService) { }
 
     getAll(req, res, next) {
-        let units : Unit[] = [];
+        let units: Unit[] = [];
         this.unitService.getAll((err, rows)=>{
             if (err) return next(err);
             if (!rows.length) {
@@ -24,7 +24,7 @@ export class UnitController {
 
     getById(req, res, next) {
         let id = parseInt(req.params.unitId);
-        let unit : Unit = UnitFactory.empty();
+        let unit: Unit = UnitFactory.empty();
         this.unitService.getById(id, (err, row)=>{
             if (err) return next(err);
             if (!row) {
