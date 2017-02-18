@@ -19,7 +19,7 @@ import { UnitService } from '../services/unit-service';
 
 export class InventoryController {
     private productService: ProductService;
-    private sizeTypeService: ProductService;
+    private sizeTypeService: SizeTypeService;
     private categoryService: CategoryService;
     private unitService: UnitService;
 

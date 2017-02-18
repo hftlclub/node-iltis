@@ -22,9 +22,9 @@ export class TransactionFactory {
             transaction.product.id = obj.refProduct;
         }
 
-        if(obj.sizeType) transaction.sizeTyoe = SizeTypeFactory.fromObj(obj.sizeType);
+        if(obj.sizeType) transaction.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (Validator.validNumber(obj.refSize)) {
-            transaction.sizeTyoe.id = obj.refSize;
+            transaction.sizeType.id = obj.refSize;
         }
 
         if (Validator.validNumber(obj.changeTotal)) {
@@ -33,6 +33,14 @@ export class TransactionFactory {
 
         if (Validator.validNumber(obj.changeCounter)) {
             transaction.changeCounter = obj.changeCounter;
+        }
+
+        if (obj.timestamp) {
+            if(Validator.validDate(obj.timestamp)) {
+                transaction.timestamp = obj.timestamp;
+            } else {
+                transaction.timestamp = new Date(obj.timestamp);
+            }
         }
 
         return transaction;

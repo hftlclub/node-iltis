@@ -6,7 +6,7 @@ export class Transfer {
   constructor(
     public id: number,
     public product: Product,
-    public sizeTyoe: SizeType,
+    public sizeType: SizeType,
     public change: number,
     public timestamp: Date
     ) {}

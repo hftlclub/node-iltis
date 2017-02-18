@@ -22,13 +22,13 @@ export class TransferFactory {
             transfer.product.id = obj.refProduct;
         }
 
-        if(obj.sizeType) transfer.sizeTyoe = SizeTypeFactory.fromObj(obj.sizeType);
+        if(obj.sizeType) transfer.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (Validator.validNumber(obj.refSize)) {
-            transfer.sizeTyoe.id = obj.refSize;
+            transfer.sizeType.id = obj.refSize;
         }
 
-        if (Validator.validNumber(obj.change)) {
-            transfer.change = obj.change;
+        if (Validator.validNumber(obj.changeStorage)) {
+            transfer.change = obj.changeStorage;
         }
 
         if (obj.timestamp) {

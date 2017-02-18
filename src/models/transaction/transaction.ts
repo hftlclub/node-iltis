@@ -5,7 +5,7 @@ export class Transaction {
   constructor(
     public id: number,
     public product: Product,
-    public sizeTyoe: SizeType,
+    public sizeType: SizeType,
     public changeTotal: number,
     public changeCounter: number,
     public timestamp: Date

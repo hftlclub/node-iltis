@@ -1,8 +1,9 @@
 CREATE TABLE crate_types (
-    crateTypeId int NOT NULL AUTO_INCREMENT,
-    refSize int NOT NULL,
-    slots int NOT NULL,
-    CONSTRAINT crate_types_pk PRIMARY KEY (crateTypeId)
+   crateTypeId int NOT NULL AUTO_INCREMENT,
+   refSize int NOT NULL,
+   description varchar(128) NOT NULL,
+   slots int NOT NULL,
+   CONSTRAINT crate_types_pk PRIMARY KEY (crateTypeId)
 );
 
 CREATE TABLE event_transfers (
