@@ -5,6 +5,8 @@ server.d.ts
 server.js.map
 server.js
 
+tslint.json
+
 config.js
 
 src/**/*.d.ts

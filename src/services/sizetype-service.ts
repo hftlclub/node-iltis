@@ -31,7 +31,6 @@ export class SizeTypeService {
     joinProductByProductId(id: number, callback:(err:any, rows?:any)=>void) {
         var query = 'SELECT * FROM (SELECT ps.refProduct, st.sizeTypeId, st.amount, st.description, st.deleted FROM size_types st INNER JOIN product_sizes ps ON (sizeTypeId = refSize)) AS innerTable WHERE refProduct = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
-            console.log(rows);
             if (err) {
                 return callback(err);
             }
