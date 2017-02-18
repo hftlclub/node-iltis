@@ -1,13 +1,13 @@
 {
-  "name": "iltis-api",
+  "name": "node-iltis",
   "version": "0.0.1",
   "description": "REST Server Backend for ILTIS",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fmalcher/node-iltis.git"
+    "url": "git+https://github.com/hftlclub/node-iltis.git"
   },
   "bugs": {
-    "url": "https://github.com/fmalcher/node-iltis/issues"
+    "url": "https://github.com/hftlclub/node-iltis/issues"
   },
   "scripts": {
     "build": "tsc",
@@ -16,8 +16,18 @@
   },
   "author": {
     "name": "HfTL Club",
-    "email": "club@hftl.de"
+    "email": "club@hft-leipzig.de"
   },
+  "contributors": [
+    {
+      "name": "Robert Weiße",
+      "email": "github@robert-weisse.de"
+    },
+    {
+      "name": "Ferdinand Malcher",
+      "email": "mail@fmalcher.de"
+    }
+  ],
   "dependencies": {
     "restify": "4.3.0",
     "forever": "~0.15.3",
