@@ -7,13 +7,13 @@ REST Server Backend for ILTIS (Internes Lagertransaktions- und Informationssyste
 Execute the following commands to configure the standalone-server:
 
 ```
-git clone https://github.com/fmalcher/node-iltis.git
+git clone https://github.com/hftlclub/node-iltis.git
 cd node-iltis
 npm install
 cp config.example.js config.js
 ```
 
-Modify the MySQL-Settings in your config file.
+Modify the MySQL settings in your config file.
 
 Start the server via the following command:
 
