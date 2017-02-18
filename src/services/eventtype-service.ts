@@ -3,7 +3,8 @@ var mysql = require('../modules/mysql');
 export class EventTypeService {
 
     getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM event_types;';
+        var query = 'SELECT * FROM event_types '
+            + 'ORDER BY eventTypeId ASC';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -25,22 +26,6 @@ export class EventTypeService {
                 return callback(null, false);
             }
             return callback(null, rows[0]);
-        });
-    };
-
-    joinEvents(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-        + 'FROM event_types '
-        + 'INNER JOIN events ON(eventTypeId = refEventType) '
-        + 'GROUP BY eventTypeId;';
-        mysql.conn.query(query, (err, rows, fields) => {
-            if (err) {
-                return callback(err);
-            }
-            if (!rows.length) {
-                return callback(null, false);
-            }
-            return callback(null, rows);
         });
     };
 }

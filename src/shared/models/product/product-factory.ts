@@ -32,12 +32,12 @@ export class ProductFactory {
 
         if(obj.category) product.category = CategoryFactory.fromObj(obj.category);
         else if (ValueChecker.validNumber(obj.refCategory)) {
-            product.category.id = obj.refCategory;
+            product.category = CategoryFactory.fromObj(obj);
         }
 
         if(obj.unit) product.unit = UnitFactory.fromObj(obj.unit);
         else if (ValueChecker.validNumber(obj.refUnit)) {
-            product.unit.id = obj.refUnit;
+            product.unit = UnitFactory.fromObj(obj);
         }
 
         if(obj.sizeTypes) product.sizeTypes = obj.sizeTypes.map(sizeTypes => CrateTypeFactory.fromObj(sizeTypes));

@@ -16,12 +16,12 @@ export class InventoryFactory {
 
         if(obj.product) inventory.product = ProductFactory.fromObj(obj.product);
         else if (ValueChecker.validNumber(obj.refProduct)) {
-            inventory.product.id = obj.refProduct;
+            inventory.product = ProductFactory.fromObj(obj);
         }
 
         if(obj.sizeType) inventory.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (ValueChecker.validNumber(obj.refSizeType)) {
-            inventory.sizeType.id = obj.refSizeType;
+            inventory.sizeType = SizeTypeFactory.fromObj(obj);
         }
 
         if (ValueChecker.validNumber(obj.storage)) {

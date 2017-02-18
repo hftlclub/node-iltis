@@ -1,18 +1,12 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
 import { CrateType } from '../shared/models/crateType/cratetype';
-import { SizeType } from '../shared/models/sizetype/sizetype';
 import { CrateTypeFactory } from '../shared/models/cratetype/cratetype-factory';
 import { CrateTypeService } from '../services/cratetype-service';
-import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
-import { SizeTypeService } from '../services/sizetype-service';
 
 
 export class CrateTypeController {
-    private sizeTypeService: SizeTypeService;
 
-    constructor(private crateTypeService: CrateTypeService) {
-        this.sizeTypeService = new SizeTypeService();
-    }
+    constructor(private crateTypeService: CrateTypeService) {}
 
     getAll(req, res, next) {
         let crateTypes: CrateType[] = [];
@@ -23,17 +17,7 @@ export class CrateTypeController {
                 res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             crateTypes = rows1.map(row => CrateTypeFactory.fromObj(row));
-            this.sizeTypeService.joinCrateTypes((err, rows2) => {
-                if (err) return next(err);
-                var sizeTypes: SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
-
-                crateTypes = crateTypes.map(c => {
-                    c.sizeType = sizeTypes.find(f => f.id === c.sizeType.id);
-                    return c;
-                });
-
-                res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
-            });
+            res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -47,11 +31,7 @@ export class CrateTypeController {
                 res.send(new NotFoundError('CrateType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
             crateType = CrateTypeFactory.fromObj(row1);
-            this.sizeTypeService.getById(row1.refSizeType, (err, row2)=>{
-                if (err) return next(err);
-                crateType.sizeType = SizeTypeFactory.fromObj(row2);
-                res.send(crateType, { 'Content-Type': 'application/json; charset=utf-8' });
-            });
+            res.send(crateType, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 }

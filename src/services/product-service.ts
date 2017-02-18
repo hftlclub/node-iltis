@@ -3,7 +3,13 @@ var mysql = require('../modules/mysql');
 export class ProductService {
 
     getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM products;';
+        var query = 'SELECT * '
+            + 'FROM ('
+                + 'SELECT * '
+                + 'FROM products '
+                + 'INNER JOIN product_categories ON (categoryId = refCategory)) AS productCategories '
+            + 'INNER JOIN product_units ON (unitId = refUnit) '
+            + 'ORDER BY categoryId ASC';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -16,7 +22,14 @@ export class ProductService {
     };
   
     getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM products WHERE productId = ?;';
+        var query = 'SELECT * '
+            + 'FROM ('
+                + 'SELECT * '
+                + 'FROM products '
+                + 'INNER JOIN product_categories ON (categoryId = refCategory)) AS productCategories '
+            + 'INNER JOIN product_units ON (unitId = refUnit) '
+            + 'WHERE productId = ? '
+            + 'ORDER BY categoryId ASC';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);

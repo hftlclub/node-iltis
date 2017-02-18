@@ -20,12 +20,12 @@ export class TransferFactory {
 
         if(obj.product) transfer.product = ProductFactory.fromObj(obj.product);
         else if (ValueChecker.validNumber(obj.refProduct)) {
-            transfer.product.id = obj.refProduct;
+            transfer.product = ProductFactory.fromObj(obj);
         }
 
         if(obj.sizeType) transfer.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (ValueChecker.validNumber(obj.refSizeType)) {
-            transfer.sizeType.id = obj.refSizeType;
+            transfer.sizeType = SizeTypeFactory.fromObj(obj);
         }
 
         if (obj.change) transfer.change = obj.change;

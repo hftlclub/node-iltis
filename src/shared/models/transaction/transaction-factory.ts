@@ -20,12 +20,12 @@ export class TransactionFactory {
 
         if(obj.product) transaction.product = ProductFactory.fromObj(obj.product);
         else if (ValueChecker.validNumber(obj.refProduct)) {
-            transaction.product.id = obj.refProduct;
+            transaction.product = ProductFactory.fromObj(obj);
         }
 
         if(obj.sizeType) transaction.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (ValueChecker.validNumber(obj.refSizeType)) {
-            transaction.sizeType.id = obj.refSizeType;
+            transaction.sizeType = SizeTypeFactory.fromObj(obj);
         }
 
         if (obj.changeTotal) transaction.changeTotal = obj.changeTotal;

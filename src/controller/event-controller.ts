@@ -1,37 +1,15 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
 import { Event } from '../shared/models/event/event';
-import { EventType } from '../shared/models/eventtype/eventtype';
 import { Transfer } from '../shared/models/transfer/transfer';
 import { TransferFactory } from '../shared/models/transfer/transfer-factory';
 import { Transaction } from '../shared/models/transaction/transaction';
 import { TransactionFactory } from '../shared/models/transaction/transaction-factory';
 import { EventFactory } from '../shared/models/event/event-factory';
 import { EventService } from '../services/event-service';
-import { EventTypeFactory } from '../shared/models/eventtype/eventtype-factory';
-import { EventTypeService } from '../services/eventtype-service';
-import { Product } from '../shared/models/product/product';
-import { ProductFactory } from '../shared/models/product/product-factory';
-import { SizeType } from '../shared/models/sizetype/sizetype';
-import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
-import { SizeTypeService } from '../services/sizetype-service';
-import { Category } from '../shared/models/category/category';
-import { CategoryFactory } from '../shared/models/category/category-factory';
-import { CategoryService } from '../services/category-service';
-import { Unit } from '../shared/models/unit/unit';
-import { UnitFactory } from '../shared/models/unit/unit-factory';
-import { UnitService } from '../services/unit-service';
-
 
 export class EventController {
-    private eventTypeService: EventTypeService;
-    private categoryService: CategoryService;
-    private unitService: UnitService;
 
-    constructor(private eventService: EventService) {
-        this.eventTypeService = new EventTypeService();
-        this.categoryService = new CategoryService();
-        this.unitService = new UnitService();
-    }
+    constructor(private eventService: EventService) {}
 
     getAll(req, res, next) {
         let events: Event[] = [];
@@ -42,17 +20,7 @@ export class EventController {
                 res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             events = rows1.map(row => EventFactory.fromObj(row));
-            this.eventTypeService.joinEvents((err, rows2) => {
-                if (err) return next(err);
-                var eventTypes: EventType[] = rows2.map(row => EventTypeFactory.fromObj(row));
-
-                events = events.map(e => {
-                    e.eventType = eventTypes.find(f => f.id === e.eventType.id);
-                    return e;
-                });
-
-                res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
-            });
+            res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -66,11 +34,7 @@ export class EventController {
                 res.send(new NotFoundError('Event does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
             event = EventFactory.fromObj(row1);
-            this.eventTypeService.getById(row1.refEventType, (err, row2)=>{
-                if (err) return next(err);
-                event.eventType = EventTypeFactory.fromObj(row2);
-                res.send(event, { 'Content-Type': 'application/json; charset=utf-8' });
-            });
+            res.send(event, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -84,40 +48,7 @@ export class EventController {
                 res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             transfers = rows1.map(row => TransferFactory.fromObj(row));
-            this.eventService.joinSizeTypeTransfersByEventId(id, (err, rows2) => {
-                if (err) return next(err);
-                var sizeTypes: SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
-                this.eventService.joinProductTransfersByEventId(id, (err, rows3)=>{
-                    if (err) return next(err);
-                    var products = rows3.map(row => ProductFactory.fromObj(row));
-                    this.categoryService.joinProducts((err, rows4) => {
-                        if (err) return next(err);
-                        var categories: Category[] = rows4.map(row => CategoryFactory.fromObj(row));
-                        this.unitService.joinProducts((err, rows5) => {
-                            if (err) return next(err);
-                            var units: Unit[] = rows5.map(row => UnitFactory.fromObj(row));
-
-                            products = products.map(p => {
-                                p.category = categories.find(f => f.id === p.category.id);
-                                return p;
-                            }).map(p => {
-                                p.unit = units.find(f => f.id === p.unit.id);
-                                return p;
-                            });
-
-                            transfers = transfers.map(t => {
-                                t.sizeType = sizeTypes.find(f => f.id === t.sizeType.id);
-                                return t;
-                            }).map(i => {
-                                i.product = products.find(f => f.id === i.product.id);
-                                return i;
-                            });
-
-                            res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
-                        });
-                    });
-                });
-            });
+            res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 
@@ -131,40 +62,7 @@ export class EventController {
                 res.send(transactions, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             transactions = rows1.map(row => TransactionFactory.fromObj(row));
-            this.eventService.joinSizeTypeTransactionsByEventId(id, (err, rows2) => {
-                if (err) return next(err);
-                var sizeTypes: SizeType[] = rows2.map(row => SizeTypeFactory.fromObj(row));
-                this.eventService.joinProductTransactionsByEventId(id, (err, rows3)=>{
-                    if (err) return next(err);
-                    var products = rows3.map(row => ProductFactory.fromObj(row));
-                    this.categoryService.joinProducts((err, rows4) => {
-                        if (err) return next(err);
-                        var categories: Category[] = rows4.map(row => CategoryFactory.fromObj(row));
-                        this.unitService.joinProducts((err, rows5) => {
-                            if (err) return next(err);
-                            var units: Unit[] = rows5.map(row => UnitFactory.fromObj(row));
-
-                            products = products.map(p => {
-                                p.category = categories.find(f => f.id === p.category.id);
-                                return p;
-                            }).map(p => {
-                                p.unit = units.find(f => f.id === p.unit.id);
-                                return p;
-                            });
-
-                            transactions = transactions.map(t => {
-                                t.sizeType = sizeTypes.find(f => f.id === t.sizeType.id);
-                                return t;
-                            }).map(i => {
-                                i.product = products.find(f => f.id === i.product.id);
-                                return i;
-                            });
-
-                            res.send(transactions, { 'Content-Type': 'application/json; charset=utf-8' });
-                        });
-                    });
-                });
-            });
+            res.send(transactions, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
 }

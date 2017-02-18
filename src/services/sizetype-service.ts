@@ -3,7 +3,8 @@ var mysql = require('../modules/mysql');
 export class SizeTypeService {
 
     getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM size_types;';
+        var query = 'SELECT * FROM size_types '
+            + 'ORDER BY sizeTypeDesc ASC';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -28,13 +29,14 @@ export class SizeTypeService {
         });
     };
 
-    joinProductByProductId(id: number, callback:(err:any, rows?:any)=>void) {
+    getProductSizesByProductId(id: number, callback:(err:any, rows?:any)=>void) {
         var query = 'SELECT * '
-        + 'FROM ('
-            + 'SELECT * '
-            + 'FROM size_types '
-        + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable '
-        + 'WHERE refProduct = ?;';
+            + 'FROM ('
+                + 'SELECT * '
+                + 'FROM size_types '
+            + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable '
+            + 'WHERE refProduct = ? '
+            + 'ORDER BY sizeTypeAmount DESC';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -46,26 +48,11 @@ export class SizeTypeService {
         });
     };
 
-    joinProductSizes(callback:(err:any, rows?:any)=>void) {
+    getProductsSizes(callback:(err:any, rows?:any)=>void) {
         var query = 'SELECT * '
-        + 'FROM size_types '
-        + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType);';
-        mysql.conn.query(query, (err, rows, fields) => {
-            if (err) {
-                return callback(err);
-            }
-            if (!rows.length) {
-                return callback(null, false);
-            }
-            return callback(null, rows);
-        });
-    };
-
-    joinCrateTypes(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-        + 'FROM size_types '
-        + 'INNER JOIN crate_types ON(sizeTypeId = refSizeType) '
-        + 'GROUP BY sizeTypeId;';
+            + 'FROM size_types '
+            + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType) '
+            + 'ORDER BY sizeTypeAmount DESC';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
