@@ -1,19 +1,18 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Validator } from '../modules/validator';
-import { Product } from '../models/product/product';
-import { Category } from '../models/category/category';
-import { Unit } from '../models/unit/unit';
-import { CrateType } from '../models/cratetype/cratetype';
-import { SizeType } from '../models/sizeType/sizetype';
-import { ProductFactory } from '../models/product/product-factory';
+import { Product } from '../shared/models/product/product';
+import { Category } from '../shared/models/category/category';
+import { Unit } from '../shared/models/unit/unit';
+import { CrateType } from '../shared/models/cratetype/cratetype';
+import { SizeType } from '../shared/models/sizeType/sizetype';
+import { ProductFactory } from '../shared/models/product/product-factory';
 import { ProductService } from '../services/product-service';
-import { CategoryFactory } from '../models/category/category-factory';
+import { CategoryFactory } from '../shared/models/category/category-factory';
 import { CategoryService } from '../services/category-service';
-import { UnitFactory } from '../models/unit/unit-factory';
+import { UnitFactory } from '../shared/models/unit/unit-factory';
 import { UnitService } from '../services/unit-service';
-import { CrateTypeFactory } from '../models/cratetype/cratetype-factory';
+import { CrateTypeFactory } from '../shared/models/cratetype/cratetype-factory';
 import { CrateTypeService } from '../services/cratetype-service';
-import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';
+import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
 
 interface CrateTypeProduct {

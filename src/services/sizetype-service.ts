@@ -29,7 +29,12 @@ export class SizeTypeService {
     };
 
     joinProductByProductId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM (SELECT ps.refProduct, st.sizeTypeId, st.amount, st.description, st.deleted FROM size_types st INNER JOIN product_sizes ps ON (sizeTypeId = refSize)) AS innerTable WHERE refProduct = ?;';
+        var query = 'SELECT * '
+        + 'FROM ('
+            + 'SELECT * '
+            + 'FROM size_types '
+        + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable '
+        + 'WHERE refProduct = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -42,7 +47,9 @@ export class SizeTypeService {
     };
 
     joinProductSizes(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT ps.refProduct, st.sizeTypeId, st.amount, st.description, st.deleted FROM size_types st INNER JOIN product_sizes ps ON (sizeTypeId = refSize);';
+        var query = 'SELECT * '
+        + 'FROM size_types '
+        + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType);';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -55,7 +62,10 @@ export class SizeTypeService {
     };
 
     joinCrateTypes(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT st.sizeTypeId, st.amount, st.description, st.deleted FROM size_types st INNER JOIN crate_types ON(sizeTypeId = refSize) GROUP BY sizeTypeId;';
+        var query = 'SELECT * '
+        + 'FROM size_types '
+        + 'INNER JOIN crate_types ON(sizeTypeId = refSizeType) '
+        + 'GROUP BY sizeTypeId;';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);

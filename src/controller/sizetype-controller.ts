@@ -1,7 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Validator } from '../modules/validator';
-import { SizeType } from '../models/sizetype/sizetype';
-import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';
+import { SizeType } from '../shared/models/sizetype/sizetype';
+import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
 
 

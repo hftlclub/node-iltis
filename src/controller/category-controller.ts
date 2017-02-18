@@ -1,7 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Validator } from '../modules/validator';
-import { Category } from '../models/category/category';
-import { CategoryFactory } from '../models/category/category-factory';
+import { Category } from '../shared/models/category/category';
+import { CategoryFactory } from '../shared/models/category/category-factory';
 import { CategoryService } from '../services/category-service';
 
 

@@ -1,19 +1,18 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Validator } from '../modules/validator';
-import { Inventory } from '../models/inventory/inventory';
-import { InventoryFactory } from '../models/inventory/inventory-factory';
+import { Inventory } from '../shared/models/inventory/inventory';
+import { InventoryFactory } from '../shared/models/inventory/inventory-factory';
 import { InventoryService } from '../services/inventory-service';
-import { Product } from '../models/product/product';
-import { ProductFactory } from '../models/product/product-factory';
+import { Product } from '../shared/models/product/product';
+import { ProductFactory } from '../shared/models/product/product-factory';
 import { ProductService } from '../services/product-service';
-import { SizeType } from '../models/sizetype/sizetype';
-import { SizeTypeFactory } from '../models/sizetype/sizetype-factory';
+import { SizeType } from '../shared/models/sizetype/sizetype';
+import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
-import { Category } from '../models/category/category';
-import { CategoryFactory } from '../models/category/category-factory';
+import { Category } from '../shared/models/category/category';
+import { CategoryFactory } from '../shared/models/category/category-factory';
 import { CategoryService } from '../services/category-service';
-import { Unit } from '../models/unit/unit';
-import { UnitFactory } from '../models/unit/unit-factory';
+import { Unit } from '../shared/models/unit/unit';
+import { UnitFactory } from '../shared/models/unit/unit-factory';
 import { UnitService } from '../services/unit-service';
 
 

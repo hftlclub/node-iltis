@@ -1,4 +1,3 @@
-//import { DefaultSqlService } from './default-sql-service';
 var mysql = require('../modules/mysql');
 
 export class CategoryService {
@@ -30,7 +29,10 @@ export class CategoryService {
     };
 
     joinProducts(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT pc.categoryId, pc.name, pc.description, pc.deleted FROM product_categories pc INNER JOIN products ON(categoryId = refCategory) GROUP BY categoryId;';
+        var query = 'SELECT * '
+        + 'FROM product_categories '
+        + 'INNER JOIN products ON(categoryId = refCategory) '
+        + 'GROUP BY categoryId;';
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);

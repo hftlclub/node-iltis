@@ -1,4 +1,4 @@
-import { Validator } from '../../modules/validator';
+import { ValueChecker } from '../../valuechecker';
 import { Transfer } from './transfer';
 import { ProductFactory } from '../product/product-factory';
 import { SizeTypeFactory } from '../sizetype/sizetype-factory';
@@ -13,29 +13,29 @@ export class TransferFactory {
 
         let transfer = TransferFactory.empty();
 
-        if (Validator.validNumber(obj.transferId)) {
+        if (obj.id) transfer.id = obj.id;
+        else if (ValueChecker.validNumber(obj.transferId)) {
             transfer.id = obj.transferId;
         }
 
         if(obj.product) transfer.product = ProductFactory.fromObj(obj.product);
-        else if (Validator.validNumber(obj.refProduct)) {
+        else if (ValueChecker.validNumber(obj.refProduct)) {
             transfer.product.id = obj.refProduct;
         }
 
         if(obj.sizeType) transfer.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
-        else if (Validator.validNumber(obj.refSize)) {
-            transfer.sizeType.id = obj.refSize;
+        else if (ValueChecker.validNumber(obj.refSizeType)) {
+            transfer.sizeType.id = obj.refSizeType;
         }
 
-        if (Validator.validNumber(obj.changeStorage)) {
-            transfer.change = obj.changeStorage;
+        if (obj.change) transfer.change = obj.change;
+        else if (ValueChecker.validNumber(obj.transferChangeStorage)) {
+            transfer.change = obj.transferChangeStorage;
         }
 
-        if (obj.timestamp) {
-            if(Validator.validDate(obj.timestamp)) {
-                transfer.timestamp = obj.timestamp;
-            } else {
-                transfer.timestamp = new Date(obj.timestamp);
+        if (obj.transferTS) {
+            if(ValueChecker.validDate(obj.transferTS)) {
+                transfer.timestamp = obj.transferTS;
             }
         }
 

@@ -1,4 +1,4 @@
-import { Validator } from '../../modules/validator';
+import { ValueChecker } from '../../valuechecker';
 import { Inventory } from './inventory';
 import { EventFactory } from '../event/event-factory';
 import { ProductFactory } from '../product/product-factory';
@@ -15,20 +15,20 @@ export class InventoryFactory {
         let inventory = InventoryFactory.empty();
 
         if(obj.product) inventory.product = ProductFactory.fromObj(obj.product);
-        else if (Validator.validNumber(obj.refProduct)) {
+        else if (ValueChecker.validNumber(obj.refProduct)) {
             inventory.product.id = obj.refProduct;
         }
 
         if(obj.sizeType) inventory.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
-        else if (Validator.validNumber(obj.refSize)) {
-            inventory.sizeType.id = obj.refSize;
+        else if (ValueChecker.validNumber(obj.refSizeType)) {
+            inventory.sizeType.id = obj.refSizeType;
         }
 
-        if (Validator.validNumber(obj.storage)) {
+        if (ValueChecker.validNumber(obj.storage)) {
             inventory.storage = obj.storage;
         }
 
-        if (Validator.validNumber(obj.counter)) {
+        if (ValueChecker.validNumber(obj.counter)) {
             inventory.counter = obj.counter;
         }
 

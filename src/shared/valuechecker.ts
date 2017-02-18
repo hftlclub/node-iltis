@@ -1,4 +1,4 @@
-export class Validator {
+export class ValueChecker {
 
     static validNumber(no: number) {
         return no && typeof no == 'number';

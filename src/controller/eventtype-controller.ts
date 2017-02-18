@@ -1,7 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Validator } from '../modules/validator';
-import { EventType } from '../models/eventtype/eventtype';
-import { EventTypeFactory } from '../models/eventtype/eventtype-factory';
+import { EventType } from '../shared/models/eventtype/eventtype';
+import { EventTypeFactory } from '../shared/models/eventtype/eventtype-factory';
 import { EventTypeService } from '../services/eventtype-service';
 
 

@@ -29,7 +29,9 @@ export class EventService {
     };
 
     getTransfersByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM event_transfers WHERE refEvent = ? AND changeStorage != 0;';
+        var query = 'SELECT * '
+        + 'FROM event_transfers '
+        + 'WHERE refEvent = ? AND transferChangeStorage != 0;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -42,7 +44,12 @@ export class EventService {
     };
 
     joinProductTransfersByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM (SELECT et.refEvent, p.productId, p.refCategory, p.refUnit, p.name, p.description, p.priceIntern, p.imgFilename, p.active, p.deleted, p.timestamp FROM products p INNER JOIN event_transfers et ON(refProduct = productId)) AS innerTable WHERE refEvent = ?;';
+        var query = 'SELECT * '
+        + 'FROM ('
+            + 'SELECT * '
+            + 'FROM products '
+            + 'INNER JOIN event_transfers ON(refProduct = productId)) AS innerTable '
+            + 'WHERE refEvent = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -55,7 +62,12 @@ export class EventService {
     };
 
     joinSizeTypeTransfersByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM (SELECT et.refEvent, st.sizeTypeId, st.amount, st.description, st.deleted FROM size_types st INNER JOIN event_transfers et ON(refSize = sizeTypeId)) AS innerTable WHERE refEvent = ?;';
+        var query = 'SELECT * '
+        + 'FROM ('
+            + 'SELECT * '
+            + 'FROM size_types '
+            + 'INNER JOIN event_transfers ON(refSizeType = sizeTypeId)) AS innerTable '
+            + 'WHERE refEvent = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -81,7 +93,12 @@ export class EventService {
     };
 
     joinProductTransactionsByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM (SELECT t.refEvent, p.productId, p.refCategory, p.refUnit, p.name, p.description, p.priceIntern, p.imgFilename, p.active, p.deleted, p.timestamp FROM products p INNER JOIN transactions t ON(refProduct = productId)) AS innerTable WHERE refEvent = ?;';
+        var query = 'SELECT * '
+        + 'FROM ('
+            + 'SELECT * '
+            + 'FROM products p '
+            + 'INNER JOIN transactions ON(refProduct = productId)) AS innerTable '
+            + 'WHERE refEvent = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -94,7 +111,12 @@ export class EventService {
     };
 
     joinSizeTypeTransactionsByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM (SELECT t.refEvent, st.sizeTypeId, st.amount, st.description, st.deleted FROM size_types st INNER JOIN transactions t ON(refSize = sizeTypeId)) AS innerTable WHERE refEvent = ?;';
+        var query = 'SELECT * '
+        + 'FROM ('
+            + 'SELECT * '
+            + 'FROM size_types '
+            + 'INNER JOIN transactions  ON(refSizeType = sizeTypeId)) AS innerTable '
+        + 'WHERE refEvent = ?;';
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
