@@ -39,6 +39,15 @@ CREATE TABLE events (
     CONSTRAINT events_pk PRIMARY KEY (eventId)
 );
 
+CREATE TABLE product_additions (
+    refProduct int NOT NULL,
+    refSizeType int NOT NULL,
+    additionDeliveryCosts decimal(5,2) NOT NULL,
+    additionMinimumStock int NOT NULL,
+    additionWarningSend bool NOT NULL,
+    CONSTRAINT product_additions_pk PRIMARY KEY (refProduct,refSizeType)
+);
+
 CREATE TABLE product_categories (
     categoryId int NOT NULL AUTO_INCREMENT,
     categoryName varchar(128) NOT NULL,
@@ -52,13 +61,6 @@ CREATE TABLE product_crates (
     refProduct int NOT NULL,
     refCrateType int NOT NULL,
     CONSTRAINT product_crates_pk PRIMARY KEY (refProduct,refCrateType)
-);
-
-CREATE TABLE product_delivery_costs (
-    refProduct int NOT NULL,
-    refSizeType int NOT NULL,
-    deliveryCosts decimal(5,2) NOT NULL,
-    CONSTRAINT product_delivery_costs_pk PRIMARY KEY (refProduct,refSizeType)
 );
 
 CREATE TABLE product_sizes (
@@ -127,6 +129,13 @@ ALTER TABLE event_transfers ADD CONSTRAINT event_transfers_size_types FOREIGN KE
 ALTER TABLE events ADD CONSTRAINT events_event_types FOREIGN KEY events_event_types (refEventType)
     REFERENCES event_types (eventTypeId);
 
+ALTER TABLE product_additions ADD CONSTRAINT product_additions_products FOREIGN KEY product_additions_products (refProduct)
+    REFERENCES products (productId)
+    ON DELETE CASCADE;
+
+ALTER TABLE product_additions ADD CONSTRAINT product_additions_size_types FOREIGN KEY product_additions_size_types (refSizeType)
+    REFERENCES size_types (sizeTypeId);
+
 ALTER TABLE product_crates ADD CONSTRAINT product_crates_crate_types FOREIGN KEY product_crates_crate_types (refCrateType)
     REFERENCES crate_types (crateTypeId)
     ON DELETE CASCADE;
@@ -134,13 +143,6 @@ ALTER TABLE product_crates ADD CONSTRAINT product_crates_crate_types FOREIGN KEY
 ALTER TABLE product_crates ADD CONSTRAINT product_crates_products FOREIGN KEY product_crates_products (refProduct)
     REFERENCES products (productId)
     ON DELETE CASCADE;
-
-ALTER TABLE product_delivery_costs ADD CONSTRAINT product_delivery_costs_products FOREIGN KEY product_delivery_costs_products (refProduct)
-    REFERENCES products (productId)
-    ON DELETE CASCADE;
-
-ALTER TABLE product_delivery_costs ADD CONSTRAINT product_delivery_costs_size_types FOREIGN KEY product_delivery_costs_size_types (refSizeType)
-    REFERENCES size_types (sizeTypeId);
 
 ALTER TABLE product_sizes ADD CONSTRAINT product_sizes_products FOREIGN KEY product_sizes_products (refProduct)
     REFERENCES products (productId)

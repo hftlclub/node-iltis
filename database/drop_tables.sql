@@ -13,17 +13,17 @@ ALTER TABLE event_transfers
 ALTER TABLE events
     DROP FOREIGN KEY events_event_types;
 
+ALTER TABLE product_additions
+    DROP FOREIGN KEY product_additions_products;
+
+ALTER TABLE product_additions
+    DROP FOREIGN KEY product_additions_size_types;
+
 ALTER TABLE product_crates
     DROP FOREIGN KEY product_crates_crate_types;
 
 ALTER TABLE product_crates
     DROP FOREIGN KEY product_crates_products;
-
-ALTER TABLE product_delivery_costs
-    DROP FOREIGN KEY product_delivery_costs_products;
-
-ALTER TABLE product_delivery_costs
-    DROP FOREIGN KEY product_delivery_costs_size_types;
 
 ALTER TABLE product_sizes
     DROP FOREIGN KEY product_sizes_products;
@@ -54,11 +54,11 @@ DROP TABLE event_types;
 
 DROP TABLE events;
 
+DROP TABLE product_additions;
+
 DROP TABLE product_categories;
 
 DROP TABLE product_crates;
-
-DROP TABLE product_delivery_costs;
 
 DROP TABLE product_sizes;
 

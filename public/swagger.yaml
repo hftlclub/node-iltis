@@ -1572,6 +1572,21 @@ definitions:
         type: number
         format: double
         example: 60
+  MinimumStock:
+    type: object
+    description: Minimum stock of product related to its size
+    properties:
+      sizeTypeId:
+        type: number
+        format: double
+        example: 3
+      minStock:
+        type: number
+        format: double
+        example: 300
+      warningSend:
+        type: boolean
+        example: false
   RestError:
     type: object
     description: >-

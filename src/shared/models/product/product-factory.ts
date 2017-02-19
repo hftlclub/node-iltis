@@ -5,11 +5,13 @@ import { UnitFactory } from '../unit/unit-factory';
 import { SizeTypeFactory } from '../sizetype/sizetype-factory';
 import { CrateTypeFactory } from '../cratetype/cratetype-factory';
 import { DeliveryCostsFactory } from '../deliverycosts/deliverycosts-factory';
+import { MinimumStockFactory } from '../minimumstock/minimumstock-factory';
+
 
 export class ProductFactory {
 
     static empty(): Product {
-        return new Product(0, '', '', CategoryFactory.empty(), UnitFactory.empty(), [], [], [], '', true, false, null);
+        return new Product(0, '', '', CategoryFactory.empty(), UnitFactory.empty(), [], [], [], [], '', true, false, null);
     }
 
     static fromObj(obj: any): Product {
@@ -46,6 +48,8 @@ export class ProductFactory {
         if(obj.crateTypes) product.crateTypes = obj.crateTypes.map(crateType => CrateTypeFactory.fromObj(crateType));
 
         if(obj.deliveryCosts) product.deliveryCosts = obj.deliveryCosts.map(deliveryCosts => DeliveryCostsFactory.fromObj(deliveryCosts));
+
+        if(obj.minimumStocks) product.minimumStocks = obj.minimumStocks.map(minimumStock => MinimumStockFactory.fromObj(minimumStock));
 
         if (obj.imgFilename) product.imgFilename = obj.imgFilename;
         else if (ValueChecker.validString(obj.productImgFilename)) {

@@ -85,12 +85,12 @@ export class EventService {
     static getCalculation(id: number, callback:(err:any, rows?:any)=>void) {
         var query = `SELECT (eventCashAfter - eventCashBefore) AS sales, costs, ((eventCashAfter - eventCashBefore) - costs) AS profit
                     FROM (
-                        SELECT refEvent, (SUM(transactionChangeTotal * deliveryCosts) * (-1)) AS costs
+                        SELECT refEvent, (SUM(transactionChangeTotal * additionDeliveryCosts) * (-1)) AS costs
                         FROM (
                             SELECT refEvent, refProduct AS productId, refSizeType AS sizeTypeId, transactionChangeTotal
                             FROM transactions
                             WHERE refEvent = ?) AS transactions
-                        INNER JOIN product_delivery_costs ON (refProduct = productId AND refSizeType = sizeTypeId)) AS costsTable
+                        INNER JOIN product_additions ON (refProduct = productId AND refSizeType = sizeTypeId)) AS costsTable
                     INNER JOIN events ON (refEvent = eventId)`;
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {

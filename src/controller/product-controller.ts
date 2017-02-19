@@ -7,6 +7,7 @@ import { CrateTypeService } from '../services/cratetype-service';
 import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
 import { SizeTypeService } from '../services/sizetype-service';
 import { DeliveryCostsFactory } from '../shared/models/deliverycosts/deliverycosts-factory';
+import { MinimumStockFactory } from '../shared/models/minimumstock/minimumstock-factory';
 
 
 export class ProductController {
@@ -30,10 +31,11 @@ export class ProductController {
                     rows.forEach(row => {
                         products.find(f => f.id === row.refProduct).sizeTypes.push(SizeTypeFactory.fromObj(row));
                     });
-                    ProductService.getProductsPrices((err, rows) => {
+                    ProductService.getProductsAdditions((err, rows) => {
                         if (err) return next(err);
                         rows.forEach(row => {
                             products.find(f => f.id === row.refProduct).deliveryCosts.push(DeliveryCostsFactory.fromObj(row));
+                            products.find(f => f.id === row.refProduct).minimumStocks.push(MinimumStockFactory.fromObj(row));
                         });
                         res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
                     });
@@ -55,9 +57,10 @@ export class ProductController {
             SizeTypeService.getProductSizesByProductId(product.id, (err, rows) => {
                 if (err) return next(err);
                 product.sizeTypes = rows.map(row => SizeTypeFactory.fromObj(row));
-                ProductService.getProductPricesByProductId(product.id, (err, rows) => {
+                ProductService.getProductAdditionsByProductId(product.id, (err, rows) => {
                     if (err) return next(err);
                     product.deliveryCosts = rows.map(row => DeliveryCostsFactory.fromObj(row));
+                    product.minimumStocks = rows.map(row => MinimumStockFactory.fromObj(row));
                     CrateTypeService.getProductCratesByProductId(product.id, (err, rows) => {
                         if (err) return next(err);
                         if (!rows.length) {

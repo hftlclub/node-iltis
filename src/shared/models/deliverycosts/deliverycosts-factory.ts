@@ -17,8 +17,8 @@ export class DeliveryCostsFactory {
         }
 
         if (obj.costs) deliveryCosts.costs = obj.costs;
-        else if (ValueChecker.validNumber(obj.deliveryCosts)) {
-            deliveryCosts.costs = obj.deliveryCosts;
+        else if (ValueChecker.validNumber(obj.additionDeliveryCosts)) {
+            deliveryCosts.costs = obj.additionDeliveryCosts;
         }
 
         return deliveryCosts;

@@ -41,9 +41,9 @@ export class ProductService {
         });
     };
 
-    static getProductPricesByProductId(id: number, callback:(err:any, rows?:any)=>void) {
+    static getProductAdditionsByProductId(id: number, callback:(err:any, rows?:any)=>void) {
         var query = `SELECT *
-                    FROM product_delivery_costs
+                    FROM product_additions
                     WHERE refProduct = ?
                     ORDER BY refSizeType ASC`;
         mysql.conn.query(query, id, (err, rows, fields) => {
@@ -57,9 +57,9 @@ export class ProductService {
         });
     };
 
-    static getProductsPrices(callback:(err:any, rows?:any)=>void) {
+    static getProductsAdditions(callback:(err:any, rows?:any)=>void) {
         var query = `SELECT *
-                    FROM product_delivery_costs
+                    FROM product_additions
                     ORDER BY refSizeType ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
