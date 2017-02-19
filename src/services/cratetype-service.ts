@@ -2,11 +2,11 @@ var mysql = require('../modules/mysql');
 
 export class CrateTypeService {
 
-    getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-            + 'FROM size_types '
-            + 'INNER JOIN crate_types ON(sizeTypeId = refSizeType) '
-            + 'ORDER BY crateTypeDesc ASC';
+    static getAll(callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM size_types
+                    INNER JOIN crate_types ON(sizeTypeId = refSizeType)
+                    ORDER BY crateTypeDesc ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -18,11 +18,11 @@ export class CrateTypeService {
         });
     };
 
-    getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-            + 'FROM size_types '
-            + 'INNER JOIN crate_types ON(sizeTypeId = refSizeType) '
-            + 'WHERE crateTypeId = ?;'
+    static getById(id: number, callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM size_types
+                    INNER JOIN crate_types ON(sizeTypeId = refSizeType)
+                    WHERE crateTypeId = ?`;
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -34,11 +34,11 @@ export class CrateTypeService {
         });
     };
 
-    getProductsCrates(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-            + 'FROM crate_types '
-            + 'INNER JOIN product_crates ON (crateTypeId = refCrateType) '
-            + 'ORDER BY crateTypeSlots DESC';
+    static getProductsCrates(callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM crate_types
+                    INNER JOIN product_crates ON (crateTypeId = refCrateType)
+                    ORDER BY crateTypeSlots DESC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -50,15 +50,15 @@ export class CrateTypeService {
         });
     };
 
-    getProductCratesByProductId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-            + 'FROM ('
-                + 'SELECT * '
-                + 'FROM size_types '
-                + 'INNER JOIN crate_types ON(sizeTypeId = refSizeType)) AS sizeCrates '
-            + 'INNER JOIN product_crates ON(crateTypeId = refCrateType) '
-            + 'WHERE refProduct = ? '
-            + 'ORDER BY crateTypeSlots DESC';
+    static getProductCratesByProductId(id: number, callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM (
+                        SELECT *
+                        FROM size_types
+                        INNER JOIN crate_types ON(sizeTypeId = refSizeType)) AS sizeCrates
+                    INNER JOIN product_crates ON(crateTypeId = refCrateType)
+                    WHERE refProduct = ?
+                    ORDER BY crateTypeSlots DESC`;
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 console.log(err);

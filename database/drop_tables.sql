@@ -19,6 +19,12 @@ ALTER TABLE product_crates
 ALTER TABLE product_crates
     DROP FOREIGN KEY product_crates_products;
 
+ALTER TABLE product_delivery_costs
+    DROP FOREIGN KEY product_delivery_costs_products;
+
+ALTER TABLE product_delivery_costs
+    DROP FOREIGN KEY product_delivery_costs_size_types;
+
 ALTER TABLE product_sizes
     DROP FOREIGN KEY product_sizes_products;
 
@@ -51,6 +57,8 @@ DROP TABLE events;
 DROP TABLE product_categories;
 
 DROP TABLE product_crates;
+
+DROP TABLE product_delivery_costs;
 
 DROP TABLE product_sizes;
 

@@ -6,11 +6,9 @@ import { CategoryService } from '../services/category-service';
 
 export class CategoryController {
 
-    constructor(private categoryService: CategoryService) { }
-
     getAll(req, res, next) {
         let categories: Category[] = [];
-        this.categoryService.getAll((err, rows)=>{
+        CategoryService.getAll((err, rows)=>{
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -24,7 +22,7 @@ export class CategoryController {
     getById(req, res, next) {
         let id = parseInt(req.params.categoryId);
         let category: Category = CategoryFactory.empty();
-        this.categoryService.getById(id, (err, row)=>{
+        CategoryService.getById(id, (err, row)=>{
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

@@ -2,9 +2,10 @@ var mysql = require('../modules/mysql');
 
 export class CategoryService {
 
-    getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM product_categories '
-            + 'ORDER BY categoryId ASC';
+    static getAll(callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM product_categories
+                    ORDER BY categoryId ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -16,8 +17,10 @@ export class CategoryService {
         });
     };
 
-    getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM product_categories WHERE categoryId = ?';
+    static getById(id: number, callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM product_categories
+                    WHERE categoryId = ?`;
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);

@@ -4,11 +4,12 @@ import { CategoryFactory } from '../category/category-factory';
 import { UnitFactory } from '../unit/unit-factory';
 import { SizeTypeFactory } from '../sizetype/sizetype-factory';
 import { CrateTypeFactory } from '../cratetype/cratetype-factory';
+import { DeliveryCostsFactory } from '../deliverycosts/deliverycosts-factory';
 
 export class ProductFactory {
 
     static empty(): Product {
-        return new Product(0, '', '', CategoryFactory.empty(), UnitFactory.empty(), [], [], 0, '', true, false, null);
+        return new Product(0, '', '', CategoryFactory.empty(), UnitFactory.empty(), [], [], [], '', true, false, null);
     }
 
     static fromObj(obj: any): Product {
@@ -44,10 +45,7 @@ export class ProductFactory {
 
         if(obj.crateTypes) product.crateTypes = obj.crateTypes.map(crateType => CrateTypeFactory.fromObj(crateType));
 
-        if (obj.priceIntern) product.priceIntern = obj.priceIntern;
-        else if (ValueChecker.validNumber(obj.productPriceIntern)) {
-            product.priceIntern = obj.productPriceIntern;
-        }
+        if(obj.deliveryCosts) product.deliveryCosts = obj.deliveryCosts.map(deliveryCosts => DeliveryCostsFactory.fromObj(deliveryCosts));
 
         if (obj.imgFilename) product.imgFilename = obj.imgFilename;
         else if (ValueChecker.validString(obj.productImgFilename)) {

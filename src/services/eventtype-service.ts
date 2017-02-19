@@ -2,9 +2,10 @@ var mysql = require('../modules/mysql');
 
 export class EventTypeService {
 
-    getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM event_types '
-            + 'ORDER BY eventTypeId ASC';
+    static getAll(callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM event_types
+                    ORDER BY eventTypeId ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -16,8 +17,10 @@ export class EventTypeService {
         });
     };
 
-    getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM event_types WHERE eventTypeId = ?;';
+    static getById(id: number, callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM event_types
+                    WHERE eventTypeId = ?`;
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);

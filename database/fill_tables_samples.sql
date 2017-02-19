@@ -1,5 +1,5 @@
 -- Data of these insert-commands are just samples.
--- Therefore prices and products are not equal with the operational systems data.
+-- Therefore products, prices and costs are not equal with the operational systems data of the organization.
 
 INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (0.2, 'Flasche', false);
 INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (0.33, 'Flasche', false);
@@ -30,17 +30,17 @@ INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDelete
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('Obst und Gemüse', 'Limetten, Gurken, ...', false);
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('Sonstiges', 'Sonstige Lebensmittel', false);
 
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Ur-Krostitzer', 'Sächsiches Bier', 0.80, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Augustiner', 'Bayrisches Bier', 0.90, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Fanta', 'Softdrink', 2.00, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Cola', 'Softdrink', 2.00, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Sekt', null, 3.00, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Glühwein', 'Wintergetränk', 2.00, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Salzstangen', null, 1.2, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Erdnüsse', null, 1.2, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Limetten', 'Für Cocktails', 0.7, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Gurken', 'Für Cocktails', 1.50, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `productPriceIntern`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (6, 3, 'Eis', 'Für Cocktails', 4.00, '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Ur-Krostitzer', 'Sächsiches Bier', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Augustiner', 'Bayrisches Bier', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Fanta', 'Softdrink', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Cola', 'Softdrink', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Sekt', null, '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Glühwein', 'Wintergetränk', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Salzstangen', null, '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Erdnüsse', null, '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Limetten', 'Für Cocktails', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Gurken', 'Für Cocktails', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (6, 3, 'Eis', 'Für Cocktails', '/images/sample.png', true, false);
 
 INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (1, 3);
 INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (2, 3);
@@ -54,6 +54,19 @@ INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (8, 10);
 INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (9, 9);
 INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (10, 9);
 INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (11, 10);
+
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (1, 3, 0.80);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (2, 3, 0.90);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (3, 5, 2.00);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (4, 5, 2.00);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (5, 1, 1.20);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (5, 4, 3.50);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (6, 5, 2.00);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (7, 9, 1.20);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (8, 10, 1.20);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (9, 9, 0.70);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (10, 9, 1.50);
+INSERT INTO `product_delivery_costs`(`refProduct`, `refSizeType`, `deliveryCosts`) VALUES (11, 10, 4.00);
 
 INSERT INTO `crate_types`(`refSizeType`, `crateTypeDesc`, `crateTypeSlots`) VALUES (2, 'Kasten', 24);
 INSERT INTO `crate_types`(`refSizeType`, `crateTypeDesc`, `crateTypeSlots`) VALUES (3, 'Kasten', 20);
@@ -93,7 +106,7 @@ INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transaction
 INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (2, 8, 10, -3, 0);
 INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (2, 9, 9, -10, 0);
 INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (2, 10, 9, -1, 0);
-INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (2, 11, 10, 4, 0);
+INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (2, 11, 10, -4, 0);
 
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 2, 3, -20, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 1, 3, -20, 0);

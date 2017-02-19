@@ -6,11 +6,9 @@ import { SizeTypeService } from '../services/sizetype-service';
 
 export class SizeTypeController {
 
-    constructor(private sizeTypeService: SizeTypeService) { }
-
     getAll(req, res, next) {
         let sizeTypes: SizeType[] = [];
-        this.sizeTypeService.getAll((err, rows)=>{
+        SizeTypeService.getAll((err, rows)=>{
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -24,7 +22,7 @@ export class SizeTypeController {
     getById(req, res, next) {
         let id = parseInt(req.params.sizeTypeId);
         let sizeType: SizeType = SizeTypeFactory.empty();
-        this.sizeTypeService.getById(id, (err, row)=>{
+        SizeTypeService.getById(id, (err, row)=>{
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

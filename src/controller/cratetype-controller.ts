@@ -6,17 +6,15 @@ import { CrateTypeService } from '../services/cratetype-service';
 
 export class CrateTypeController {
 
-    constructor(private crateTypeService: CrateTypeService) {}
-
     getAll(req, res, next) {
         let crateTypes: CrateType[] = [];
-        this.crateTypeService.getAll((err, rows1)=>{
+        CrateTypeService.getAll((err, rows)=>{
             if (err) return next(err);
-            if (!rows1.length) {
+            if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            crateTypes = rows1.map(row => CrateTypeFactory.fromObj(row));
+            crateTypes = rows.map(row => CrateTypeFactory.fromObj(row));
             res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
@@ -24,13 +22,13 @@ export class CrateTypeController {
     getById(req, res, next) {
         let id = parseInt(req.params.crateTypeId);
         let crateType: CrateType = CrateTypeFactory.empty();
-        this.crateTypeService.getById(id, (err, row1) => {
+        CrateTypeService.getById(id, (err, row) => {
             if (err) return next(err);
-            if (!row1) {
+            if (!row) {
                 // Todo: Implementet correct feedback (error 204)
                 res.send(new NotFoundError('CrateType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
             }
-            crateType = CrateTypeFactory.fromObj(row1);
+            crateType = CrateTypeFactory.fromObj(row);
             res.send(crateType, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };

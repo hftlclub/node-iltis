@@ -1,34 +1,26 @@
 import { createServer, bodyParser, CORS, queryParser, serveStatic } from 'restify';
 import { ProductController } from './src/controller/product-controller';
-import { ProductService } from './src/services/product-service';
 import { ServerController } from './src/controller/server-controller';
-import { CategoryService } from './src/services/category-service';
 import { CategoryController } from './src/controller/category-controller';
-import { UnitService } from './src/services/unit-service';
 import { UnitController } from './src/controller/unit-controller';
-import { SizeTypeService } from './src/services/sizetype-service';
 import { SizeTypeController } from './src/controller/sizetype-controller';
-import { CrateTypeService } from './src/services/cratetype-service';
 import { CrateTypeController } from './src/controller/cratetype-controller';
-import { EventService } from './src/services/event-service';
 import { EventController } from './src/controller/event-controller';
-import { EventTypeService } from './src/services/eventtype-service';
 import { EventTypeController } from './src/controller/eventtype-controller';
-import { InventoryService } from './src/services/inventory-service';
 import { InventoryController } from './src/controller/inventory-controller';
 
 var config = require('./config');
 
 let serverController = new ServerController();
-let productController = new ProductController(new ProductService());
-let categoryController = new CategoryController(new CategoryService());
-let unitController = new UnitController(new UnitService());
-let sizeTypeController = new SizeTypeController(new SizeTypeService());
-let crateTypeController = new CrateTypeController(new CrateTypeService());
-let eventController = new EventController(new EventService());
-let eventTypeController = new EventTypeController(new EventTypeService());
-let inventoryController = new InventoryController(new InventoryService());
-let inventoryTypeController = new InventoryController(new InventoryService());
+let productController = new ProductController();
+let categoryController = new CategoryController();
+let unitController = new UnitController();
+let sizeTypeController = new SizeTypeController();
+let crateTypeController = new CrateTypeController();
+let eventController = new EventController();
+let eventTypeController = new EventTypeController();
+let inventoryController = new InventoryController();
+let inventoryTypeController = new InventoryController();
 
 var server = createServer({
     formatters: {
@@ -59,6 +51,7 @@ server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
 server.get('/event/:eventId/transfers', eventController.getEventTransfers.bind(eventController));
 server.get('/event/:eventId/transactions', eventController.getEventTransactions.bind(eventController));
+server.get('/event/:eventId/calculation', eventController.getCalculation.bind(eventController));
 server.get('/eventtypes', eventTypeController.getAll.bind(eventTypeController));
 server.get('/eventtype/:eventTypeId', eventTypeController.getById.bind(eventTypeController));
 server.get('/categories', categoryController.getAll.bind(categoryController));

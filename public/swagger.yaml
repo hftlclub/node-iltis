@@ -584,6 +584,31 @@ paths:
           in: path
           type: number
           required: true
+  '/event/{eventId}/calculation':
+    get:
+      summary: Get calculation of a specific closed event
+      responses:
+        '200':
+          description: Get calculation
+          schema:
+            $ref: '#/definitions/Calculation'
+        '404':
+          description: Event does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '423':
+          description: Event is not closed
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
   /inventory:
     get:
       summary: Get current inventory
@@ -1284,10 +1309,10 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/CrateType'
-      priceIntern:
-        type: number
-        format: double
-        example: 0.7
+      deliveryCosts:
+        type: array
+        items:
+          $ref: '#/definitions/DeliveryCosts'
       imgFilename:
         type: string
         example: 'JHS09234JKK.jpg'
@@ -1516,6 +1541,34 @@ definitions:
         format: double
         example: 1600
       counter:
+        type: number
+        format: double
+        example: 60
+  DeliveryCosts:
+    type: object
+    description: Contains the delivery costs of a product related to its size
+    properties:
+      sizeTypeId:
+        type: number
+        format: double
+        example: 3
+      costs:
+        type: number
+        format: double
+        example: 0.80
+  Calculation:
+    type: object
+    description: Contains the calculation of an event
+    properties:
+      sales:
+        type: number
+        format: double
+        example: 365.5
+      costs:
+        type: number
+        format: double
+        example: 205.5
+      profit:
         type: number
         format: double
         example: 60

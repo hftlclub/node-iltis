@@ -2,6 +2,7 @@ import { Category } from '../category/category';
 import { Unit } from '../unit/unit';
 import { CrateType } from '../cratetype/cratetype';
 import { SizeType } from '../sizetype/sizetype';
+import { DeliveryCosts} from '../deliverycosts/deliverycosts';
 
 export class Product {
   constructor(
@@ -12,7 +13,7 @@ export class Product {
     public unit: Unit,
     public sizeTypes: SizeType[],
     public crateTypes: CrateType[],
-    public priceIntern: number,
+    public deliveryCosts: DeliveryCosts[],
     public imgFilename: string,
     public active: boolean,
     public deleted: boolean,

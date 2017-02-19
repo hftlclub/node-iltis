@@ -6,11 +6,9 @@ import { UnitService } from '../services/unit-service';
 
 export class UnitController {
 
-    constructor(private unitService: UnitService) { }
-
     getAll(req, res, next) {
         let units: Unit[] = [];
-        this.unitService.getAll((err, rows)=>{
+        UnitService.getAll((err, rows)=>{
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -24,7 +22,7 @@ export class UnitController {
     getById(req, res, next) {
         let id = parseInt(req.params.unitId);
         let unit: Unit = UnitFactory.empty();
-        this.unitService.getById(id, (err, row)=>{
+        UnitService.getById(id, (err, row)=>{
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

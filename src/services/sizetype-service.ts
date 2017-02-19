@@ -2,9 +2,10 @@ var mysql = require('../modules/mysql');
 
 export class SizeTypeService {
 
-    getAll(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM size_types '
-            + 'ORDER BY sizeTypeDesc ASC';
+    static getAll(callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM size_types
+                    ORDER BY sizeTypeDesc ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -16,8 +17,10 @@ export class SizeTypeService {
         });
     };
 
-    getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * FROM size_types WHERE sizeTypeId = ?;';
+    static getById(id: number, callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM size_types
+                    WHERE sizeTypeId = ?`;
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -29,14 +32,14 @@ export class SizeTypeService {
         });
     };
 
-    getProductSizesByProductId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-            + 'FROM ('
-                + 'SELECT * '
-                + 'FROM size_types '
-            + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable '
-            + 'WHERE refProduct = ? '
-            + 'ORDER BY sizeTypeAmount DESC';
+    static getProductSizesByProductId(id: number, callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM (
+                        SELECT *
+                        FROM size_types
+                    INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable
+                    WHERE refProduct = ?
+                    ORDER BY sizeTypeAmount DESC`;
         mysql.conn.query(query, id, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -48,11 +51,11 @@ export class SizeTypeService {
         });
     };
 
-    getProductsSizes(callback:(err:any, rows?:any)=>void) {
-        var query = 'SELECT * '
-            + 'FROM size_types '
-            + 'INNER JOIN product_sizes ON (sizeTypeId = refSizeType) '
-            + 'ORDER BY sizeTypeAmount DESC';
+    static getProductsSizes(callback:(err:any, rows?:any)=>void) {
+        var query = `SELECT *
+                    FROM size_types
+                    INNER JOIN product_sizes ON (sizeTypeId = refSizeType)
+                    ORDER BY sizeTypeAmount DESC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
