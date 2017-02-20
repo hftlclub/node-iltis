@@ -1,6 +1,17 @@
 var mysql = require('../modules/mysql');
+import { Event } from '../shared/models/event/event';
 
 export class EventService {
+
+    static addEvent(event: any, callback:(err:any, result?:any)=>void) {
+        var query = `INSERT INTO events SET ?`;
+        mysql.conn.query(query, event, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
 
     static getAll(callback:(err:any, rows?:any)=>void) {
         var query = `SELECT *

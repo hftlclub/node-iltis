@@ -59,5 +59,26 @@ export class EventFactory {
 
         return event;
     }
+
+    static fromModel(obj: Event): any {
+
+        var dbEntry: any = {};
+
+        if(obj.eventType) dbEntry.refEventType = obj.eventType.id;
+
+        if (obj.description) dbEntry.eventDesc = obj.description;
+
+        if (obj.cashBefore) dbEntry.eventCashBefore = obj.cashBefore;
+
+        if (obj.cashAfter) dbEntry.eventCashAfter = obj.cashAfter;
+
+        if (obj.tip) dbEntry.eventTip = obj.tip;
+
+        if (obj.datetime) dbEntry.eventDT = obj.datetime;
+
+        if (obj.active) dbEntry.eventActive = obj.active;
+
+        return dbEntry;
+    }
   
 }

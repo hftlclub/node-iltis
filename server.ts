@@ -66,6 +66,8 @@ server.get('/cratetype/:crateTypeId', crateTypeController.getById.bind(crateType
 server.get('/inventory', inventoryController.getCurrent.bind(inventoryController));
 server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
+server.post('/event', eventController.addEvent.bind(eventController));
+
 // start server
 server.listen(config.port, () => {
     console.log('ILTIS API on %s', server.url);

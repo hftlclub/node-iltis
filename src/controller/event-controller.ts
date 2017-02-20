@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError } from 'restify';
+import { NotFoundError, BadRequestError, ConflictError, InternalError} from 'restify';
 import { Event } from '../shared/models/event/event';
 import { Transfer } from '../shared/models/transfer/transfer';
 import { TransferFactory } from '../shared/models/transfer/transfer-factory';
@@ -10,6 +10,14 @@ import { CalculationFactory } from '../shared/models/calculation/calculation-fac
 
 
 export class EventController {
+
+    addEvent(req, res, next) {
+        EventService.addEvent(EventFactory.fromModel(req.body), (err, result)=>{
+            if (err) return next(new BadRequestError());
+            if (result) res.send(201);
+            else res.send(new InternalError());
+        });
+    };
 
     getAll(req, res, next) {
         let events: Event[] = [];
