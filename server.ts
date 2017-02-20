@@ -8,6 +8,7 @@ import { CrateTypeController } from './src/controller/cratetype-controller';
 import { EventController } from './src/controller/event-controller';
 import { EventTypeController } from './src/controller/eventtype-controller';
 import { InventoryController } from './src/controller/inventory-controller';
+import { TinyJson } from './src/shared/tinyjson';
 
 var config = require('./config');
 
@@ -25,7 +26,7 @@ let inventoryTypeController = new InventoryController();
 var server = createServer({
     formatters: {
         'application/json': function (req, res, body, cb) {
-            return cb(null, JSON.stringify(body, null, '  '));
+            return cb(null, TinyJson.getJSON(body));
         }
     }
 });
