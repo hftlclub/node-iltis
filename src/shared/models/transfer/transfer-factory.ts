@@ -33,7 +33,7 @@ export class TransferFactory {
             transfer.change = obj.transferChangeStorage;
         }
 
-        if (obj.timestamp) transfer.timestamp = transfer.timestamp;
+        if (obj.timestamp) transfer.timestamp = obj.timestamp;
         if (obj.transferTS) {
             if(ValueChecker.validDate(obj.transferTS)) {
                 transfer.timestamp = obj.transferTS;
