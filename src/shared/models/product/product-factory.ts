@@ -62,6 +62,7 @@ export class ProductFactory {
         if (obj.deleted) product.deleted = obj.deleted;
         else product.deleted = !!ValueChecker.validNumber(obj.productDeleted);
 
+        if (obj.timestamp) product.timestamp = product.timestamp;
         if (obj.productTS) {
             if(ValueChecker.validDate(obj.productTS)) {
                 product.timestamp = obj.productTS;

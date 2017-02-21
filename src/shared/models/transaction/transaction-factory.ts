@@ -38,6 +38,7 @@ export class TransactionFactory {
             transaction.changeCounter = obj.transactionChangeCounter;
         }
 
+        if (obj.timestamp) transaction.timestamp = transaction.timestamp;
         if (obj.transactionTS) {
             if(ValueChecker.validDate(obj.transactionTS)) {
                 transaction.timestamp = obj.transactionTS;
