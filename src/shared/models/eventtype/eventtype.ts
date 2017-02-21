@@ -4,6 +4,8 @@ export class EventType {
     public description: string,
     public intern: boolean,
     public realEvent: boolean,
-    public deleted: boolean
+    public deleted: boolean,
+    public uiMode: string,
+    public icon: string
     ) {}
 }

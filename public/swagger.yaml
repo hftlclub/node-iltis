@@ -1486,6 +1486,12 @@ definitions:
       deleted:
         type: boolean
         example: false
+      uiMode:
+        type: string
+        example: event
+      icon:
+        type: string
+        example: fa-glass
   SizeType:
     type: object
     description: Contains all information about a size-type

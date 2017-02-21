@@ -17,11 +17,11 @@ INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES (null, null);
 INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES ('l', 'Liter');
 INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES ('kg', 'Kilogramm');
 
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`) VALUES ('Afterwork', false, true, false);
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`) VALUES ('Privatparty', false, true, false);
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`) VALUES ('Clubsitzung', true, true, false);
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`) VALUES ('Spontanentnahme', true, false, false);
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`) VALUES ('Einkauf', true, false, false);
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Afterwork', false, true, false, 'event', 'fa-beer');
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Privatparty', false, true, false, 'event' , 'fa-glass');
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Clubsitzung', true, true, false, 'event', 'fa-users');
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Spontanentnahme', true, false, false, 'private', 'fa-hand-paper-o');
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Einkauf', true, false, false, 'purchase', 'fa-shopping-cart');
 
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('Bier', 'Bier, Mischbier, und alkoholfreies Bier', false);
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('AFG', 'Alkoholfreie Getränke', false);
