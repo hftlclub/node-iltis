@@ -35,12 +35,6 @@ server.use(bodyParser());
 server.use(CORS({}));
 server.use(queryParser());
 
-// serve public folder
-server.get(/^(?!\/(product|category|categories|event|transfer|inventory|category|categories|unit|cratetype|sizetype|info|img)).*/, serveStatic({
-    directory: __dirname + '/public/',
-    default: 'index.html'
-}));
-
 // other routes
 server.get('/info', serverController.info.bind(serverController));
 server.get('/swagger.json', serverController.getFixedSwaggerJson.bind(serverController));
@@ -67,6 +61,12 @@ server.get('/inventory', inventoryController.getCurrent.bind(inventoryController
 server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
 server.post('/event', eventController.addEvent.bind(eventController));
+
+// serve public folder
+server.get(/.*/, serveStatic({
+    directory: __dirname + '/public/',
+    default: 'index.html'
+}));
 
 // start server
 server.listen(config.port, () => {
