@@ -19,7 +19,7 @@ export class EventFactory {
 
         if(obj.eventType) event.eventType = EventTypeFactory.fromObj(obj.eventType);
         else if (ValueChecker.validNumber(obj.refEventType)) {
-            event.eventType = EventTypeFactory.fromObj(obj);;
+            event.eventType = EventTypeFactory.fromObj(obj);
         }
 
         if (obj.description) event.description = obj.description;
