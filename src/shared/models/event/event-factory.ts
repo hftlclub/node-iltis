@@ -1,6 +1,6 @@
 import { ValueChecker } from '../../valuechecker';
-import { Event } from './event';
-import { EventTypeFactory } from '../eventtype/eventtype-factory';
+import { Event } from './';
+import { EventTypeFactory } from '../eventtype';
 
 export class EventFactory {
 
@@ -19,7 +19,7 @@ export class EventFactory {
 
         if(obj.eventType) event.eventType = EventTypeFactory.fromObj(obj.eventType);
         else if (ValueChecker.validNumber(obj.refEventType)) {
-            event.eventType = EventTypeFactory.fromObj(obj);
+            event.eventType = EventTypeFactory.fromObj(obj);;
         }
 
         if (obj.description) event.description = obj.description;
@@ -82,5 +82,5 @@ export class EventFactory {
 
         return dbEntry;
     }
-  
+
 }

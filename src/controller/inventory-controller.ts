@@ -1,6 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Inventory } from '../shared/models/inventory/inventory';
-import { InventoryFactory } from '../shared/models/inventory/inventory-factory';
+
+import { Inventory, InventoryFactory } from '../shared/models/inventory';
 import { InventoryService } from '../services/inventory-service';
 
 

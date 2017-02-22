@@ -1,5 +1,5 @@
+import { Event } from '../shared/models/event';
 var mysql = require('../modules/mysql');
-import { Event } from '../shared/models/event/event';
 
 export class EventService {
 

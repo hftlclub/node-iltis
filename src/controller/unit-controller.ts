@@ -1,6 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Unit } from '../shared/models/unit/unit';
-import { UnitFactory } from '../shared/models/unit/unit-factory';
+
+import { Unit, UnitFactory } from '../shared/models/unit';
 import { UnitService } from '../services/unit-service';
 
 

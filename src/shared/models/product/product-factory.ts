@@ -1,11 +1,11 @@
 import { ValueChecker } from '../../valuechecker';
-import { Product } from './product';
-import { CategoryFactory } from '../category/category-factory';
-import { UnitFactory } from '../unit/unit-factory';
-import { SizeTypeFactory } from '../sizetype/sizetype-factory';
-import { CrateTypeFactory } from '../cratetype/cratetype-factory';
-import { DeliveryCostsFactory } from '../deliverycosts/deliverycosts-factory';
-import { MinimumStockFactory } from '../minimumstock/minimumstock-factory';
+import { Product } from './';
+import { CategoryFactory } from '../category';
+import { UnitFactory } from '../unit';
+import { SizeTypeFactory } from '../sizetype';
+import { CrateTypeFactory } from '../cratetype';
+import { DeliveryCostsFactory } from '../deliverycosts';
+import { MinimumStockFactory } from '../minimumstock';
 
 
 export class ProductFactory {

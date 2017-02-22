@@ -1,12 +1,10 @@
 import { NotFoundError, BadRequestError, ConflictError, InternalError} from 'restify';
-import { Event } from '../shared/models/event/event';
-import { Transfer } from '../shared/models/transfer/transfer';
-import { TransferFactory } from '../shared/models/transfer/transfer-factory';
-import { Transaction } from '../shared/models/transaction/transaction';
-import { TransactionFactory } from '../shared/models/transaction/transaction-factory';
-import { EventFactory } from '../shared/models/event/event-factory';
+
+import { Event, EventFactory } from '../shared/models/event';
+import { Transfer, TransferFactory } from '../shared/models/transfer';
+import { Transaction, TransactionFactory } from '../shared/models/transaction';
+import { CalculationFactory } from '../shared/models/calculation';
 import { EventService } from '../services/event-service';
-import { CalculationFactory } from '../shared/models/calculation/calculation-factory';
 
 
 export class EventController {

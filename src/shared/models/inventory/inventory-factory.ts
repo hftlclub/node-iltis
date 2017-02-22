@@ -1,8 +1,8 @@
 import { ValueChecker } from '../../valuechecker';
-import { Inventory } from './inventory';
-import { EventFactory } from '../event/event-factory';
-import { ProductFactory } from '../product/product-factory';
-import { SizeTypeFactory } from '../sizetype/sizetype-factory';
+import { Inventory } from './';
+import { EventFactory } from '../event';
+import { ProductFactory } from '../product';
+import { SizeTypeFactory } from '../sizetype';
 
 export class InventoryFactory {
 
@@ -34,5 +34,5 @@ export class InventoryFactory {
 
         return inventory;
     }
-  
+
 }

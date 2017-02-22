@@ -1,6 +1,5 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { CrateType } from '../shared/models/crateType/cratetype';
-import { CrateTypeFactory } from '../shared/models/cratetype/cratetype-factory';
+import { CrateType, CrateTypeFactory } from '../shared/models/cratetype';
 import { CrateTypeService } from '../services/cratetype-service';
 
 

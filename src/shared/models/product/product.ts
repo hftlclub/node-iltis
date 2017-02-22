@@ -1,9 +1,9 @@
-import { Category } from '../category/category';
-import { Unit } from '../unit/unit';
-import { CrateType } from '../cratetype/cratetype';
-import { SizeType } from '../sizetype/sizetype';
-import { DeliveryCosts} from '../deliverycosts/deliverycosts';
-import { MinimumStock } from '../minimumstock/minimumstock';
+import { Category } from '../category';
+import { Unit } from '../unit';
+import { CrateType } from '../cratetype';
+import { SizeType } from '../sizetype';
+import { DeliveryCosts} from '../deliverycosts';
+import { MinimumStock } from '../minimumstock';
 
 export class Product {
   constructor(

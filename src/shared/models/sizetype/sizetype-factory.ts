@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { SizeType } from '../sizetype/sizetype';
+import { SizeType } from './';
 
 export class SizeTypeFactory {
 
@@ -31,5 +31,5 @@ export class SizeTypeFactory {
 
         return sizeType;
     }
-  
+
 }

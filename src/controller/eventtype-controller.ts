@@ -1,6 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { EventType } from '../shared/models/eventtype/eventtype';
-import { EventTypeFactory } from '../shared/models/eventtype/eventtype-factory';
+
+import { EventType, EventTypeFactory } from '../shared/models/eventtype';
 import { EventTypeService } from '../services/eventtype-service';
 
 

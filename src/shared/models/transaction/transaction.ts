@@ -1,5 +1,5 @@
-import { Product } from '../product/product';
-import { SizeType } from '../sizetype/sizetype';
+import { Product } from '../product';
+import { SizeType } from '../sizetype';
 
 export class Transaction {
   constructor(

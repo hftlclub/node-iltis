@@ -1,6 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { SizeType } from '../shared/models/sizetype/sizetype';
-import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
+
+import { SizeType, SizeTypeFactory } from '../shared/models/sizetype';
 import { SizeTypeService } from '../services/sizetype-service';
 
 

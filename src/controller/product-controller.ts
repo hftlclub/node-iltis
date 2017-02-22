@@ -1,13 +1,13 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
-import { Product } from '../shared/models/product/product';
-import { ProductFactory } from '../shared/models/product/product-factory';
+
+import { Product, ProductFactory } from '../shared/models/product';
 import { ProductService } from '../services/product-service';
-import { CrateTypeFactory } from '../shared/models/cratetype/cratetype-factory';
+import { CrateTypeFactory } from '../shared/models/cratetype';
 import { CrateTypeService } from '../services/cratetype-service';
-import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
+import { SizeTypeFactory } from '../shared/models/sizetype';
 import { SizeTypeService } from '../services/sizetype-service';
-import { DeliveryCostsFactory } from '../shared/models/deliverycosts/deliverycosts-factory';
-import { MinimumStockFactory } from '../shared/models/minimumstock/minimumstock-factory';
+import { DeliveryCostsFactory } from '../shared/models/deliverycosts';
+import { MinimumStockFactory } from '../shared/models/minimumstock';
 
 
 export class ProductController {

@@ -1,6 +1,6 @@
-import { Event } from '../event/event';
-import { Product } from '../product/product';
-import { SizeType } from '../sizetype/sizetype';
+import { Event } from '../event';
+import { Product } from '../product';
+import { SizeType } from '../sizetype';
 
 export class Transfer {
   constructor(

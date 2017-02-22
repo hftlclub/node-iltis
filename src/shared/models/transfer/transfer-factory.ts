@@ -1,7 +1,7 @@
 import { ValueChecker } from '../../valuechecker';
-import { Transfer } from './transfer';
-import { ProductFactory } from '../product/product-factory';
-import { SizeTypeFactory } from '../sizetype/sizetype-factory';
+import { Transfer } from './';
+import { ProductFactory } from '../product';
+import { SizeTypeFactory } from '../sizetype';
 
 export class TransferFactory {
 
@@ -42,5 +42,5 @@ export class TransferFactory {
 
         return transfer;
     }
-  
+
 }

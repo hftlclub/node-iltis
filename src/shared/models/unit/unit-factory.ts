@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { Unit } from './unit';
+import { Unit } from './';
 
 export class UnitFactory {
 
@@ -28,5 +28,5 @@ export class UnitFactory {
 
         return unit;
     }
-  
+
 }

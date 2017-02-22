@@ -1,4 +1,4 @@
-import { SizeType } from '../sizetype/sizetype';
+import { SizeType } from '../sizetype';
 
 export class CrateType {
   constructor(
