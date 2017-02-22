@@ -13,10 +13,29 @@ consumes:
   - application/json
 produces:
   - application/json
+tags:
+  - name: product
+    description: Product Ressources
+  - name: event
+    description: Event Ressources
+  - name: inventory
+    description: Inventory Ressources
+  - name: category
+    description: Category Ressources
+  - name: unit
+    description: Unit Ressources
+  - name: cratetype
+    description: CrateType Ressources
+  - name: sizetype
+    description: SizeType Ressources
+  - name: eventtype
+    description: EventType Ressources
 # Ressources
 paths:
   /products:
     get:
+      tags:
+        - product
       summary: Get all products
       responses:
         '200':
@@ -34,6 +53,8 @@ paths:
             $ref: '#/definitions/RestError'
   /product:
     post:
+      tags:
+        - product
       summary: Creates a new product
       parameters:
         - name: Product
@@ -59,6 +80,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/product/{productId}':
     delete:
+      tags:
+        - product
       summary: Deletes a specific product
       responses:
         '204':
@@ -77,6 +100,8 @@ paths:
           type: number
           required: true
     get:
+      tags:
+        - product
       summary: Get a specific product
       responses:
         '200':
@@ -97,6 +122,8 @@ paths:
           type: number
           required: true
     put:
+      tags:
+        - product
       summary: Updates an existing product
       description: 'Requires a full product entry'
       parameters:
@@ -127,6 +154,8 @@ paths:
             $ref: '#/definitions/RestError'
   /events:
     get:
+      tags:
+        - event
       summary: Get all events
       responses:
         '200':
@@ -144,6 +173,8 @@ paths:
             $ref: '#/definitions/RestError'
   /event:
     post:
+      tags:
+        - event
       summary: Creates a new event
       parameters:
         - name: Event
@@ -169,6 +200,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/event/{eventId}':
     delete:
+      tags:
+        - event
       summary: Deletes a specific event
       responses:
         '204':
@@ -191,6 +224,8 @@ paths:
           type: number
           required: true
     get:
+      tags:
+        - event
       summary: Get a specific event
       responses:
         '200':
@@ -211,6 +246,8 @@ paths:
           type: number
           required: true
     put:
+      tags:
+        - event
       summary: Updates an existing event
       description: 'Requires a full event entry'
       parameters:
@@ -239,170 +276,10 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfers/storage/take':
-    post:
-      summary: Creates multiple new transfer-records for the storage (taking)
-      parameters:
-        - name: Transfers
-          in: body
-          description: Multiple new transfer-records to be stored
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-          required: true
-        - name: eventId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Transfer-record was created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfers/storage/stockup':
-    post:
-      summary: Creates multiple new transfer-records for the storage (stock up)
-      parameters:
-        - name: Transfers
-          in: body
-          description: Multiple new transfer-records to be stored
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-          required: true
-        - name: eventId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Transfer-record was created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfers/storage/count':
-    post:
-      summary: Creates multiple new transfer-records for the storage (counting)
-      parameters:
-        - name: Transfers
-          in: body
-          description: Multiple new transfer-records to be stored
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-          required: true
-        - name: eventId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Transfer-record was created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfers/counter/take':
-    post:
-      summary: Creates multiple new transfer-records for the counter (taking)
-      parameters:
-        - name: Transfers
-          in: body
-          description: Multiple new transfer-records to be stored
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-          required: true
-        - name: eventId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Transfer-record was created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfers/counter/count':
-    post:
-      summary: Creates multiple new transfer-records for the counter (counting)
-      parameters:
-        - name: Transfers
-          in: body
-          description: Multiple new transfer-records to be stored
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-          required: true
-        - name: eventId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Transfer-record was created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
   '/event/{eventId}/transfers':
-    delete:
-      summary: Deletes all transfer-records of a specific event
-      responses:
-        '204':
-          description: All transfer-records for the requested Id have been deleted
-        '403':
-          description: Event is not closed
-          schema:
-            $ref: '#/definitions/RestError'
-        '404':
-          description: Event does not exist
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-      parameters:
-        - name: eventId
-          in: path
-          type: number
-          required: true
     get:
+      tags:
+        - event
       summary: Get all transfer-records of a specific event
       responses:
         '200':
@@ -427,15 +304,48 @@ paths:
           in: path
           type: number
           required: true
-  '/event/{eventId}/transfer/storage/take':
-    post:
-      summary: Creates a new transfer-record for the storage (taking)
-      parameters:
-        - name: Transfer
-          in: body
-          description: A new transfer-record to be stored
+  '/event/{eventId}/transfers/storage':
+    get:
+      tags:
+        - event
+      summary: Get all storage transfer-records of a specific event
+      responses:
+        '200':
+          description: List of all storage transfer-records of an event with the requested Id
           schema:
-            $ref: '#/definitions/Transfer'
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+        '204':
+          description: Transfer-records has been deleted before
+        '404':
+          description: Event does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  '/event/{eventId}/transfers/storage/out':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the storage (taking)
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
           required: true
         - name: eventId
           in: path
@@ -443,7 +353,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-record was created
+          description: Transfer-records were created
         '400':
           description: Invalid data
           schema:
@@ -452,15 +362,20 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfer/storage/stockup':
+  '/event/{eventId}/transfers/storage/in':
     post:
-      summary: Creates a new transfer-record for the storage (stock up)
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the storage (stock up)
       parameters:
-        - name: Transfer
+        - name: Transfers
           in: body
-          description: A new transfer-record to be stored
+          description: Multiple new transfer-records to be stored
           schema:
-            $ref: '#/definitions/Transfer'
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
           required: true
         - name: eventId
           in: path
@@ -468,7 +383,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-record was created
+          description: Transfer-records were created
         '400':
           description: Invalid data
           schema:
@@ -477,15 +392,20 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfer/storage/count':
+  '/event/{eventId}/transfers/storage/count':
     post:
-      summary: Creates a new transfer-record for the storage (counting)
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the storage (counting), deletes existing I/O transfer records
       parameters:
-        - name: Transfer
+        - name: Transfers
           in: body
-          description: A new transfer-record to be stored
+          description: Multiple new transfer-records to be stored
           schema:
-            $ref: '#/definitions/Transfer'
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
           required: true
         - name: eventId
           in: path
@@ -493,7 +413,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-record was created
+          description: Transfer-records were created
         '400':
           description: Invalid data
           schema:
@@ -502,15 +422,19 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfer/counter/take':
-    post:
-      summary: Creates a new transfer-record for the counter (taking)
+    put:
+      tags:
+        - event
+      summary: Updates transfer-records for the storage (counting), without deleting existing I/O transfer records
       parameters:
-        - name: Transfer
+        - name: Transfers
           in: body
-          description: A new transfer-record to be stored
+          description: Multiple new transfer-records to be updated
           schema:
-            $ref: '#/definitions/Transfer'
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
           required: true
         - name: eventId
           in: path
@@ -518,7 +442,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-record was created
+          description: Transfer-records were created
         '400':
           description: Invalid data
           schema:
@@ -527,15 +451,48 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfer/counter/count':
-    post:
-      summary: Creates a new transfer-record for the counter (counting)
-      parameters:
-        - name: Transfer
-          in: body
-          description: A new transfer-record to be stored
+  '/event/{eventId}/transfers/counter':
+    get:
+      tags:
+        - event
+      summary: Get all counter transfer-records of a specific event
+      responses:
+        '200':
+          description: List of all counter transfer-records of an event with the requested Id
           schema:
-            $ref: '#/definitions/Transfer'
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+        '204':
+          description: Transfer-records has been deleted before
+        '404':
+          description: Event does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  '/event/{eventId}/transfers/counter/out':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the counter (taking)
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
           required: true
         - name: eventId
           in: path
@@ -543,7 +500,66 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-record was created
+          description: Transfer-records were created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/transfers/counter/count':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the counter (counting), deletes existing I/O transfer records
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+          required: true
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Transfer-records were created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+    put:
+      tags:
+        - event
+      summary: Updates transfer-records for the counter (counting), without deleting existing I/O transfer records
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be updated
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+          required: true
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Transfer-records were created
         '400':
           description: Invalid data
           schema:
@@ -554,6 +570,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/event/{eventId}/transactions':
     get:
+      tags:
+        - event
       summary: Get transactions of a specific closed event
       responses:
         '200':
@@ -586,6 +604,8 @@ paths:
           required: true
   '/event/{eventId}/calculation':
     get:
+      tags:
+        - event
       summary: Get calculation of a specific closed event
       responses:
         '200':
@@ -611,6 +631,8 @@ paths:
           required: true
   /inventory:
     get:
+      tags:
+        - inventory
       summary: Get current inventory
       responses:
         '200':
@@ -627,6 +649,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/inventory/{eventId}':
     get:
+      tags:
+        - inventory
       summary: Get inventory after a specific closed event
       responses:
         '200':
@@ -654,6 +678,8 @@ paths:
           required: true
   /categories:
     get:
+      tags:
+        - category
       summary: Get all possible product-categories
       responses:
         '200':
@@ -671,6 +697,8 @@ paths:
             $ref: '#/definitions/RestError'
   /category:
     post:
+      tags:
+        - category
       summary: Creates a new category
       parameters:
         - name: Category
@@ -696,6 +724,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/category/{categoryId}':
     delete:
+      tags:
+        - category
       summary: Deletes a specific category
       responses:
         '204':
@@ -714,6 +744,8 @@ paths:
           type: number
           required: true
     get:
+      tags:
+        - category
       summary: Get a specific category
       responses:
         '200':
@@ -734,6 +766,8 @@ paths:
           type: number
           required: true
     put:
+      tags:
+        - category
       summary: Updates an existing category
       description: 'Requires a full category entry'
       parameters:
@@ -764,6 +798,8 @@ paths:
             $ref: '#/definitions/RestError'
   /units:
     get:
+      tags:
+        - unit
       summary: Get all possible units
       responses:
         '200':
@@ -781,6 +817,8 @@ paths:
             $ref: '#/definitions/RestError'
   /unit:
     post:
+      tags:
+        - unit
       summary: Creates a new unit
       parameters:
         - name: Unit
@@ -806,6 +844,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/unit/{unitId}':
     delete:
+      tags:
+        - unit
       summary: Deletes a specific unit
       responses:
         '204':
@@ -828,6 +868,8 @@ paths:
           type: number
           required: true
     get:
+      tags:
+        - unit
       summary: Get a specific unit
       responses:
         '200':
@@ -848,6 +890,8 @@ paths:
           type: number
           required: true
     put:
+      tags:
+        - unit
       summary: Updates an existing unit
       description: 'Requires a full unit entry'
       parameters:
@@ -878,6 +922,8 @@ paths:
             $ref: '#/definitions/RestError'
   /cratetypes:
     get:
+      tags:
+        - cratetype
       summary: Get all possible crate-types
       responses:
         '200':
@@ -895,6 +941,8 @@ paths:
             $ref: '#/definitions/RestError'
   /cratetype:
     post:
+      tags:
+        - cratetype
       summary: Creates a new crate-type
       parameters:
         - name: CrateType
@@ -920,6 +968,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/cratetype/{crateTypeId}':
     delete:
+      tags:
+        - cratetype
       summary: Deletes a specific crate-type
       responses:
         '204':
@@ -938,6 +988,8 @@ paths:
           type: number
           required: true
     get:
+      tags:
+        - cratetype
       summary: Get a specific crate-type
       responses:
         '200':
@@ -959,6 +1011,8 @@ paths:
           required: true
   '/cratetype/{crateTypeId}/{productId}':
     delete:
+      tags:
+        - cratetype
       summary: Deletes a specific crate-type of a specific product
       responses:
         '204':
@@ -981,6 +1035,8 @@ paths:
           type: number
           required: true
     post:
+      tags:
+        - cratetype
       summary: Creates a new relation between a product and a crate-type
       parameters:
         - name: productId
@@ -1008,6 +1064,8 @@ paths:
             $ref: '#/definitions/RestError'
   /sizetypes:
     get:
+      tags:
+        - cratetype
       summary: Get all possible size-types
       responses:
         '200':
@@ -1025,6 +1083,8 @@ paths:
             $ref: '#/definitions/RestError'
   /sizetype:
     post:
+      tags:
+        - sizetype
       summary: Creates a new size-type
       parameters:
         - name: SizeType
@@ -1050,6 +1110,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/sizetype/{sizeTypeId}':
     delete:
+      tags:
+        - sizetype
       summary: Deletes a specific size-type
       responses:
         '204':
@@ -1068,6 +1130,8 @@ paths:
           type: number
           required: true
     get:
+      tags:
+        - sizetype
       summary: Get a specific size-type
       responses:
         '200':
@@ -1088,6 +1152,8 @@ paths:
           type: number
           required: true
     put:
+      tags:
+        - sizetype
       summary: Updates an existing size-type
       description: 'Requires a full size-type entry'
       parameters:
@@ -1118,6 +1184,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/sizetype/{sizeTypeId}/{productId}':
     delete:
+      tags:
+        - sizetype
       summary: Deletes a specific size-type of a specific product
       responses:
         '204':
@@ -1144,6 +1212,8 @@ paths:
           type: number
           required: true
     post:
+      tags:
+        - sizetype
       summary: Creates a new relation between a product and a size-type
       parameters:
         - name: productId
@@ -1171,6 +1241,8 @@ paths:
             $ref: '#/definitions/RestError'
   /eventtypes:
     get:
+      tags:
+        - eventtype
       summary: Get all possible event-types
       responses:
         '200':
@@ -1188,6 +1260,8 @@ paths:
             $ref: '#/definitions/RestError'
   /eventtype:
     post:
+      tags:
+        - eventtype
       summary: Creates a new event-type
       parameters:
         - name: EventType
@@ -1213,6 +1287,8 @@ paths:
             $ref: '#/definitions/RestError'
   '/eventtype/{eventTypeId}':
     delete:
+      tags:
+        - eventtype
       summary: Deletes a specific event-type
       responses:
         '204':
@@ -1231,6 +1307,8 @@ paths:
           type: number
           required: true
     get:
+      tags:
+        - eventtype
       summary: Get a specific event-type
       responses:
         '200':
@@ -1251,6 +1329,8 @@ paths:
           type: number
           required: true
     put:
+      tags:
+        - eventtype
       summary: Updates an existing event-type
       description: 'Requires a full event-type entry'
       parameters:
@@ -1296,10 +1376,8 @@ definitions:
         type: string
         example: 'Wahre Helden stehen mitten im Leben.'
       category:
-        type: object
         $ref: '#/definitions/Category'
       unit:
-        type: object
         $ref: '#/definitions/Unit'
       sizeTypes:
         type: array
@@ -1340,7 +1418,6 @@ definitions:
         format: int32
         example: 21
       eventType:
-        type: objetct
         $ref: '#/definitions/EventType'
       description:
         type: string
@@ -1382,10 +1459,8 @@ definitions:
       - sizeType
     properties:
       product:
-        type: object
         $ref: '#/definitions/Product'
       sizeType:
-        type: object
         $ref: '#/definitions/SizeType'
       changeTotal:
         type: number
@@ -1413,10 +1488,8 @@ definitions:
         format: int32
         example: 15
       product:
-        type: object
         $ref: '#/definitions/Product'
       sizeType:
-        type: object
         $ref: '#/definitions/SizeType'
       change:
         type: number
@@ -1523,7 +1596,6 @@ definitions:
         format: int32
         example: 5
       sizeType:
-        type: object
         $ref: '#/definitions/SizeType'
       description:
         type: string
@@ -1537,10 +1609,8 @@ definitions:
     description: Contains the inventory of a product related to its size
     properties:
       product:
-        type: object
         $ref: '#/definitions/Product'
       sizeType:
-        type: object
         $ref: '#/definitions/SizeType'
       storage:
         type: number
@@ -1578,21 +1648,20 @@ definitions:
         type: number
         format: double
         example: 60
-  MinimumStock:
-    type: object
-    description: Minimum stock of product related to its size
-    properties:
-      sizeTypeId:
-        type: number
-        format: double
-        example: 3
-      minStock:
-        type: number
-        format: double
-        example: 300
-      warningSend:
-        type: boolean
-        example: false
+#  MinimumStock:
+#    type: object
+#    description: Minimum stock of product related to its size
+#    properties:
+#      sizeTypeId:
+#        type: number
+#        format: double
+#        example: 3
+#      minStock:
+#        type: number
+#        format: double
+#      warningSend:
+#        type: boolean
+#        example: false
   RestError:
     type: object
     description: >-
