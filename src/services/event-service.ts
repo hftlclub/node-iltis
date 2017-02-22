@@ -14,6 +14,18 @@ export class EventService {
         });
     };
 
+    static addTransfers(transfer: any[], callback: (err: any, result?: any) => void) {
+        let query = `INSERT INTO event_transfers
+                    (refEvent, refProduct, refSizeType, transferChangeStorage, transferChangeCounter)
+                    VALUES ?`;
+        mysql.conn.query(query, transfer, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static getAll(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM event_types

@@ -12,7 +12,12 @@ export class EventController {
     addEvent(req, res, next) {
         EventService.addEvent(EventFactory.fromModel(req.body), (err, result) => {
             if (err) return next(new BadRequestError());
-            if (result) res.send(201);
+            if (result) {
+                EventService.getById(result.insertId, (err, row) => {
+                    if (err) return next(err);
+                    res.send(201, EventFactory.fromObj(row), {'Content-Type': 'application/json; charset=utf-8'});
+                });
+            }
             else res.send(new InternalError());
         });
     };

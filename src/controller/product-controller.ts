@@ -47,7 +47,7 @@ export class ProductController {
     getById(req, res, next) {
         let id = parseInt(req.params.productId);
         let product: Product = ProductFactory.empty();
-        ProductService.getById(id, (err, row)=>{
+        ProductService.getById(id, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
