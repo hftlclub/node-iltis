@@ -20,7 +20,7 @@ export class EventTypeController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.eventTypeId);
+        let id = parseInt(req.params.eventTypeId, 0);
         let eventType: EventType = EventTypeFactory.empty();
         EventTypeService.getById(id, (err, row) => {
             if (err) return next(err);

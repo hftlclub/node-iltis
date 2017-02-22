@@ -20,7 +20,7 @@ export class InventoryController {
     };
 
     getByEventId(req, res, next) {
-        let id = parseInt(req.params.eventId);
+        let id = parseInt(req.params.eventId, 0);
         let inventory: Inventory[] = [];
         InventoryService.getByEventId(id, (err, rows) => {
             if (err) return next(err);

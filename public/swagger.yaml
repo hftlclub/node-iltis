@@ -1591,7 +1591,7 @@ definitions:
       id:
         type: number
         format: int32
-        example: 0
+        example: 3
       amount:
         type: number
         format: double

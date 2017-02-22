@@ -19,7 +19,7 @@ export class CrateTypeController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.crateTypeId);
+        let id = parseInt(req.params.crateTypeId, 0);
         let crateType: CrateType = CrateTypeFactory.empty();
         CrateTypeService.getById(id, (err, row) => {
             if (err) return next(err);

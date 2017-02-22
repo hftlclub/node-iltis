@@ -20,7 +20,7 @@ export class UnitController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.unitId);
+        let id = parseInt(req.params.unitId, 0);
         let unit: Unit = UnitFactory.empty();
         UnitService.getById(id, (err, row) => {
             if (err) return next(err);

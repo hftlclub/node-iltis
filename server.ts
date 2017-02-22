@@ -27,6 +27,7 @@ let server = createServer({
     formatters: {
         'application/json': function (req, res, body, cb) {
             return cb(null, TinyJson.getJSON(body));
+            // return cb(null, JSON.stringify(body, null, '  '));
         }
     }
 });
@@ -63,6 +64,9 @@ server.get('/inventory', inventoryController.getCurrent.bind(inventoryController
 server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
 server.post('/event', eventController.addEvent.bind(eventController));
+server.post('/event/:eventId/transfers/storage/out', eventController.addTransferStorageOut.bind(eventController));
+server.post('/event/:eventId/transfers/storage/in', eventController.addTransferStorageIn.bind(eventController));
+server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));
 
 // serve public folder
 server.get(/.*/, serveStatic({

@@ -22,6 +22,35 @@ export class EventController {
         });
     };
 
+    addTransferStorageOut(req, res, next) {
+        let id = parseInt(req.context.eventId, 0);
+        let transfers: any[] = [];
+        req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, true, -1)));
+        this.addTransfer(req, res, next, transfers);
+    };
+
+    addTransferStorageIn(req, res, next) {
+        let id = parseInt(req.context.eventId, 0);
+        let transfers: any[] = [];
+        req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, true, 1)));
+        this.addTransfer(req, res, next, transfers);
+    };
+
+    addTransferCounterOut(req, res, next) {
+        let id = parseInt(req.context.eventId, 0);
+        let transfers: any[] = [];
+        req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, false, -1)));
+        this.addTransfer(req, res, next, transfers);
+    };
+
+    private addTransfer(req, res, next, transfers: any[]) {
+        EventService.addTransfers(transfers, (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) res.send(201);
+            else res.send(new InternalError());
+        });
+    };
+
     getAll(req, res, next) {
         let events: Event[] = [];
         EventService.getAll((err, rows) => {
@@ -36,7 +65,7 @@ export class EventController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.eventId);
+        let id = parseInt(req.params.eventId, 0);
         let event: Event = EventFactory.empty();
         EventService.getById(id, (err, row) => {
             if (err) return next(err);
@@ -50,7 +79,7 @@ export class EventController {
     };
 
     getEventTransfers(req, res, next) {
-        let id = parseInt(req.params.eventId);
+        let id = parseInt(req.params.eventId, 0);
         let transfers: Transfer[] = [];
         EventService.getTransfersByEventId(id, (err, rows) => {
             if (err) return next(err);
@@ -64,7 +93,7 @@ export class EventController {
     };
 
     getEventStorageTransfers(req, res, next) {
-        let id = parseInt(req.params.eventId);
+        let id = parseInt(req.params.eventId, 0);
         let transfers: Transfer[] = [];
         EventService.getStorageTransfersByEventId(id, (err, rows) => {
             if (err) return next(err);
@@ -78,7 +107,7 @@ export class EventController {
     };
 
     getEventCounterTransfers(req, res, next) {
-        let id = parseInt(req.params.eventId);
+        let id = parseInt(req.params.eventId, 0);
         let transfers: Transfer[] = [];
         EventService.getCounterTransfersByEventId(id, (err, rows) => {
             if (err) return next(err);
@@ -92,7 +121,7 @@ export class EventController {
     };
 
     getEventTransactions(req, res, next) {
-        let id = parseInt(req.params.eventId);
+        let id = parseInt(req.params.eventId, 0);
         let transactions: Transaction[] = [];
         EventService.getTransactionsByEventId(id, (err, rows) => {
             if (err) return next(err);
@@ -106,7 +135,7 @@ export class EventController {
     };
 
     getCalculation(req, res, next) {
-        let id = parseInt(req.params.eventId);
+        let id = parseInt(req.params.eventId, 0);
         let calculation: CalculationFactory = CalculationFactory.empty();
         EventService.getCalculation(id, (err, row) => {
             if (err) return next(err);

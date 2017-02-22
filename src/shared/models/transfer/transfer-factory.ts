@@ -41,4 +41,26 @@ export class TransferFactory {
         return transfer;
     }
 
+    static fromModel(obj: Transfer, eventId: number, isStorageChange: boolean, sign: number): any {
+
+        let  dbEntry: any = {};
+
+        dbEntry.refEvent = eventId;
+
+        if (obj.product) dbEntry.refProduct = obj.product.id;
+
+        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
+
+        if (isStorageChange) {
+            dbEntry.transferChangeStorage = obj.change * sign;
+            dbEntry.transferChangeCounter = 0;
+        }
+        else {
+            dbEntry.transferChangeStorage = 0;
+            dbEntry.transferChangeCounter = obj.change * sign;
+        }
+
+        return dbEntry;
+    }
+
 }
