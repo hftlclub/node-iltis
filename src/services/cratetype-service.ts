@@ -1,9 +1,9 @@
-var mysql = require('../modules/mysql');
+let mysql = require('../modules/mysql');
 
 export class CrateTypeService {
 
-    static getAll(callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getAll(callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM size_types
                     INNER JOIN crate_types ON(sizeTypeId = refSizeType)
                     ORDER BY crateTypeDesc ASC`;
@@ -18,8 +18,8 @@ export class CrateTypeService {
         });
     };
 
-    static getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getById(id: number, callback: (err: any, rows?: any ) => void) {
+        let query = `SELECT *
                     FROM size_types
                     INNER JOIN crate_types ON(sizeTypeId = refSizeType)
                     WHERE crateTypeId = ?`;
@@ -34,8 +34,8 @@ export class CrateTypeService {
         });
     };
 
-    static getProductsCrates(callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getProductsCrates(callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM crate_types
                     INNER JOIN product_crates ON (crateTypeId = refCrateType)
                     ORDER BY crateTypeSlots DESC`;
@@ -50,8 +50,8 @@ export class CrateTypeService {
         });
     };
 
-    static getProductCratesByProductId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getProductCratesByProductId(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM size_types

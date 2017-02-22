@@ -8,7 +8,7 @@ export class UnitController {
 
     getAll(req, res, next) {
         let units: Unit[] = [];
-        UnitService.getAll((err, rows)=>{
+        UnitService.getAll((err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -22,7 +22,7 @@ export class UnitController {
     getById(req, res, next) {
         let id = parseInt(req.params.unitId);
         let unit: Unit = UnitFactory.empty();
-        UnitService.getById(id, (err, row)=>{
+        UnitService.getById(id, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

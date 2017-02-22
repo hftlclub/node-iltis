@@ -7,7 +7,7 @@ export class CrateTypeController {
 
     getAll(req, res, next) {
         let crateTypes: CrateType[] = [];
-        CrateTypeService.getAll((err, rows)=>{
+        CrateTypeService.getAll((err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)

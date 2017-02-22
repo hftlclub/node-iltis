@@ -1,9 +1,9 @@
-var mysql = require('../modules/mysql');
+let mysql = require('../modules/mysql');
 
 export class ProductService {
 
-    static getAll(callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getAll(callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM products
@@ -20,9 +20,9 @@ export class ProductService {
             return callback(null, rows);
         });
     };
-  
-    static getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+
+    static getById(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM products
@@ -41,8 +41,8 @@ export class ProductService {
         });
     };
 
-    static getProductAdditionsByProductId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getProductAdditionsByProductId(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM product_additions
                     WHERE refProduct = ?
                     ORDER BY refSizeType ASC`;
@@ -57,8 +57,8 @@ export class ProductService {
         });
     };
 
-    static getProductsAdditions(callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getProductsAdditions(callback:(err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM product_additions
                     ORDER BY refSizeType ASC`;
         mysql.conn.query(query, (err, rows, fields) => {

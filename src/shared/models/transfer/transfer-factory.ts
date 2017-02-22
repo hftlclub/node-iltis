@@ -18,12 +18,12 @@ export class TransferFactory {
             transfer.id = obj.transferId;
         }
 
-        if(obj.product) transfer.product = ProductFactory.fromObj(obj.product);
+        if (obj.product) transfer.product = ProductFactory.fromObj(obj.product);
         else if (ValueChecker.validNumber(obj.refProduct)) {
             transfer.product = ProductFactory.fromObj(obj);
         }
 
-        if(obj.sizeType) transfer.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
+        if (obj.sizeType) transfer.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (ValueChecker.validNumber(obj.refSizeType)) {
             transfer.sizeType = SizeTypeFactory.fromObj(obj);
         }
@@ -33,11 +33,9 @@ export class TransferFactory {
             transfer.change = obj.transferChangeStorage;
         }
 
-        if (obj.timestamp) transfer.timestamp = obj.timestamp;
-        if (obj.transferTS) {
-            if(ValueChecker.validDate(obj.transferTS)) {
-                transfer.timestamp = obj.transferTS;
-            }
+        if (obj.timestamp) transfer.timestamp = new Date (obj.timestamp);
+        else if (ValueChecker.validDate(obj.transferTS)) {
+            transfer.timestamp = obj.transferTS;
         }
 
         return transfer;

@@ -10,7 +10,7 @@ import { EventService } from '../services/event-service';
 export class EventController {
 
     addEvent(req, res, next) {
-        EventService.addEvent(EventFactory.fromModel(req.body), (err, result)=>{
+        EventService.addEvent(EventFactory.fromModel(req.body), (err, result) => {
             if (err) return next(new BadRequestError());
             if (result) res.send(201);
             else res.send(new InternalError());
@@ -19,7 +19,7 @@ export class EventController {
 
     getAll(req, res, next) {
         let events: Event[] = [];
-        EventService.getAll((err, rows)=>{
+        EventService.getAll((err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -58,6 +58,34 @@ export class EventController {
         });
     };
 
+    getEventStorageTransfers(req, res, next) {
+        let id = parseInt(req.params.eventId);
+        let transfers: Transfer[] = [];
+        EventService.getStorageTransfersByEventId(id, (err, rows) => {
+            if (err) return next(err);
+            if (!rows.length) {
+                // Todo: Implementet correct feedback (error 204)
+                res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+            transfers = rows.map(row => TransferFactory.fromObj(row));
+            res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+        });
+    };
+
+    getEventCounterTransfers(req, res, next) {
+        let id = parseInt(req.params.eventId);
+        let transfers: Transfer[] = [];
+        EventService.getCounterTransfersByEventId(id, (err, rows) => {
+            if (err) return next(err);
+            if (!rows.length) {
+                // Todo: Implementet correct feedback (error 204)
+                res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+            transfers = rows.map(row => TransferFactory.fromObj(row));
+            res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+        });
+    };
+
     getEventTransactions(req, res, next) {
         let id = parseInt(req.params.eventId);
         let transactions: Transaction[] = [];
@@ -78,8 +106,7 @@ export class EventController {
         EventService.getCalculation(id, (err, row) => {
             if (err) return next(err);
             if (!row) {
-                // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('Calculation does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(calculation, { 'Content-Type': 'application/json; charset=utf-8' });
             }
             calculation = CalculationFactory.fromObj(row);
             res.send(calculation, { 'Content-Type': 'application/json; charset=utf-8' });

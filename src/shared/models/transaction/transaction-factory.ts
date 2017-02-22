@@ -18,12 +18,12 @@ export class TransactionFactory {
             transaction.id = obj.transactionId;
         }
 
-        if(obj.product) transaction.product = ProductFactory.fromObj(obj.product);
+        if (obj.product) transaction.product = ProductFactory.fromObj(obj.product);
         else if (ValueChecker.validNumber(obj.refProduct)) {
             transaction.product = ProductFactory.fromObj(obj);
         }
 
-        if(obj.sizeType) transaction.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
+        if (obj.sizeType) transaction.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (ValueChecker.validNumber(obj.refSizeType)) {
             transaction.sizeType = SizeTypeFactory.fromObj(obj);
         }
@@ -38,11 +38,9 @@ export class TransactionFactory {
             transaction.changeCounter = obj.transactionChangeCounter;
         }
 
-        if (obj.timestamp) transaction.timestamp = obj.timestamp;
-        if (obj.transactionTS) {
-            if(ValueChecker.validDate(obj.transactionTS)) {
-                transaction.timestamp = obj.transactionTS;
-            }
+        if (obj.timestamp) transaction.timestamp = new Date (obj.timestamp);
+        else if (ValueChecker.validDate(obj.transactionTS)) {
+            transaction.timestamp = obj.transactionTS;
         }
 
         return transaction;

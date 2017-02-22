@@ -10,20 +10,20 @@ import { EventTypeController } from './src/controller/eventtype-controller';
 import { InventoryController } from './src/controller/inventory-controller';
 import { TinyJson } from './src/shared/tinyjson';
 
-var config = require('./config');
+const config = require('./config');
 
-let serverController = new ServerController();
-let productController = new ProductController();
-let categoryController = new CategoryController();
-let unitController = new UnitController();
-let sizeTypeController = new SizeTypeController();
-let crateTypeController = new CrateTypeController();
-let eventController = new EventController();
-let eventTypeController = new EventTypeController();
-let inventoryController = new InventoryController();
-let inventoryTypeController = new InventoryController();
+const serverController = new ServerController();
+const productController = new ProductController();
+const categoryController = new CategoryController();
+const unitController = new UnitController();
+const sizeTypeController = new SizeTypeController();
+const crateTypeController = new CrateTypeController();
+const eventController = new EventController();
+const eventTypeController = new EventTypeController();
+const inventoryController = new InventoryController();
+const inventoryTypeController = new InventoryController();
 
-var server = createServer({
+let server = createServer({
     formatters: {
         'application/json': function (req, res, body, cb) {
             return cb(null, TinyJson.getJSON(body));
@@ -45,6 +45,8 @@ server.get('/product/:productId', productController.getById.bind(productControll
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
 server.get('/event/:eventId/transfers', eventController.getEventTransfers.bind(eventController));
+server.get('/event/:eventId/transfers/storage', eventController.getEventStorageTransfers.bind(eventController));
+server.get('/event/:eventId/transfers/counter', eventController.getEventCounterTransfers.bind(eventController));
 server.get('/event/:eventId/transactions', eventController.getEventTransactions.bind(eventController));
 server.get('/event/:eventId/calculation', eventController.getCalculation.bind(eventController));
 server.get('/eventtypes', eventTypeController.getAll.bind(eventTypeController));

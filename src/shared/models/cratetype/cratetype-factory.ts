@@ -17,7 +17,7 @@ export class CrateTypeFactory {
             crateType.id = obj.crateTypeId;
         }
 
-        if(obj.sizeType) crateType.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
+        if (obj.sizeType) crateType.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
         else if (ValueChecker.validNumber(obj.refSizeType)) {
             crateType.sizeType = SizeTypeFactory.fromObj(obj);
         }

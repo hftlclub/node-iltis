@@ -1,10 +1,11 @@
 import { Event } from '../shared/models/event';
-var mysql = require('../modules/mysql');
+let mysql = require('../modules/mysql');
 
 export class EventService {
 
-    static addEvent(event: any, callback:(err:any, result?:any)=>void) {
-        var query = `INSERT INTO events SET ?`;
+    static addEvent(event: any, callback: (err: any, result?: any) => void) {
+        event.eventActive = true;
+        let query = `INSERT INTO events SET ?`;
         mysql.conn.query(query, event, (err, result) => {
             if (err) {
                 return callback(err);
@@ -13,8 +14,8 @@ export class EventService {
         });
     };
 
-    static getAll(callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getAll(callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM event_types
                     INNER JOIN events ON(eventTypeId = refEventType)
                     ORDER BY eventId DESC`;
@@ -29,8 +30,8 @@ export class EventService {
         });
     };
 
-    static getById(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getById(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM event_types
                     INNER JOIN events ON(eventTypeId = refEventType)
                     WHERE eventId = ?`;
@@ -45,8 +46,32 @@ export class EventService {
         });
     };
 
-    static getTransfersByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getTransfersByEventId(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
+                    FROM (
+                        SELECT *
+                        FROM (
+                            SELECT *
+                            FROM event_transfers
+                            INNER JOIN products ON (refProduct = productId)) AS transfersProducts
+                        INNER JOIN size_types ON (refSizeType = sizeTypeId)
+                        WHERE refEvent = ?
+                        ORDER BY transferId ASC) AS transfers
+                    INNER JOIN product_categories ON (refCategory = categoryId)
+                    INNER JOIN product_units ON (refUnit = unitId)`;
+        mysql.conn.query(query, id, (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows.length) {
+                return callback(null, false);
+            }
+            return callback(null, rows);
+        });
+    };
+
+    static getStorageTransfersByEventId(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
@@ -69,8 +94,32 @@ export class EventService {
         });
     };
 
-    static getTransactionsByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getCounterTransfersByEventId(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
+                    FROM (
+                        SELECT *
+                        FROM (
+                            SELECT *
+                            FROM event_transfers
+                            INNER JOIN products ON (refProduct = productId)) AS transfersProducts
+                        INNER JOIN size_types ON (refSizeType = sizeTypeId)
+                        WHERE refEvent = ? AND transferChangeCounter != 0
+                        ORDER BY transferId ASC) AS transfers
+                    INNER JOIN product_categories ON (refCategory = categoryId)
+                    INNER JOIN product_units ON (refUnit = unitId)`;
+        mysql.conn.query(query, id, (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows.length) {
+                return callback(null, false);
+            }
+            return callback(null, rows);
+        });
+    };
+
+    static getTransactionsByEventId(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
@@ -93,8 +142,8 @@ export class EventService {
         });
     };
 
-    static getCalculation(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT (eventCashAfter - eventCashBefore) AS sales, costs, ((eventCashAfter - eventCashBefore) - costs) AS profit
+    static getCalculation(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT (eventCashAfter - eventCashBefore) AS sales, costs, ((eventCashAfter - eventCashBefore) - costs) AS profit
                     FROM (
                         SELECT refEvent, (SUM(transactionChangeTotal * additionDeliveryCosts) * (-1)) AS costs
                         FROM (

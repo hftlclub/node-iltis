@@ -8,7 +8,7 @@ export class InventoryController {
 
     getCurrent(req, res, next) {
         let inventory: Inventory[] = [];
-        InventoryService.getCurrent((err, rows)=>{
+        InventoryService.getCurrent((err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -22,7 +22,7 @@ export class InventoryController {
     getByEventId(req, res, next) {
         let id = parseInt(req.params.eventId);
         let inventory: Inventory[] = [];
-        InventoryService.getByEventId(id, (err, rows)=>{
+        InventoryService.getByEventId(id, (err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)

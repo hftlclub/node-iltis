@@ -4,7 +4,7 @@ let fs = require('fs');
 export class ServerController {
 
     info(req, res, next) {
-        var info = {
+        let info = {
             version: pjson.version,
             time: process.uptime()
         };

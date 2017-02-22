@@ -8,7 +8,7 @@ export class EventTypeController {
 
     getAll(req, res, next) {
         let eventTypes: EventType[] = [];
-        EventTypeService.getAll((err, rows)=>{
+        EventTypeService.getAll((err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -22,7 +22,7 @@ export class EventTypeController {
     getById(req, res, next) {
         let id = parseInt(req.params.eventTypeId);
         let eventType: EventType = EventTypeFactory.empty();
-        EventTypeService.getById(id, (err, row)=>{
+        EventTypeService.getById(id, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

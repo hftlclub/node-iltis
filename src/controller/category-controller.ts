@@ -7,7 +7,7 @@ export class CategoryController {
 
     getAll(req, res, next) {
         let categories: Category[] = [];
-        CategoryService.getAll((err, rows)=>{
+        CategoryService.getAll((err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)

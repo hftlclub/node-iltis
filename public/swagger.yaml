@@ -276,6 +276,23 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
+  '/event/{eventId}/close':
+    post:
+      tags:
+        - event
+      summary: Closes an event, saves transactions and deletes transfers
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Event was closed
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
   '/event/{eventId}/transfers':
     get:
       tags:

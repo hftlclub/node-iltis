@@ -14,7 +14,7 @@ export class ProductController {
 
     getAll(req, res, next) {
         let products: Product[] = [];
-        ProductService.getAll((err, rows)=>{
+        ProductService.getAll((err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)

@@ -17,7 +17,7 @@ export class EventFactory {
             event.id = obj.eventId;
         }
 
-        if(obj.eventType) event.eventType = EventTypeFactory.fromObj(obj.eventType);
+        if (obj.eventType) event.eventType = EventTypeFactory.fromObj(obj.eventType);
         else if (ValueChecker.validNumber(obj.refEventType)) {
             event.eventType = EventTypeFactory.fromObj(obj);;
         }
@@ -42,18 +42,15 @@ export class EventFactory {
             event.tip = obj.eventTip;
         }
 
-        if (obj.datetime) event.datetime = obj.datetime;
-        if (obj.eventDT) {
-            if(ValueChecker.validDate(obj.eventDT)) {
-                event.datetime = obj.eventDT;
-            }
+        if (obj.datetime) event.datetime = new Date (obj.datetime);
+        else if (ValueChecker.validDate(obj.eventDT)) {
+            event.datetime = obj.eventDT;
         }
 
-        if (obj.timestamp) event.timestamp = obj.timestamp;
-        if (obj.eventTS) {
-            if(ValueChecker.validDate(obj.eventTS)) {
-                event.timestamp = obj.eventTS;
-            }
+
+        if (obj.timestamp) event.timestamp = new Date(obj.timestamp);
+        else if (ValueChecker.validDate(obj.eventTS)) {
+            event.timestamp = obj.eventTS;
         }
 
         if (obj.active) event.active = obj.active;
@@ -64,21 +61,22 @@ export class EventFactory {
 
     static fromModel(obj: Event): any {
 
-        var dbEntry: any = {};
+        let  dbEntry: any = {};
 
-        if(obj.eventType) dbEntry.refEventType = obj.eventType.id;
+        if (obj.eventType) dbEntry.refEventType = obj.eventType.id;
 
         if (obj.description) dbEntry.eventDesc = obj.description;
 
-        if (obj.cashBefore) dbEntry.eventCashBefore = obj.cashBefore;
+        if (ValueChecker.validNumber(obj.cashBefore)) dbEntry.eventCashBefore = obj.cashBefore;
 
-        if (obj.cashAfter) dbEntry.eventCashAfter = obj.cashAfter;
+        if (ValueChecker.validNumber(obj.cashAfter)) dbEntry.eventCashAfter = obj.cashAfter;
 
         if (obj.tip) dbEntry.eventTip = obj.tip;
 
         if (obj.datetime) dbEntry.eventDT = obj.datetime;
 
-        if (obj.active) dbEntry.eventActive = obj.active;
+        if (obj.active) dbEntry.eventActive = true;
+        else dbEntry.eventActive = false;
 
         return dbEntry;
     }

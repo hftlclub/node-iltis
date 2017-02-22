@@ -33,23 +33,23 @@ export class ProductFactory {
             product.description = obj.productDesc.trim();
         }
 
-        if(obj.category) product.category = CategoryFactory.fromObj(obj.category);
+        if (obj.category) product.category = CategoryFactory.fromObj(obj.category);
         else if (ValueChecker.validNumber(obj.refCategory)) {
             product.category = CategoryFactory.fromObj(obj);
         }
 
-        if(obj.unit) product.unit = UnitFactory.fromObj(obj.unit);
+        if (obj.unit) product.unit = UnitFactory.fromObj(obj.unit);
         else if (ValueChecker.validNumber(obj.refUnit)) {
             product.unit = UnitFactory.fromObj(obj);
         }
 
-        if(obj.sizeTypes) product.sizeTypes = obj.sizeTypes.map(sizeTypes => SizeTypeFactory.fromObj(sizeTypes));
+        if (obj.sizeTypes) product.sizeTypes = obj.sizeTypes.map(sizeTypes => SizeTypeFactory.fromObj(sizeTypes));
 
-        if(obj.crateTypes) product.crateTypes = obj.crateTypes.map(crateType => CrateTypeFactory.fromObj(crateType));
+        if (obj.crateTypes) product.crateTypes = obj.crateTypes.map(crateType => CrateTypeFactory.fromObj(crateType));
 
-        if(obj.deliveryCosts) product.deliveryCosts = obj.deliveryCosts.map(deliveryCosts => DeliveryCostsFactory.fromObj(deliveryCosts));
+        if (obj.deliveryCosts) product.deliveryCosts = obj.deliveryCosts.map(deliveryCosts => DeliveryCostsFactory.fromObj(deliveryCosts));
 
-        if(obj.minimumStocks) product.minimumStocks = obj.minimumStocks.map(minimumStock => MinimumStockFactory.fromObj(minimumStock));
+        if (obj.minimumStocks) product.minimumStocks = obj.minimumStocks.map(minimumStock => MinimumStockFactory.fromObj(minimumStock));
 
         if (obj.imgFilename) product.imgFilename = obj.imgFilename;
         else if (ValueChecker.validString(obj.productImgFilename)) {
@@ -62,11 +62,10 @@ export class ProductFactory {
         if (obj.deleted) product.deleted = obj.deleted;
         else product.deleted = !!ValueChecker.validNumber(obj.productDeleted);
 
-        if (obj.timestamp) product.timestamp = obj.timestamp;
-        if (obj.productTS) {
-            if(ValueChecker.validDate(obj.productTS)) {
-                product.timestamp = obj.productTS;
-            }
+
+        if (obj.timestamp) product.timestamp = new Date (obj.timestamp);
+        else if (ValueChecker.validDate(obj.productTS)) {
+            product.timestamp = obj.productTS;
         }
 
         return product;

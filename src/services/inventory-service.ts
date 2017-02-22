@@ -1,9 +1,9 @@
-var mysql = require('../modules/mysql');
+let mysql = require('../modules/mysql');
 
 export class InventoryService {
 
-    static getCurrent(callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getCurrent(callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
@@ -32,8 +32,8 @@ export class InventoryService {
         });
     };
 
-    static getByEventId(id: number, callback:(err:any, rows?:any)=>void) {
-        var query = `SELECT *
+    static getByEventId(id: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
