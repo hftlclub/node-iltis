@@ -26,27 +26,33 @@ export class EventController {
         let id = parseInt(req.context.eventId, 0);
         let transfers: any[] = [];
         req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, true, -1)));
-        this.addTransfer(req, res, next, transfers);
+        this.addTransfer(req, res, next, transfers, id);
     };
 
     addTransferStorageIn(req, res, next) {
         let id = parseInt(req.context.eventId, 0);
         let transfers: any[] = [];
         req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, true, 1)));
-        this.addTransfer(req, res, next, transfers);
+        this.addTransfer(req, res, next, transfers, id);
     };
 
     addTransferCounterOut(req, res, next) {
         let id = parseInt(req.context.eventId, 0);
         let transfers: any[] = [];
         req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, false, -1)));
-        this.addTransfer(req, res, next, transfers);
+        this.addTransfer(req, res, next, transfers, id);
     };
 
-    private addTransfer(req, res, next, transfers: any[]) {
+    private addTransfer(req, res, next, transfers, eventId) {
         EventService.addTransfers(transfers, (err, result) => {
             if (err) return next(new BadRequestError());
-            if (result) res.send(201);
+            if (result) {
+                EventService.getLastTransfers(eventId, result.insertId, (err, rows) => {
+                    if (err) return next(err);
+                    transfers = rows.map(row => TransferFactory.fromObj(row));
+                    res.send(201, transfers, {'Content-Type': 'application/json; charset=utf-8'});
+                });
+            }
             else res.send(new InternalError());
         });
     };
