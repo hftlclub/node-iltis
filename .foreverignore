@@ -1,0 +1,7 @@
+**/.git/**
+*.log
+config.example.js
+public/**
+database/**
+.vscode/**
+README.md

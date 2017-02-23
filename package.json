@@ -10,6 +10,7 @@
     "url": "https://github.com/hftlclub/node-iltis/issues"
   },
   "scripts": {
+    "tsc": "tsc",
     "build": "tsc",
     "start": "tsc && node server.js",
     "startForever": "tsc && forever --minUptime 1000 --spinSleepTime 1000 server.js"
