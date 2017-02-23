@@ -39,7 +39,7 @@ export class EventController {
             updatedEvent.eventActive = storedEvent.active;
             EventService.updateEvent(updatedEvent, (err, result) => {
                 if (err) return next(new BadRequestError());
-                if (result) res.send(201);
+                if (result) res.send(204);
                 else res.send(new InternalError());
             });
         });
