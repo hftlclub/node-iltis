@@ -23,27 +23,23 @@ export class EventController {
     };
 
     addTransferStorageOut(req, res, next) {
-        let id = parseInt(req.context.eventId, 0);
-        let transfers: any[] = [];
-        req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, true, -1)));
-        this.addTransfer(req, res, next, transfers, id);
+        this.addTransfer(req, res, next, true, -1);
     };
 
     addTransferStorageIn(req, res, next) {
-        let id = parseInt(req.context.eventId, 0);
-        let transfers: any[] = [];
-        req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, true, 1)));
-        this.addTransfer(req, res, next, transfers, id);
+        this.addTransfer(req, res, next, true, 1);
     };
 
     addTransferCounterOut(req, res, next) {
-        let id = parseInt(req.context.eventId, 0);
-        let transfers: any[] = [];
-        req.body.forEach(obj => transfers.push(TransferFactory.fromModel(obj, id, false, -1)));
-        this.addTransfer(req, res, next, transfers, id);
+        this.addTransfer(req, res, next, false, -1);
     };
 
-    private addTransfer(req, res, next, transfers, eventId) {
+    private addTransfer(req, res, next, isStorageChange, sign) {
+        let eventId = parseInt(req.context.eventId, 0);
+        let transfers: any[] = [];
+        req.body.forEach(obj => {
+            if (obj.change != 0) transfers.push(TransferFactory.fromModel(obj, eventId, true, -1));
+        });
         EventService.addTransfers(transfers, (err, result) => {
             if (err) return next(new BadRequestError());
             if (result) {
