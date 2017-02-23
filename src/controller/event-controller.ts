@@ -22,6 +22,29 @@ export class EventController {
         });
     };
 
+    updateEvent(req, res, next) {
+        let id = parseInt(req.context.eventId, 0);
+        let storedEvent: Event = EventFactory.empty();
+        EventService.getById(id, (err, row) => {
+            if (err) return next(err);
+            if (!row) {
+                // Todo: Implementet correct feedback (error 204)
+                res.send(new NotFoundError('Event does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+            storedEvent = EventFactory.fromObj(row);
+            let updatedEvent: any = EventFactory.fromModel(req.body);
+            updatedEvent.eventId = storedEvent.id;
+            updatedEvent.refEventType = storedEvent.eventType.id;
+            updatedEvent.eventTS = storedEvent.timestamp;
+            updatedEvent.eventActive = storedEvent.active;
+            EventService.updateEvent(updatedEvent, (err, result) => {
+                if (err) return next(new BadRequestError());
+                if (result) res.send(201);
+                else res.send(new InternalError());
+            });
+        });
+    };
+
     addTransferStorageOut(req, res, next) {
         this.addTransfer(req, res, next, true, -1);
     };

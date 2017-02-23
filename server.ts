@@ -68,6 +68,8 @@ server.post('/event/:eventId/transfers/storage/out', eventController.addTransfer
 server.post('/event/:eventId/transfers/storage/in', eventController.addTransferStorageIn.bind(eventController));
 server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));
 
+server.put('/event/:eventId', eventController.updateEvent.bind(eventController));
+
 // serve public folder
 server.get(/.*/, serveStatic({
     directory: __dirname + '/public/',

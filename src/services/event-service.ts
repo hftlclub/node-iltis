@@ -14,6 +14,17 @@ export class EventService {
         });
     };
 
+    static updateEvent(event: any, callback: (err: any, result?: any) => void) {
+        event.eventActive = true;
+        let query = `UPDATE events SET ? WHERE eventId = ?`;
+        mysql.conn.query(query, [event, event.eventId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static addTransfers(transfers: any[], callback: (err: any, result?: any) => void) {
         let query = `INSERT INTO event_transfers
                     (refEvent, refProduct, refSizeType, transferChangeStorage, transferChangeCounter)
