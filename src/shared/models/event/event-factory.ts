@@ -67,11 +67,11 @@ export class EventFactory {
 
         if (obj.description) dbEntry.eventDesc = obj.description;
 
-        if (ValueChecker.validNumber(obj.cashBefore)) dbEntry.eventCashBefore = obj.cashBefore;
+        if (ValueChecker.validNumber(obj.cashBefore) || obj.cashBefore === 0) dbEntry.eventCashBefore = obj.cashBefore;
 
-        if (ValueChecker.validNumber(obj.cashAfter)) dbEntry.eventCashAfter = obj.cashAfter;
+        if (ValueChecker.validNumber(obj.cashAfter) || obj.cashAfter === 0) dbEntry.eventCashAfter = obj.cashAfter;
 
-        if (ValueChecker.validNumber(obj.tip)) dbEntry.eventTip = obj.tip;
+        if (ValueChecker.validNumber(obj.tip) || obj.tip === 0) dbEntry.eventTip = obj.tip;
 
         if (obj.datetime) dbEntry.eventDT = obj.datetime;
 
