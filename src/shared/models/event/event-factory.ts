@@ -71,12 +71,11 @@ export class EventFactory {
 
         if (ValueChecker.validNumber(obj.cashAfter)) dbEntry.eventCashAfter = obj.cashAfter;
 
-        if (obj.tip) dbEntry.eventTip = obj.tip;
+        if (ValueChecker.validNumber(obj.tip)) dbEntry.eventTip = obj.tip;
 
         if (obj.datetime) dbEntry.eventDT = obj.datetime;
 
-        if (obj.active) dbEntry.eventActive = true;
-        else dbEntry.eventActive = false;
+        if (obj.active) dbEntry.eventActive = obj.active;
 
         return dbEntry;
     }
