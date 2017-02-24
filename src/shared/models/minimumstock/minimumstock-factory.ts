@@ -22,7 +22,7 @@ export class MinimumStockFactory {
         }
 
         if (obj.warningSend) minimumStock.warningSend = obj.warningSend;
-        else minimumStock.warningSend = !!ValueChecker.validNumber(obj.additionWarningSend);
+        else minimumStock.warningSend = !!ValueChecker.validBooleanNumber(obj.additionWarningSend);
 
         return minimumStock;
     }

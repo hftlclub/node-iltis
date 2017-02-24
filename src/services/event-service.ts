@@ -5,6 +5,8 @@ export class EventService {
 
     static addEvent(event: any, callback: (err: any, result?: any) => void) {
         event.eventActive = true;
+        event.eventCountedCounter = false;
+        event.eventCountedStorage = false;
         let query = `INSERT INTO events SET ?`;
         mysql.conn.query(query, event, (err, result) => {
             if (err) {
@@ -24,11 +26,46 @@ export class EventService {
         });
     };
 
+    static updateEventCountedValues(eventId: number, isStorageChange: boolean, callback: (err: any, result?: any) => void) {
+        let event: any = {};
+        if (isStorageChange) event.eventCountedStorage = true;
+        else event.eventCountedCounter = true;
+        let query = `UPDATE events SET ? WHERE eventId = ?`;
+        mysql.conn.query(query, [event, eventId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static addTransfers(transfers: any[], callback: (err: any, result?: any) => void) {
         let query = `INSERT INTO event_transfers
                     (refEvent, refProduct, refSizeType, transferChangeStorage, transferChangeCounter)
                     VALUES ` + transfers.map(t => `(${t.refEvent}, ${t.refProduct}, ${t.refSizeType}, ${t.transferChangeStorage}, ${t.transferChangeCounter})`).join(',');
         mysql.conn.query(query, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteStorageTransfers(id: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM event_transfers
+                    WHERE refEvent = ? AND transferChangeCounter = 0`;
+        mysql.conn.query(query, id, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteCounterTransfers(id: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM event_transfers
+                    WHERE refEvent = ? AND transferChangeStorage = 0`;
+        mysql.conn.query(query, id, (err, result) => {
             if (err) {
                 return callback(err);
             }

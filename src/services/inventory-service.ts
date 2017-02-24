@@ -18,7 +18,7 @@ export class InventoryService {
                                 INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
                             INNER JOIN size_types ON (refSizeType = sizeTypeId)
                             GROUP BY refProduct, refSizeType) AS inventoryWithoutCosts
-                        WHERE storage > 0 OR counter > 0) AS inventoryWithCosts
+                        WHERE productActive = true) AS inventoryWithCosts
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
         mysql.conn.query(query, (err, rows, fields) => {
@@ -49,7 +49,7 @@ export class InventoryService {
                             INNER JOIN size_types ON (refSizeType = sizeTypeId)
                             WHERE refEvent <= ?
                             GROUP BY refProduct, refSizeType) AS inventoryWithoutCosts
-                        WHERE storage > 0 OR counter > 0) AS inventoryWithCosts
+                        WHERE productActive = true) AS inventoryWithCosts
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
         mysql.conn.query(query, id, (err, rows, fields) => {

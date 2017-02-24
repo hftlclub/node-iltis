@@ -67,6 +67,9 @@ server.post('/event', eventController.addEvent.bind(eventController));
 server.post('/event/:eventId/transfers/storage/out', eventController.addTransferStorageOut.bind(eventController));
 server.post('/event/:eventId/transfers/storage/in', eventController.addTransferStorageIn.bind(eventController));
 server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));
+server.post('/event/:eventId/transfers/storage/count', eventController.countStorage.bind(eventController));
+server.post('/event/:eventId/transfers/counter/count', eventController.countCounter.bind(eventController));
+
 
 server.put('/event/:eventId', eventController.updateEvent.bind(eventController));
 

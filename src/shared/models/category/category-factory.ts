@@ -27,7 +27,7 @@ export class CategoryFactory {
         }
 
         if (obj.deleted) category.deleted = obj.deleted;
-        else category.deleted = !!ValueChecker.validNumber(obj.categoryDeleted);
+        else category.deleted = !!ValueChecker.validBooleanNumber(obj.categoryDeleted);
 
         return category;
     }

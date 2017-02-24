@@ -57,10 +57,10 @@ export class ProductFactory {
         }
 
         if (obj.active) product.active = obj.active;
-        else product.active = !!ValueChecker.validNumber(obj.productActive);
+        else product.active = !!ValueChecker.validBooleanNumber(obj.productActive);
 
         if (obj.deleted) product.deleted = obj.deleted;
-        else product.deleted = !!ValueChecker.validNumber(obj.productDeleted);
+        else product.deleted = !!ValueChecker.validBooleanNumber(obj.productDeleted);
 
 
         if (obj.timestamp) product.timestamp = new Date (obj.timestamp);

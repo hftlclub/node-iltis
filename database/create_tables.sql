@@ -38,6 +38,8 @@ CREATE TABLE events (
     eventTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     eventDT timestamp NOT NULL,
     eventActive bool NOT NULL,
+    eventCountedCounter bool NOT NULL,
+    eventCountedStorage bool NOT NULL,
     CONSTRAINT events_pk PRIMARY KEY (eventId)
 );
 

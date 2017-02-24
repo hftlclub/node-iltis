@@ -22,13 +22,13 @@ export class EventTypeFactory {
         }
 
         if (obj.intern) eventType.intern = obj.intern;
-        else eventType.intern = !!ValueChecker.validNumber(obj.eventTypeIntern);
+        else eventType.intern = !!ValueChecker.validBooleanNumber(obj.eventTypeIntern);
 
         if (obj.realEvent) eventType.realEvent = obj.realEvent;
-        else eventType.realEvent = !!ValueChecker.validNumber(obj.eventTypeRealEvent);
+        else eventType.realEvent = !!ValueChecker.validBooleanNumber(obj.eventTypeRealEvent);
 
         if (obj.deleted) eventType.deleted = obj.deleted;
-        else eventType.deleted = !!ValueChecker.validNumber(obj.eventTypeDeleted);
+        else eventType.deleted = !!ValueChecker.validBooleanNumber(obj.eventTypeDeleted);
 
         if (obj.uiMode) eventType.uiMode = obj.uiMode;
         else if (ValueChecker.validString(obj.eventTypeUiMode)) {

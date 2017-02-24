@@ -2,6 +2,8 @@ import { ValueChecker } from '../../valuechecker';
 import { Transfer } from './';
 import { ProductFactory } from '../product';
 import { SizeTypeFactory } from '../sizetype';
+import { Inventory, InventoryFactory} from '../inventory';
+
 
 export class TransferFactory {
 
@@ -29,8 +31,8 @@ export class TransferFactory {
         }
 
         if (obj.change) transfer.change = obj.change;
-        else if (ValueChecker.validNumber(obj.transferChangeStorage)) {
-            transfer.change = obj.transferChangeStorage;
+        else if (ValueChecker.validNumber(obj.transferChangeStorage) && ValueChecker.validNumber(obj.transferChangeCounter)) {
+            transfer.change = obj.transferChangeStorage + obj.transferChangeCounter;
         }
 
         if (obj.timestamp) transfer.timestamp = new Date (obj.timestamp);
@@ -41,7 +43,7 @@ export class TransferFactory {
         return transfer;
     }
 
-    static fromModel(obj: Transfer, eventId: number, isStorageChange: boolean, sign: number): any {
+    static fromTransferModel(obj: Transfer, eventId: number, isStorageChange: boolean, sign: number): any {
 
         let  dbEntry: any = {};
 
@@ -54,10 +56,30 @@ export class TransferFactory {
         if (isStorageChange) {
             dbEntry.transferChangeStorage = obj.change * sign;
             dbEntry.transferChangeCounter = 0;
-        }
-        else {
+        } else {
             dbEntry.transferChangeStorage = 0;
             dbEntry.transferChangeCounter = obj.change * sign;
+        }
+
+        return dbEntry;
+    }
+
+    static fromInventoryModel(obj: Inventory, eventId: number, isStorageChange: boolean): any {
+
+        let  dbEntry: any = {};
+
+        dbEntry.refEvent = eventId;
+
+        if (obj.product) dbEntry.refProduct = obj.product.id;
+
+        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
+
+        if (isStorageChange) {
+            dbEntry.transferChangeStorage = - obj.storage;
+            dbEntry.transferChangeCounter = 0;
+        } else {
+            dbEntry.transferChangeStorage = 0;
+            dbEntry.transferChangeCounter = - obj.storage;
         }
 
         return dbEntry;

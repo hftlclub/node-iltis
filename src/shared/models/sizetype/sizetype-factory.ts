@@ -27,7 +27,7 @@ export class SizeTypeFactory {
         }
 
         if (obj.deleted) sizeType.deleted = obj.deleted;
-        else sizeType.deleted = !!ValueChecker.validNumber(obj.sizeTypeDeleted);
+        else sizeType.deleted = !!ValueChecker.validBooleanNumber(obj.sizeTypeDeleted);
 
         return sizeType;
     }
