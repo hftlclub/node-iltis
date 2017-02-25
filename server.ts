@@ -74,6 +74,9 @@ server.post('/event/:eventId/transfers/counter/count', eventController.countCoun
 // API routes (PUT)
 server.put('/event/:eventId', eventController.updateEvent.bind(eventController));
 
+// API routes (DELETE)
+server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
+
 // serve public folder
 server.get(/.*/, serveStatic({
     directory: __dirname + '/public/',

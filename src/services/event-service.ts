@@ -17,8 +17,20 @@ export class EventService {
     };
 
     static updateEvent(event: any, callback: (err: any, result?: any) => void) {
-        let query = `UPDATE events SET ? WHERE eventId = ?`;
+        let query = `UPDATE events SET ?
+                    WHERE eventId = ?`;
         mysql.conn.query(query, [event, event.eventId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteEvent(eventId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM events
+                    WHERE eventId = ?`;
+        mysql.conn.query(query, eventId, (err, result) => {
             if (err) {
                 return callback(err);
             }

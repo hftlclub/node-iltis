@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError} from 'restify';
+import { NotFoundError, BadRequestError, ConflictError, InternalError, ForbiddenError} from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Event, EventFactory } from '../shared/models/event';
@@ -34,6 +34,15 @@ export class EventController {
         delete updatedEvent.eventCountedStorage;
         EventService.updateEvent(updatedEvent, (err, result) => {
             if (err) return next(new BadRequestError());
+            if (result) res.send(204);
+            else next(new InternalError());
+        });
+    };
+
+    deleteEvent(req, res, next) {
+        let eventId = parseInt(req.context.eventId, 0);
+        EventService.deleteEvent(eventId, (err, result) => {
+            if (err) return next(new ForbiddenError());
             if (result) res.send(204);
             else next(new InternalError());
         });
