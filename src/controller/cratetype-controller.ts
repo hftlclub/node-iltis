@@ -1,4 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
+
+import { ContentType } from '../contenttype';
 import { CrateType, CrateTypeFactory } from '../shared/models/cratetype';
 import { CrateTypeService } from '../services/cratetype-service';
 
@@ -11,10 +13,10 @@ export class CrateTypeController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(crateTypes, ContentType.ApplicationJSON);
             }
             crateTypes = rows.map(row => CrateTypeFactory.fromObj(row));
-            res.send(crateTypes, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(crateTypes, ContentType.ApplicationJSON);
         });
     };
 
@@ -28,7 +30,7 @@ export class CrateTypeController {
                 next(new NotFoundError('CrateType does not exist'));
             }
             crateType = CrateTypeFactory.fromObj(row);
-            res.send(crateType, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(crateType, ContentType.ApplicationJSON);
         });
     };
 }

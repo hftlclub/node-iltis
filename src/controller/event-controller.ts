@@ -1,5 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError, InternalError} from 'restify';
 
+import { ContentType } from '../contenttype';
 import { Event, EventFactory } from '../shared/models/event';
 import { Transfer, TransferFactory } from '../shared/models/transfer';
 import { Transaction, TransactionFactory } from '../shared/models/transaction';
@@ -17,7 +18,7 @@ export class EventController {
             if (result) {
                 EventService.getById(result.insertId, (err, row) => {
                     if (err) return next(err);
-                    res.send(201, EventFactory.fromObj(row), {'Content-Type': 'application/json; charset=utf-8'});
+                    res.send(201, EventFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
         });
@@ -62,7 +63,7 @@ export class EventController {
                 EventService.getLastTransfers(eventId, result.insertId, (err, rows) => {
                     if (err) return next(err);
                     transfers = rows.map(row => TransferFactory.fromObj(row));
-                    res.send(201, transfers, {'Content-Type': 'application/json; charset=utf-8'});
+                    res.send(201, transfers, ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
         });
@@ -118,7 +119,7 @@ export class EventController {
                 t[tKey] -= inventoryForTransfer[iKey];
                 return t;
             });
-            transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter)
+            transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter);
             EventService.addTransfers(transfers, (err, result) => {
                 if (err) return next(new BadRequestError());
                 if (result) {
@@ -141,10 +142,10 @@ export class EventController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(events, ContentType.ApplicationJSON);
             }
             events = rows.map(row => EventFactory.fromObj(row));
-            res.send(events, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(events, ContentType.ApplicationJSON);
         });
     };
 
@@ -158,7 +159,7 @@ export class EventController {
                 next(new NotFoundError('Event does not exist'));
             }
             event = EventFactory.fromObj(row);
-            res.send(event, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(event, ContentType.ApplicationJSON);
         });
     };
 
@@ -169,10 +170,10 @@ export class EventController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(transfers, ContentType.ApplicationJSON);
             }
             transfers = rows.map(row => TransferFactory.fromObj(row));
-            res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(transfers, ContentType.ApplicationJSON);
         });
     };
 
@@ -183,10 +184,10 @@ export class EventController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(transfers, ContentType.ApplicationJSON);
             }
             transfers = rows.map(row => TransferFactory.fromObj(row));
-            res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(transfers, ContentType.ApplicationJSON);
         });
     };
 
@@ -197,10 +198,10 @@ export class EventController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(transfers, ContentType.ApplicationJSON);
             }
             transfers = rows.map(row => TransferFactory.fromObj(row));
-            res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(transfers, ContentType.ApplicationJSON);
         });
     };
 
@@ -211,7 +212,7 @@ export class EventController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(inventory, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(inventory, ContentType.ApplicationJSON);
             }
             inventory = rows.map(row => InventoryFactory.fromObj(row));
             let inventoryTransfers: Inventory[] = [];
@@ -225,7 +226,7 @@ export class EventController {
                         iOld.storage = iNew.storage;
                     }
                 });
-                res.send(inventory, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(inventory, ContentType.ApplicationJSON);
             });
         });
     }
@@ -237,10 +238,10 @@ export class EventController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(transactions, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(transactions, ContentType.ApplicationJSON);
             }
             transactions = rows.map(row => TransactionFactory.fromObj(row));
-            res.send(transactions, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(transactions, ContentType.ApplicationJSON);
         });
     };
 
@@ -250,10 +251,10 @@ export class EventController {
         EventService.getCalculation(eventId, (err, row) => {
             if (err) return next(err);
             if (!row) {
-                res.send(calculation, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(calculation, ContentType.ApplicationJSON);
             }
             calculation = CalculationFactory.fromObj(row);
-            res.send(calculation, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(calculation, ContentType.ApplicationJSON);
         });
     };
 }

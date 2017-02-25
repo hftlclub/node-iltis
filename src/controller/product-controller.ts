@@ -1,5 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
 
+import { ContentType } from '../contenttype';
 import { Product, ProductFactory } from '../shared/models/product';
 import { ProductService } from '../services/product-service';
 import { CrateTypeFactory } from '../shared/models/cratetype';
@@ -18,7 +19,7 @@ export class ProductController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(products, ContentType.ApplicationJSON);
             }
             products = rows.map(row => ProductFactory.fromObj(row));
             CrateTypeService.getProductsCrates((err, rows) => {
@@ -37,7 +38,7 @@ export class ProductController {
                             products.find(f => f.id === row.refProduct).deliveryCosts.push(DeliveryCostsFactory.fromObj(row));
                             products.find(f => f.id === row.refProduct).minimumStocks.push(MinimumStockFactory.fromObj(row));
                         });
-                        res.send(products, { 'Content-Type': 'application/json; charset=utf-8' });
+                        res.send(products, ContentType.ApplicationJSON);
                     });
                 });
             });
@@ -64,10 +65,10 @@ export class ProductController {
                     CrateTypeService.getProductCratesByProductId(product.id, (err, rows) => {
                         if (err) return next(err);
                         if (!rows.length) {
-                            res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
+                            res.send(product, ContentType.ApplicationJSON);
                         }
                         product.crateTypes = rows.map(row => CrateTypeFactory.fromObj(row));
-                        res.send(product, { 'Content-Type': 'application/json; charset=utf-8' });
+                        res.send(product, ContentType.ApplicationJSON);
                     });
                 });
             });

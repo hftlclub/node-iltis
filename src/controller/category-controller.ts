@@ -1,4 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
+
+import { ContentType } from '../contenttype';
 import { Category, CategoryFactory } from '../shared/models/category';
 import { CategoryService } from '../services/category-service';
 
@@ -11,10 +13,10 @@ export class CategoryController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(categories, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(categories, ContentType.ApplicationJSON);
             }
             categories = rows.map(row => CategoryFactory.fromObj(row));
-            res.send(categories, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(categories, ContentType.ApplicationJSON);
         });
     };
 
@@ -28,7 +30,7 @@ export class CategoryController {
                 next(new NotFoundError('Category does not exist'));
             }
             category = CategoryFactory.fromObj(row);
-            res.send(category, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(category, ContentType.ApplicationJSON);
         });
     };
 }

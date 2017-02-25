@@ -1,3 +1,5 @@
+import { ContentType } from '../contenttype';
+
 let pjson = require('../../package.json');
 let fs = require('fs');
 
@@ -8,7 +10,7 @@ export class ServerController {
             version: pjson.version,
             time: process.uptime()
         };
-        res.send(info, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.send(info, ContentType.ApplicationJSON);
         next();
     }
 

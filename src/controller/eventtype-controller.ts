@@ -1,5 +1,6 @@
 import { NotFoundError, BadRequestError, ConflictError } from 'restify';
 
+import { ContentType } from '../contenttype';
 import { EventType, EventTypeFactory } from '../shared/models/eventtype';
 import { EventTypeService } from '../services/eventtype-service';
 
@@ -12,10 +13,10 @@ export class EventTypeController {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(eventTypes, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.send(eventTypes, ContentType.ApplicationJSON);
             }
             eventTypes = rows.map(row => EventTypeFactory.fromObj(row));
-            res.send(eventTypes, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(eventTypes, ContentType.ApplicationJSON);
         });
     };
 
@@ -29,7 +30,7 @@ export class EventTypeController {
                 next(new NotFoundError('EventType does not exist'));
             }
             eventType = EventTypeFactory.fromObj(row);
-            res.send(eventType, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.send(eventType, ContentType.ApplicationJSON);
         });
     };
 }

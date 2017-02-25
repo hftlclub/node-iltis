@@ -88,7 +88,6 @@ export class EventService {
             if (!rows[0]) {
                 return callback(null, false);
             }
-            console.log(rows[0]);
             return callback(null, rows[0]);
         });
     };
