@@ -17,11 +17,11 @@ export class SizeTypeService {
         });
     };
 
-    static getById(id: number, callback: (err: any, rows?: any) => void) {
+    static getById(sizeTypeId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM size_types
                     WHERE sizeTypeId = ?`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, sizeTypeId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -32,7 +32,7 @@ export class SizeTypeService {
         });
     };
 
-    static getProductSizesByProductId(id: number, callback: (err: any, rows?: any) => void) {
+    static getProductSizesByProductId(productId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -40,7 +40,7 @@ export class SizeTypeService {
                     INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable
                     WHERE refProduct = ?
                     ORDER BY sizeTypeAmount DESC`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, productId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

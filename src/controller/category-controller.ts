@@ -19,9 +19,9 @@ export class CategoryController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.categoryId, 0);
+        let categoryId = parseInt(req.params.categoryId, 0);
         let category: Category = CategoryFactory.empty();
-        CategoryService.getById(id, (err, row) => {
+        CategoryService.getById(categoryId, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

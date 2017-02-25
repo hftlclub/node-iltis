@@ -20,9 +20,9 @@ export class UnitController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.unitId, 0);
+        let unitId = parseInt(req.params.unitId, 0);
         let unit: Unit = UnitFactory.empty();
-        UnitService.getById(id, (err, row) => {
+        UnitService.getById(unitId, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

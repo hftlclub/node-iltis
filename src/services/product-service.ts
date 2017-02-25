@@ -21,7 +21,7 @@ export class ProductService {
         });
     };
 
-    static getById(id: number, callback: (err: any, rows?: any) => void) {
+    static getById(productId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -30,7 +30,7 @@ export class ProductService {
                     INNER JOIN product_units ON (unitId = refUnit)
                     WHERE productId = ?
                     ORDER BY categoryId ASC`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, productId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -41,12 +41,12 @@ export class ProductService {
         });
     };
 
-    static getProductAdditionsByProductId(id: number, callback: (err: any, rows?: any) => void) {
+    static getProductAdditionsByProductId(productId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM product_additions
                     WHERE refProduct = ?
                     ORDER BY refSizeType ASC`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, productId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -57,7 +57,7 @@ export class ProductService {
         });
     };
 
-    static getProductsAdditions(callback:(err: any, rows?: any) => void) {
+    static getProductsAdditions(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM product_additions
                     ORDER BY refSizeType ASC`;

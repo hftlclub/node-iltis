@@ -24,9 +24,9 @@ export class EventController {
     };
 
     updateEvent(req, res, next) {
-        let id = parseInt(req.context.eventId, 0);
+        let eventId = parseInt(req.context.eventId, 0);
         let updatedEvent: any = EventFactory.toDbObject(req.body);
-        updatedEvent.eventId = id;
+        updatedEvent.eventId = eventId;
         delete updatedEvent.eventTS;
         delete updatedEvent.eventActive;
         delete updatedEvent.eventCountedCounter;
@@ -149,9 +149,9 @@ export class EventController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req.params.eventId, 0);
         let event: Event = EventFactory.empty();
-        EventService.getById(id, (err, row) => {
+        EventService.getById(eventId, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
@@ -163,9 +163,9 @@ export class EventController {
     };
 
     getEventTransfers(req, res, next) {
-        let id = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req.params.eventId, 0);
         let transfers: Transfer[] = [];
-        EventService.getTransfersByEventId(id, (err, rows) => {
+        EventService.getTransfersByEventId(eventId, (err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -177,9 +177,9 @@ export class EventController {
     };
 
     getEventStorageTransfers(req, res, next) {
-        let id = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req.params.eventId, 0);
         let transfers: Transfer[] = [];
-        EventService.getStorageTransfersByEventId(id, (err, rows) => {
+        EventService.getStorageTransfersByEventId(eventId, (err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -191,9 +191,9 @@ export class EventController {
     };
 
     getEventCounterTransfers(req, res, next) {
-        let id = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req.params.eventId, 0);
         let transfers: Transfer[] = [];
-        EventService.getCounterTransfersByEventId(id, (err, rows) => {
+        EventService.getCounterTransfersByEventId(eventId, (err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -231,9 +231,9 @@ export class EventController {
     }
 
     getEventTransactions(req, res, next) {
-        let id = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req.params.eventId, 0);
         let transactions: Transaction[] = [];
-        EventService.getTransactionsByEventId(id, (err, rows) => {
+        EventService.getTransactionsByEventId(eventId, (err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)
@@ -245,9 +245,9 @@ export class EventController {
     };
 
     getCalculation(req, res, next) {
-        let id = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req.params.eventId, 0);
         let calculation: CalculationFactory = CalculationFactory.empty();
-        EventService.getCalculation(id, (err, row) => {
+        EventService.getCalculation(eventId, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 res.send(calculation, { 'Content-Type': 'application/json; charset=utf-8' });

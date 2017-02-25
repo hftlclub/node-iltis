@@ -17,11 +17,11 @@ export class UnitService {
         });
     };
 
-    static getById(id: number, callback: (err: any, rows?: any) => void) {
+    static getById(unitId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM product_units
                     WHERE unitId = ?`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, unitId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

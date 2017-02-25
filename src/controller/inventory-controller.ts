@@ -20,9 +20,9 @@ export class InventoryController {
     };
 
     getByEventId(req, res, next) {
-        let id = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req.params.eventId, 0);
         let inventory: Inventory[] = [];
-        InventoryService.getByEventId(id, (err, rows) => {
+        InventoryService.getByEventId(eventId, (err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)

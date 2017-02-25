@@ -20,9 +20,9 @@ export class EventTypeController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.eventTypeId, 0);
+        let eventTypeId = parseInt(req.params.eventTypeId, 0);
         let eventType: EventType = EventTypeFactory.empty();
-        EventTypeService.getById(id, (err, row) => {
+        EventTypeService.getById(eventTypeId, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)

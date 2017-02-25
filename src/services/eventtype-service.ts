@@ -17,11 +17,11 @@ export class EventTypeService {
         });
     };
 
-    static getById(id: number, callback: (err: any, rows?: any) => void) {
+    static getById(eventTypeId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM event_types
                     WHERE eventTypeId = ?`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventTypeId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

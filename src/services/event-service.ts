@@ -38,10 +38,10 @@ export class EventService {
         });
     };
 
-    static deleteStorageTransfers(id: number, callback: (err: any, result?: any) => void) {
+    static deleteStorageTransfers(eventId: number, callback: (err: any, result?: any) => void) {
         let query = `DELETE FROM event_transfers
                     WHERE refEvent = ? AND transferChangeCounter = 0`;
-        mysql.conn.query(query, id, (err, result) => {
+        mysql.conn.query(query, eventId, (err, result) => {
             if (err) {
                 return callback(err);
             }
@@ -49,10 +49,10 @@ export class EventService {
         });
     };
 
-    static deleteCounterTransfers(id: number, callback: (err: any, result?: any) => void) {
+    static deleteCounterTransfers(eventId: number, callback: (err: any, result?: any) => void) {
         let query = `DELETE FROM event_transfers
                     WHERE refEvent = ? AND transferChangeStorage = 0`;
-        mysql.conn.query(query, id, (err, result) => {
+        mysql.conn.query(query, eventId, (err, result) => {
             if (err) {
                 return callback(err);
             }
@@ -76,18 +76,19 @@ export class EventService {
         });
     };
 
-    static getById(id: number, callback: (err: any, rows?: any) => void) {
+    static getById(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM event_types
                     INNER JOIN events ON(eventTypeId = refEventType)
                     WHERE eventId = ?`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
             if (!rows[0]) {
                 return callback(null, false);
             }
+            console.log(rows[0]);
             return callback(null, rows[0]);
         });
     };
@@ -116,7 +117,7 @@ export class EventService {
         });
     };
 
-    static getTransfersByEventId(id: number, callback: (err: any, rows?: any) => void) {
+    static getTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -129,7 +130,7 @@ export class EventService {
                         ORDER BY transferId ASC) AS transfers
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -140,7 +141,7 @@ export class EventService {
         });
     };
 
-    static getStorageTransfersByEventId(id: number, callback: (err: any, rows?: any) => void) {
+    static getStorageTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -153,7 +154,7 @@ export class EventService {
                         ORDER BY transferId ASC) AS transfers
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -164,7 +165,7 @@ export class EventService {
         });
     };
 
-    static getCounterTransfersByEventId(id: number, callback: (err: any, rows?: any) => void) {
+    static getCounterTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -177,7 +178,7 @@ export class EventService {
                         ORDER BY transferId ASC) AS transfers
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -188,7 +189,7 @@ export class EventService {
         });
     };
 
-    static getTransactionsByEventId(id: number, callback: (err: any, rows?: any) => void) {
+    static getTransactionsByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -201,7 +202,7 @@ export class EventService {
                         ORDER BY transactionId ASC) AS transactions
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -212,7 +213,7 @@ export class EventService {
         });
     };
 
-    static getCalculation(id: number, callback: (err: any, rows?: any) => void) {
+    static getCalculation(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT (eventCashAfter - eventCashBefore) AS sales, costs, ((eventCashAfter - eventCashBefore) - costs) AS profit
                     FROM (
                         SELECT refEvent, (SUM(transactionChangeTotal * additionDeliveryCosts) * (-1)) AS costs
@@ -222,7 +223,7 @@ export class EventService {
                             WHERE refEvent = ?) AS transactions
                         INNER JOIN product_additions ON (refProduct = productId AND refSizeType = sizeTypeId)) AS costsTable
                     INNER JOIN events ON (refEvent = eventId)`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

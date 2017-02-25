@@ -18,12 +18,12 @@ export class CrateTypeService {
         });
     };
 
-    static getById(id: number, callback: (err: any, rows?: any ) => void) {
+    static getById(crateTypeId: number, callback: (err: any, rows?: any ) => void) {
         let query = `SELECT *
                     FROM size_types
                     INNER JOIN crate_types ON(sizeTypeId = refSizeType)
                     WHERE crateTypeId = ?`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, crateTypeId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -50,7 +50,7 @@ export class CrateTypeService {
         });
     };
 
-    static getProductCratesByProductId(id: number, callback: (err: any, rows?: any) => void) {
+    static getProductCratesByProductId(productId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -59,7 +59,7 @@ export class CrateTypeService {
                     INNER JOIN product_crates ON(crateTypeId = refCrateType)
                     WHERE refProduct = ?
                     ORDER BY crateTypeSlots DESC`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, productId, (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 return callback(err);

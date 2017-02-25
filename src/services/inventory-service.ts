@@ -32,27 +32,32 @@ export class InventoryService {
         });
     };
 
-    static getByEventId(id: number, callback: (err: any, rows?: any) => void) {
+    static getByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
-                            SELECT refProduct, refSizeType, productId, refCategory, refUnit, productName,
+                            SELECT refEvent, refProduct, refSizeType, productId, refCategory, refUnit, productName,
                             productDesc, productImgFilename, productActive, productDeleted,
                             productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted ,
                             Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storage,
                             Sum(transactionChangeCounter) AS counter
                             FROM (
                                 SELECT *
-                                FROM transactions
-                                INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
-                            INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                            WHERE refEvent <= ?
+                                FROM (
+                                    SELECT eventDT as dateOfEvent
+                                    FROM events
+                                    WHERE eventId = ?) AS eventDate
+                                INNER JOIN transactions
+                                INNER JOIN products ON (refProduct = productId)
+                                INNER JOIN size_types ON (refSizeType = sizeTypeId)
+                                INNER JOIN events ON (eventId = refEvent)) AS tpse
+                            WHERE eventDT <= dateOfEvent
                             GROUP BY refProduct, refSizeType) AS inventoryWithoutCosts
                         WHERE productActive = true) AS inventoryWithCosts
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -63,7 +68,7 @@ export class InventoryService {
         });
     };
 
-    static getTransferInventoryByEventId(id: number, callback: (err: any, rows?: any) => void) {
+    static getTransferInventoryByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT refProduct, refSizeType, productId, refCategory, refUnit, productName,
                     productDesc, productImgFilename, productActive, productDeleted,
                     productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted,
@@ -91,7 +96,7 @@ export class InventoryService {
                     INNER JOIN event_transfers ON (refSizeType = sizeTypeId AND refProduct = productId)
                     WHERE refEvent = ?
                     GROUP BY refProduct, refSizeType`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

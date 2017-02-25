@@ -27,7 +27,6 @@ let server = createServer({
     formatters: {
         'application/json': function (req, res, body, cb) {
             return cb(null, TinyJson.getJSON(body));
-            // return cb(null, JSON.stringify(body, null, '  '));
         }
     }
 });
@@ -40,7 +39,7 @@ server.use(queryParser());
 server.get('/info', serverController.info.bind(serverController));
 server.get('/swagger.json', serverController.getFixedSwaggerJson.bind(serverController));
 
-// API routes
+// API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
@@ -64,6 +63,7 @@ server.get('/cratetype/:crateTypeId', crateTypeController.getById.bind(crateType
 server.get('/inventory', inventoryController.getCurrent.bind(inventoryController));
 server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
+// API routes (POST)
 server.post('/event', eventController.addEvent.bind(eventController));
 server.post('/event/:eventId/transfers/storage/out', eventController.addTransferStorageOut.bind(eventController));
 server.post('/event/:eventId/transfers/storage/in', eventController.addTransferStorageIn.bind(eventController));
@@ -71,7 +71,7 @@ server.post('/event/:eventId/transfers/counter/out', eventController.addTransfer
 server.post('/event/:eventId/transfers/storage/count', eventController.countStorage.bind(eventController));
 server.post('/event/:eventId/transfers/counter/count', eventController.countCounter.bind(eventController));
 
-
+// API routes (PUT)
 server.put('/event/:eventId', eventController.updateEvent.bind(eventController));
 
 // serve public folder

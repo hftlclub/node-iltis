@@ -17,11 +17,11 @@ export class CategoryService {
         });
     };
 
-    static getById(id: number, callback: (err: any, rows?: any) => void) {
+    static getById(categoryId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM product_categories
                     WHERE categoryId = ?`;
-        mysql.conn.query(query, id, (err, rows, fields) => {
+        mysql.conn.query(query, categoryId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

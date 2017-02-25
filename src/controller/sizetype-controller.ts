@@ -20,9 +20,9 @@ export class SizeTypeController {
     };
 
     getById(req, res, next) {
-        let id = parseInt(req.params.sizeTypeId, 0);
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         let sizeType: SizeType = SizeTypeFactory.empty();
-        SizeTypeService.getById(id, (err, row) => {
+        SizeTypeService.getById(sizeTypeId, (err, row) => {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
