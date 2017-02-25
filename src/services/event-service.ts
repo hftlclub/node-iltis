@@ -26,19 +26,6 @@ export class EventService {
         });
     };
 
-    static updateEventCountedValues(eventId: number, isStorageChange: boolean, callback: (err: any, result?: any) => void) {
-        let event: any = {};
-        if (isStorageChange) event.eventCountedStorage = true;
-        else event.eventCountedCounter = true;
-        let query = `UPDATE events SET ? WHERE eventId = ?`;
-        mysql.conn.query(query, [event, eventId], (err, result) => {
-            if (err) {
-                return callback(err);
-            }
-            return callback(null, result);
-        });
-    };
-
     static addTransfers(transfers: any[], callback: (err: any, result?: any) => void) {
         let query = `INSERT INTO event_transfers
                     (refEvent, refProduct, refSizeType, transferChangeStorage, transferChangeCounter)

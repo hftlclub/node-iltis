@@ -64,7 +64,7 @@ export class EventFactory {
         return event;
     }
 
-    static fromModel(obj: Event): any {
+    static toDbObject(obj: Event): any {
 
         let  dbEntry: any = {};
 
@@ -91,5 +91,4 @@ export class EventFactory {
 
         return dbEntry;
     }
-
 }

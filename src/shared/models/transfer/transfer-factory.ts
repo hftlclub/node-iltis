@@ -43,7 +43,7 @@ export class TransferFactory {
         return transfer;
     }
 
-    static fromTransferModel(obj: Transfer, eventId: number, isStorageChange: boolean, sign: number): any {
+    static toDbObject(obj: Transfer, eventId: number, isStorageChange: boolean, sign: number): any {
 
         let  dbEntry: any = {};
 
@@ -63,26 +63,4 @@ export class TransferFactory {
 
         return dbEntry;
     }
-
-    static fromInventoryModel(obj: Inventory, eventId: number, isStorageChange: boolean): any {
-
-        let  dbEntry: any = {};
-
-        dbEntry.refEvent = eventId;
-
-        if (obj.product) dbEntry.refProduct = obj.product.id;
-
-        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
-
-        if (isStorageChange) {
-            dbEntry.transferChangeStorage = - obj.storage;
-            dbEntry.transferChangeCounter = 0;
-        } else {
-            dbEntry.transferChangeStorage = 0;
-            dbEntry.transferChangeCounter = - obj.storage;
-        }
-
-        return dbEntry;
-    }
-
 }

@@ -12,7 +12,7 @@ import { InventoryService } from './../services/inventory-service';
 export class EventController {
 
     addEvent(req, res, next) {
-        EventService.addEvent(EventFactory.fromModel(req.body), (err, result) => {
+        EventService.addEvent(EventFactory.toDbObject(req.body), (err, result) => {
             if (err) return next(new BadRequestError());
             if (result) {
                 EventService.getById(result.insertId, (err, row) => {
@@ -25,7 +25,7 @@ export class EventController {
 
     updateEvent(req, res, next) {
         let id = parseInt(req.context.eventId, 0);
-        let updatedEvent: any = EventFactory.fromModel(req.body);
+        let updatedEvent: any = EventFactory.toDbObject(req.body);
         updatedEvent.eventId = id;
         delete updatedEvent.eventTS;
         delete updatedEvent.eventActive;
@@ -54,7 +54,7 @@ export class EventController {
         let eventId = parseInt(req.context.eventId, 0);
         let transfers: any[] = [];
         req.body.forEach(obj => {
-            if (obj.change != 0) transfers.push(TransferFactory.fromTransferModel(obj, eventId, true, -1));
+            if (obj.change != 0) transfers.push(TransferFactory.toDbObject(obj, eventId, true, -1));
         });
         EventService.addTransfers(transfers, (err, result) => {
             if (err) return next(new BadRequestError());
@@ -97,40 +97,41 @@ export class EventController {
 
     private countInventory(req, res, next, isStorageChange, eventId) {
         let transfers: any[] = [];
-        transfers = req.body.map(obj => TransferFactory.fromTransferModel(obj, eventId, isStorageChange, 1));
-        let inventory: Inventory[] = [];
-        InventoryService.getCurrent((err, rows) => {
-            if (err) return next(err);
-            if (rows.length > 0) {
+        transfers = req.body.map(obj => TransferFactory.toDbObject(obj, eventId, isStorageChange, 1));
+        if (transfers.length > 0) {
+            let inventory: Inventory[] = [];
+            InventoryService.getCurrent((err, rows) => {
+                if (err) return next(err);
                 inventory = rows.map(row => InventoryFactory.fromObj(row));
-            }
-            inventory.forEach(i => {
+                let tKey, iKey;
                 if (isStorageChange) {
-                    try {
-                        transfers.find(f => (i.product.id === f.refProduct && i.sizeType.id === f.refSizeType)).transferChangeStorage -= i.storage;
-                    } catch (e) {}
+                    tKey = 'transferChangeStorage';
+                    iKey = 'storage';
                 } else {
-                    try {
-                        transfers.find(f => (i.product.id === f.refProduct && i.sizeType.id === f.refSizeType)).transferChangeCounter -= i.counter;
-                    } catch (e) {}
+                    tKey = 'transferChangeCounter';
+                    iKey = 'counter';
                 }
+                transfers = transfers.map(t => {
+                    let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.refProduct && inv.sizeType.id === t.refSizeType));
+                    t[tKey] -= inventoryForTransfer[iKey];
+                    return t;
+                });
+                transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter)
+                EventService.addTransfers(transfers, (err, result) => {
+                    if (err) return next(new BadRequestError());
+                    if (result) {
+                        let event: any = {};
+                        if (isStorageChange) event.eventCountedStorage = true;
+                        else event.eventCountedCounter = true;
+                        EventService.updateEvent(event, (err, result) => {
+                            if (err) return next(new BadRequestError());
+                            if (result) res.send(201);
+                            else res.send(new InternalError());
+                        });
+                    } else res.send(new InternalError());
+                });
             });
-            for (let i  = transfers.length - 1; i >= 0; i--) {
-                if (transfers[i].transferChangeStorage === 0 && transfers[i].transferChangeCounter === 0) {
-                    transfers.splice(i, 1);
-                }
-            }
-            EventService.addTransfers(transfers, (err, result) => {
-                if (err) return next(new BadRequestError());
-                if (result) {
-                    EventService.updateEventCountedValues(eventId, isStorageChange, (err, result) => {
-                        if (err) return next(new BadRequestError());
-                        if (result) res.send(201);
-                        else res.send(new InternalError());
-                    });
-                } else res.send(new InternalError());
-            });
-        });
+        } else next(new BadRequestError());
     }
 
     getAll(req, res, next) {
