@@ -45,6 +45,7 @@ server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
+server.get('/event/:eventId/inventory', eventController.getEventInventoryTransfers.bind(eventController));
 server.get('/event/:eventId/transfers', eventController.getEventTransfers.bind(eventController));
 server.get('/event/:eventId/transfers/storage', eventController.getEventStorageTransfers.bind(eventController));
 server.get('/event/:eventId/transfers/counter', eventController.getEventCounterTransfers.bind(eventController));

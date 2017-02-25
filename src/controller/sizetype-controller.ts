@@ -26,7 +26,7 @@ export class SizeTypeController {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('SizeType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                next(new NotFoundError('SizeType does not exist'));
             }
             sizeType = SizeTypeFactory.fromObj(row);
             res.send(sizeType, { 'Content-Type': 'application/json; charset=utf-8' });

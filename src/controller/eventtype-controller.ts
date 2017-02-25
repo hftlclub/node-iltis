@@ -26,7 +26,7 @@ export class EventTypeController {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('EventType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                next(new NotFoundError('EventType does not exist'));
             }
             eventType = EventTypeFactory.fromObj(row);
             res.send(eventType, { 'Content-Type': 'application/json; charset=utf-8' });

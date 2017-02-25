@@ -51,7 +51,7 @@ export class ProductController {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('Product does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                next(new NotFoundError('Product does not exist'));
             }
             product = ProductFactory.fromObj(row);
             SizeTypeService.getProductSizesByProductId(product.id, (err, rows) => {

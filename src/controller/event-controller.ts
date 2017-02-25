@@ -19,7 +19,7 @@ export class EventController {
                     if (err) return next(err);
                     res.send(201, EventFactory.fromObj(row), {'Content-Type': 'application/json; charset=utf-8'});
                 });
-            } else res.send(new InternalError());
+            } else next(new InternalError());
         });
     };
 
@@ -34,7 +34,7 @@ export class EventController {
         EventService.updateEvent(updatedEvent, (err, result) => {
             if (err) return next(new BadRequestError());
             if (result) res.send(204);
-            else res.send(new InternalError());
+            else next(new InternalError());
         });
     };
 
@@ -64,7 +64,7 @@ export class EventController {
                     transfers = rows.map(row => TransferFactory.fromObj(row));
                     res.send(201, transfers, {'Content-Type': 'application/json; charset=utf-8'});
                 });
-            } else res.send(new InternalError());
+            } else next(new InternalError());
         });
     };
 
@@ -98,40 +98,41 @@ export class EventController {
     private countInventory(req, res, next, isStorageChange, eventId) {
         let transfers: any[] = [];
         transfers = req.body.map(obj => TransferFactory.toDbObject(obj, eventId, isStorageChange, 1));
-        if (transfers.length > 0) {
-            let inventory: Inventory[] = [];
-            InventoryService.getCurrent((err, rows) => {
-                if (err) return next(err);
-                inventory = rows.map(row => InventoryFactory.fromObj(row));
-                let tKey, iKey;
-                if (isStorageChange) {
-                    tKey = 'transferChangeStorage';
-                    iKey = 'storage';
-                } else {
-                    tKey = 'transferChangeCounter';
-                    iKey = 'counter';
-                }
-                transfers = transfers.map(t => {
-                    let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.refProduct && inv.sizeType.id === t.refSizeType));
-                    t[tKey] -= inventoryForTransfer[iKey];
-                    return t;
-                });
-                transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter)
-                EventService.addTransfers(transfers, (err, result) => {
-                    if (err) return next(new BadRequestError());
-                    if (result) {
-                        let event: any = {};
-                        if (isStorageChange) event.eventCountedStorage = true;
-                        else event.eventCountedCounter = true;
-                        EventService.updateEvent(event, (err, result) => {
-                            if (err) return next(new BadRequestError());
-                            if (result) res.send(201);
-                            else res.send(new InternalError());
-                        });
-                    } else res.send(new InternalError());
-                });
+        if (!transfers.length) {
+            next(new BadRequestError());
+        }
+        let inventory: Inventory[] = [];
+        InventoryService.getCurrent((err, rows) => {
+            if (err) return next(err);
+            inventory = rows.map(row => InventoryFactory.fromObj(row));
+            let tKey, iKey;
+            if (isStorageChange) {
+                tKey = 'transferChangeStorage';
+                iKey = 'storage';
+            } else {
+                tKey = 'transferChangeCounter';
+                iKey = 'counter';
+            }
+            transfers = transfers.map(t => {
+                let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.refProduct && inv.sizeType.id === t.refSizeType));
+                t[tKey] -= inventoryForTransfer[iKey];
+                return t;
             });
-        } else next(new BadRequestError());
+            transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter)
+            EventService.addTransfers(transfers, (err, result) => {
+                if (err) return next(new BadRequestError());
+                if (result) {
+                    let event: any = {};
+                    if (isStorageChange) event.eventCountedStorage = true;
+                    else event.eventCountedCounter = true;
+                    EventService.updateEvent(event, (err, result) => {
+                        if (err) return next(new BadRequestError());
+                        if (result) res.send(201);
+                        else next(new InternalError());
+                    });
+                } else next(new InternalError());
+            });
+        });
     }
 
     getAll(req, res, next) {
@@ -154,7 +155,7 @@ export class EventController {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('Event does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                next(new NotFoundError('Event does not exist'));
             }
             event = EventFactory.fromObj(row);
             res.send(event, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -202,6 +203,32 @@ export class EventController {
             res.send(transfers, { 'Content-Type': 'application/json; charset=utf-8' });
         });
     };
+
+    getEventInventoryTransfers(req, res, next) {
+        let eventId = parseInt(req.params.eventId, 0);
+        let inventory: Inventory[] = [];
+        InventoryService.getCurrent((err, rows) => {
+            if (err) return next(err);
+            if (!rows.length) {
+                // Todo: Implementet correct feedback (error 204)
+                res.send(inventory, { 'Content-Type': 'application/json; charset=utf-8' });
+            }
+            inventory = rows.map(row => InventoryFactory.fromObj(row));
+            let inventoryTransfers: Inventory[] = [];
+            InventoryService.getTransferInventoryByEventId(eventId, (err, rows) => {
+                if (err) return next(err);
+                inventoryTransfers = rows.map(row => InventoryFactory.fromObj(row));
+                let iNew;
+                inventory.forEach(iOld => {
+                    if (iNew = inventoryTransfers.find(i => iOld.product.id === i.product.id && iOld.sizeType.id === i.sizeType.id)) {
+                        iOld.counter = iNew.counter;
+                        iOld.storage = iNew.storage;
+                    }
+                });
+                res.send(inventory, { 'Content-Type': 'application/json; charset=utf-8' });
+            });
+        });
+    }
 
     getEventTransactions(req, res, next) {
         let id = parseInt(req.params.eventId, 0);

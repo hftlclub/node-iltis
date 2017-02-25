@@ -293,6 +293,32 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
+  '/event/{eventId}/inventory':
+    get:
+      tags:
+        - event
+      summary: Get all transfers converted to inventory of a specific event
+      responses:
+        '200':
+          description: List of all transfers converted to inventory of an event with the requested Id
+          schema:
+            title: Inventory
+            type: array
+            items:
+              $ref: '#/definitions/Inventory'
+        '404':
+          description: Event does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
   '/event/{eventId}/transfers':
     get:
       tags:
@@ -439,35 +465,6 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-    put:
-      tags:
-        - event
-      summary: Updates transfer-records for the storage (counting), without deleting existing I/O transfer records
-      parameters:
-        - name: Transfers
-          in: body
-          description: Multiple new transfer-records to be updated
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-          required: true
-        - name: eventId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Transfer-records were created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
   '/event/{eventId}/transfers/counter':
     get:
       tags:
@@ -535,35 +532,6 @@ paths:
         - name: Transfers
           in: body
           description: Multiple new transfer-records to be stored
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-          required: true
-        - name: eventId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Transfer-records were created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-    put:
-      tags:
-        - event
-      summary: Updates transfer-records for the counter (counting), without deleting existing I/O transfer records
-      parameters:
-        - name: Transfers
-          in: body
-          description: Multiple new transfer-records to be updated
           schema:
             title: Transfers
             type: array

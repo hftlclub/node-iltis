@@ -26,7 +26,7 @@ export class UnitController {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('Unit does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                next(new NotFoundError('Unit does not exist'));
             }
             unit = UnitFactory.fromObj(row);
             res.send(unit, { 'Content-Type': 'application/json; charset=utf-8' });

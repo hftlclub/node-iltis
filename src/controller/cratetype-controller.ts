@@ -25,7 +25,7 @@ export class CrateTypeController {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('CrateType does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                next(new NotFoundError('CrateType does not exist'));
             }
             crateType = CrateTypeFactory.fromObj(row);
             res.send(crateType, { 'Content-Type': 'application/json; charset=utf-8' });

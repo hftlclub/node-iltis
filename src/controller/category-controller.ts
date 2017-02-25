@@ -25,7 +25,7 @@ export class CategoryController {
             if (err) return next(err);
             if (!row) {
                 // Todo: Implementet correct feedback (error 204)
-                res.send(new NotFoundError('Category does not exist'), { 'Content-Type': 'application/json; charset=utf-8' });
+                next(new NotFoundError('Category does not exist'));
             }
             category = CategoryFactory.fromObj(row);
             res.send(category, { 'Content-Type': 'application/json; charset=utf-8' });
