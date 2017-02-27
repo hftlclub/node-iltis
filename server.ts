@@ -43,6 +43,7 @@ server.get('/swagger.json', serverController.getFixedSwaggerJson.bind(serverCont
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
+server.get('/event/checkpermission', eventController.checkPermission.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
 server.get('/event/:eventId/inventory', eventController.getEventInventoryTransfers.bind(eventController));
 server.get('/event/:eventId/transfers', eventController.getEventTransfers.bind(eventController));

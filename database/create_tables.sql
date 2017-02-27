@@ -25,6 +25,7 @@ CREATE TABLE event_types (
    eventTypeDeleted bool NOT NULL,
    eventTypeUiMode varchar(32) NOT NULL,
    eventTypeIcon varchar(32) NOT NULL,
+   eventTypeCountAllowed bool NOT NULL,
    CONSTRAINT event_types_pk PRIMARY KEY (eventTypeId)
 );
 

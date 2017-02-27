@@ -17,11 +17,12 @@ INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES (null, null);
 INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES ('l', 'Liter');
 INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES ('kg', 'Kilogramm');
 
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Afterwork', false, true, false, 'event', 'fa-beer');
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Privatparty', false, true, false, 'event' , 'fa-glass');
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Clubsitzung', true, true, false, 'event', 'fa-users');
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Spontanentnahme', true, false, false, 'private', 'fa-hand-paper-o');
-INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`) VALUES ('Einkauf', true, false, false, 'purchase', 'fa-shopping-cart');
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Afterwork', false, true, false, 'event', 'fa-beer', true);
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Privatparty', false, true, false, 'event' , 'fa-glass', true);
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Clubsitzung', true, true, false, 'event', 'fa-users', true);
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Spontanentnahme', true, false, false, 'private', 'fa-hand-paper-o', false);
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Einkauf', true, false, false, 'purchase', 'fa-shopping-cart', false);
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Auswärtiges Event', false, true, false, 'event', 'fa-users', false);
 
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('Bier', 'Bier, Mischbier, und alkoholfreies Bier', false);
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('AFG', 'Alkoholfreie Getränke', false);

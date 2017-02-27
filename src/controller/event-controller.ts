@@ -13,16 +13,31 @@ import { InventoryService } from './../services/inventory-service';
 export class EventController {
 
     addEvent(req, res, next) {
-        EventService.addEvent(EventFactory.toDbObject(req.body), (err, result) => {
-            if (err) return next(new BadRequestError());
-            if (result) {
-                EventService.getById(result.insertId, (err, row) => {
-                    if (err) return next(err);
-                    res.send(201, EventFactory.fromObj(row), ContentType.ApplicationJSON);
-                });
-            } else next(new InternalError());
+        EventService.countOpenEventsWithCountAllowed((err, rows) => {
+            if (EventFactory.fromObj(req.body).eventType.countAllowed) {
+                if (err) return next(new InternalError());
+                if (rows[0].count !== 0) return next(new BadRequestError());
+            }
+            EventService.addEvent(EventFactory.toDbObject(req.body), (err, result) => {
+                if (err) return next(new BadRequestError());
+                if (result) {
+                    EventService.getById(result.insertId, (err, row) => {
+                        if (err) return next(err);
+                        res.send(201, EventFactory.fromObj(row), ContentType.ApplicationJSON);
+                    });
+                } else next(new InternalError());
+            });
         });
     };
+
+    checkPermission(req, res, next) {
+        EventService.countOpenEventsWithCountAllowed((err, rows) => {
+            let permission = { createEventCountAllowed: true};
+            if (err) return next(new InternalError());
+            if (rows[0].count !== 0) permission.createEventCountAllowed = false;
+            res.send(permission, ContentType.ApplicationJSON);
+        });
+    }
 
     updateEvent(req, res, next) {
         let eventId = parseInt(req.context.eventId, 0);
@@ -88,21 +103,25 @@ export class EventController {
 
     private deleteTransfers(req, res, next, isStorageChange) {
         let eventId = parseInt(req.context.eventId, 0);
-        if (isStorageChange) {
-            EventService.deleteStorageTransfers(eventId, (err, result) => {
-                if (err) return next();
-                if (result) {
-                    this.countInventory(req, res, next, isStorageChange, eventId);
-                }
-            });
-        } else {
-            EventService.deleteCounterTransfers(eventId, (err, result) => {
-                if (err) return next();
-                if (result) {
-                    this.countInventory(req, res, next, isStorageChange, eventId);
-                }
-            });
-        }
+        EventService.getById(eventId, (err, rows) => {
+            if (err) return next(new BadRequestError());
+            if (!EventFactory.fromObj(rows[0]).eventType.countAllowed) return next(new BadRequestError());
+            if (isStorageChange) {
+                EventService.deleteStorageTransfers(eventId, (err, result) => {
+                    if (err) return next();
+                    if (result) {
+                        this.countInventory(req, res, next, isStorageChange, eventId);
+                    }
+                });
+            } else {
+                EventService.deleteCounterTransfers(eventId, (err, result) => {
+                    if (err) return next();
+                    if (result) {
+                        this.countInventory(req, res, next, isStorageChange, eventId);
+                    }
+                });
+            }
+        });
     }
 
     private countInventory(req, res, next, isStorageChange, eventId) {

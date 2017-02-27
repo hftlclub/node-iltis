@@ -88,6 +88,22 @@ export class EventService {
         });
     };
 
+    static countOpenEventsWithCountAllowed(callback: (err: any, rows?: any) => void) {
+        let query = `SELECT COUNT(*) AS count
+                    FROM event_types
+                    INNER JOIN events ON(eventTypeId = refEventType)
+                    WHERE eventTypeCountAllowed = true AND eventActive = true`;
+        mysql.conn.query(query, (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows.length) {
+                return callback(null, false);
+            }
+            return callback(null, rows);
+        });
+    };
+
     static getById(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM event_types

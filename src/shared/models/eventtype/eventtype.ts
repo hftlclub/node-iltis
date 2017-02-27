@@ -6,6 +6,7 @@ export class EventType {
     public realEvent: boolean,
     public deleted: boolean,
     public uiMode: string,
-    public icon: string
+    public icon: string,
+    public countAllowed: boolean
     ) {}
 }

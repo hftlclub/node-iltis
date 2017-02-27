@@ -198,6 +198,20 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
+  '/event/checkpermission':
+    get:
+      tags:
+        - event
+      summary: Ask for permission to create new event with countableAllowed property
+      responses:
+        '200':
+          description: Get boolean for allowed / not allowed.
+          schema:
+            $ref: '#/definitions/Permission'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
   '/event/{eventId}':
     delete:
       tags:
@@ -1556,6 +1570,9 @@ definitions:
       icon:
         type: string
         example: fa-glass
+      countAllowed:
+        type: boolean
+        example: true
   SizeType:
     type: object
     description: Contains all information about a size-type
@@ -1639,6 +1656,13 @@ definitions:
         type: number
         format: double
         example: 60
+  Permission:
+    type: object
+    description: Contains permission
+    properties:
+      createEventCountAllowed:
+        type: boolean
+        example: true
 #  MinimumStock:
 #    type: object
 #    description: Minimum stock of product related to its size

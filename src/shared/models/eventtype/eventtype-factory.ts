@@ -4,7 +4,7 @@ import { EventType } from './';
 export class EventTypeFactory {
 
     static empty(): EventType {
-        return new EventType(0, '', false, true, false, '', '');
+        return new EventType(0, '', false, true, false, '', '', true);
     }
 
     static fromObj(obj: any): EventType {
@@ -39,6 +39,9 @@ export class EventTypeFactory {
         else if (ValueChecker.validString(obj.eventTypeIcon)) {
             eventType.icon = obj.eventTypeIcon.trim();
         }
+
+        if (obj.countAllowed) eventType.countAllowed = obj.countAllowed;
+        else eventType.deleted = !!ValueChecker.validBooleanNumber(obj.eventTypeCountAllowed);
 
         return eventType;
     }
