@@ -30,18 +30,18 @@
     }
   ],
   "dependencies": {
-    "@types/lodash": "4.14.44",
-    "@types/node": "6.0.53",
-    "@types/restify": "2.0.38",
+    "@types/lodash": "4.14.53",
+    "@types/node": "7.0.5",
+    "@types/restify": "2.0.41",
     "forever": "~0.15.3",
-    "lodash": "~4.17.2",
+    "lodash": "~4.17.4",
     "mysql": "2.13.0",
     "restify": "4.3.0",
-    "simple-node-logger": "0.93.14",
-    "typescript": "2.1.4"
+    "simple-node-logger": "0.93.16",
+    "typescript": "^2.2.1"
   },
   "devDependencies": {
-    "tslint": "^4.4.2"
+    "tslint": "^4.5.0"
   },
   "keywords": [
     "rest",
