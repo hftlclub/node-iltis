@@ -55,6 +55,74 @@ export class EventController {
         });
     };
 
+    closeEvent(req, res, next) {
+        let eventId = parseInt(req.context.eventId, 0);
+        let event: Event;
+        EventService.getById(eventId, (err, row) => {
+            if (err) return next(err);
+            if (!row) {
+                next(new NotFoundError('Event does not exist'));
+            }
+            event = EventFactory.fromObj(row);
+            if (!event.active) next(new ForbiddenError());
+            event.active = false;
+            if (event.eventType.countAllowed && event.countedStorage) this.computeParallelTransactions(event, req, res, next);
+            else this.addTransactions([], event, req, res, next);
+        });
+    };
+
+    private computeParallelTransactions(event: Event, req, res, next) {
+        EventService.convertTransfersWithCountToTransactions(event.id, (err, transactionsParallel) => {
+            if (err) return next(err);
+            this.addTransactions(transactionsParallel, event, req, res, next);
+        });
+    }
+
+    private addTransactions(transactionsParallel: any[], event: Event, req, res, next) {
+        EventService.convertTransfersToTransactions(event.id, (err, transactions) => {
+            if (err) return next(err);
+            if (!transactions.length) {
+                let dbEvent = EventFactory.toDbObject(event);
+                dbEvent.eventId = event.id;
+                EventService.updateEvent(dbEvent, (err, result) => {
+                    if (err) return next(err);
+                    if (result) res.send(204);
+                    else next(new InternalError());
+                });
+            } else {
+                if (transactionsParallel.length) {
+                    let tNew;
+                    transactions.forEach(t => {
+                        if (tNew = transactionsParallel.find(tP => tP.refProduct === t.refProduct && tP.refSizeType === t.refSizeType)) {
+                            t = tNew;
+                        }
+                    });
+                }
+                EventService.addTransactions(transactions, (err, result) => {
+                    if (err) return next(err);
+                    if (result) {
+                        this.closeEventAndDeleteTransfers(event, req, res, next);
+                    } else next(new InternalError());
+                });
+            }
+        });
+    }
+
+    private closeEventAndDeleteTransfers(event: Event, req, res, next) {
+        let dbEvent = EventFactory.toDbObject(event);
+        dbEvent.eventId = event.id;
+        EventService.updateEvent(dbEvent, (err, result) => {
+            if (err) return next(err);
+            if (result) {
+                EventService.deleteTransfersByEventId(event.id, (err, result) => {
+                    if (err) return next(err);
+                    if (result) res.send(204);
+                    else next(new InternalError());
+                });
+            } else next(new InternalError());
+        });
+    }
+
     deleteEvent(req, res, next) {
         let eventId = parseInt(req.context.eventId, 0);
         EventService.deleteEvent(eventId, (err, result) => {
@@ -180,7 +248,7 @@ export class EventController {
 
     getById(req, res, next) {
         let eventId = parseInt(req.params.eventId, 0);
-        let event: Event = EventFactory.empty();
+        let event: Event;
         EventService.getById(eventId, (err, row) => {
             if (err) return next(err);
             if (!row) {
@@ -247,6 +315,7 @@ export class EventController {
             let inventoryTransfers: Inventory[] = [];
             InventoryService.getTransferInventoryByEventId(eventId, (err, rows) => {
                 if (err) return next(err);
+                if (!rows.length) return next(new NotFoundError());
                 inventoryTransfers = rows.map(row => InventoryFactory.fromObj(row));
                 let iNew;
                 inventory.forEach(iOld => {

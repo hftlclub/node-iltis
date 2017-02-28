@@ -66,6 +66,7 @@ server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventor
 
 // API routes (POST)
 server.post('/event', eventController.addEvent.bind(eventController));
+server.post('/event/:eventId/close', eventController.closeEvent.bind(eventController));
 server.post('/event/:eventId/transfers/storage/out', eventController.addTransferStorageOut.bind(eventController));
 server.post('/event/:eventId/transfers/storage/in', eventController.addTransferStorageIn.bind(eventController));
 server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));

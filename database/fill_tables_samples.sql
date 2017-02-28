@@ -84,8 +84,9 @@ INSERT INTO `product_crates`(`refProduct`, `refCrateType`) VALUES (4, 3);
 INSERT INTO `product_crates`(`refProduct`, `refCrateType`) VALUES (9, 6);
 
 INSERT INTO `events`(`refEventType`, `eventDesc`, `eventCashBefore`, `eventCashAfter`, `eventTip`, `eventDT`, `eventActive`, `eventCountedCounter`, `eventCountedStorage`) VALUES (5 , 'Initialisere Lagerbestand', 0, 0, 0, now(), false, false, false);
-INSERT INTO `events`(`refEventType`, `eventDesc`, `eventCashBefore`, `eventCashAfter`, `eventTip`, `eventDT`, `eventActive`, `eventCountedCounter`, `eventCountedStorage`) VALUES (1 , 'Afterwork mit Basti und Alex', 500, 865.50, 5.42, now(), false, false, false);
-INSERT INTO `events`(`refEventType`, `eventDesc`, `eventCashBefore`, `eventCashAfter`, `eventTip`, `eventDT`, `eventActive`, `eventCountedCounter`, `eventCountedStorage`) VALUES (1 , 'Afterwork mit Robi und Ferdi', 500, 865.50, 5.42, now(), true, false, false);
+INSERT INTO `events`(`refEventType`, `eventDesc`, `eventCashBefore`, `eventCashAfter`, `eventTip`, `eventDT`, `eventActive`, `eventCountedCounter`, `eventCountedStorage`) VALUES (1 , 'Afterwork mit Basti und Alex', 500, 645.00, 1.20, now(), false, false, false);
+INSERT INTO `events`(`refEventType`, `eventDesc`, `eventCashBefore`, `eventCashAfter`, `eventTip`, `eventDT`, `eventActive`, `eventCountedCounter`, `eventCountedStorage`) VALUES (1 , 'Afterwork mit Robi und Ferdi', 500, 865.50, 5.42, now(), true, true, true);
+INSERT INTO `events`(`refEventType`, `eventDesc`, `eventCashBefore`, `eventCashAfter`, `eventTip`, `eventDT`, `eventActive`, `eventCountedCounter`, `eventCountedStorage`) VALUES (6 , 'Stura Weihnachtsfeier HS C', 500, 712.50, 0.00, now(), true, false, false);
 
 INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (1, 1, 3, 2000, 60);
 INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (1, 2, 3, 400, 30);
@@ -109,14 +110,20 @@ INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transaction
 INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (2, 10, 9, -1, 0);
 INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (2, 11, 10, -4, 0);
 
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 2, 3, -100, 0);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 1, 3, -80, 0);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 2, 5, +20, 0);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 1, 3, -20, 0);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 1, 3, +10, 0);
+
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 2, 3, -20, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 1, 3, -20, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 4, 5, -12, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 1, 3, -20, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 4, 5, +8, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 1, 3, +5, 0);
-INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 1, 3, 0, 60);
-INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 2, 3, 0, 30);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 1, 3, 0, 5);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 2, 3, 0, -5);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 3, 5, 0, 1);
-INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 4, 5, 0, 5);
-INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 5, 1, 0, 4);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 4, 5, 0, -1);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (3, 5, 1, 0, +4);

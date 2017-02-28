@@ -50,6 +50,29 @@ export class EventService {
         });
     };
 
+    static deleteTransfersByEventId(eventId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM event_transfers
+                    WHERE refEvent = ?`;
+        mysql.conn.query(query, eventId, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static addTransactions(transactions: any[], callback: (err: any, result?: any) => void) {
+        let query = `INSERT INTO transactions
+                    (refEvent, refProduct, refSizeType, transactionChangeCounter, transactionChangeTotal)
+                    VALUES ` + transactions.map(t => `(${t.refEvent}, ${t.refProduct}, ${t.refSizeType}, ${t.transferChangeCounter}, ${t.transferChangeTotal})`).join(',');
+        mysql.conn.query(query, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static deleteStorageTransfers(eventId: number, callback: (err: any, result?: any) => void) {
         let query = `DELETE FROM event_transfers
                     WHERE refEvent = ? AND transferChangeCounter = 0`;
@@ -119,6 +142,56 @@ export class EventService {
             return callback(null, rows[0]);
         });
     };
+
+    static convertTransfersToTransactions(eventId: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT refEvent, refProduct, refSizeType,
+                            SUM(transferChangeCounter) AS transferChangeCounter,
+                            (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
+                    FROM event_transfers
+                    WHERE refEvent = ?
+                    GROUP BY refProduct, refSizeType`;
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows.length) {
+                return callback(null, false);
+            }
+            return callback(null, rows);
+        });
+    }
+
+    static convertTransfersWithCountToTransactions(eventId: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT refEvent, refProduct, refSizeType, transferChangeCounter, (transferChangeTotal - tct) AS transferChangeTotal
+                    FROM (
+                        SELECT refProduct AS rP, refSizeType AS rSZ,
+                            SUM(transferChangeCounter) AS tcc,
+                            (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS tct
+                        FROM (
+                            SELECT MAX(transferTS) as maxTS
+                            FROM event_transfers
+                            WHERE refEvent = ?) as timeOfLastTransfer
+                        INNER JOIN event_transfers
+                        WHERE refEvent != ? AND transferTS < maxTS
+                        GROUP BY refProduct, refSizeType) parallelTransfers
+                    INNER JOIN (
+                        SELECT refEvent, refProduct, refSizeType,
+                                SUM(transferChangeCounter) AS transferChangeCounter,
+                                (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
+                        FROM event_transfers
+                        WHERE refEvent = ?
+                        GROUP BY refProduct, refSizeType) eventTransfers
+                    ON (refProduct = rP AND refSizeType = rSZ)`;
+        mysql.conn.query(query, [eventId, eventId, eventId], (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows.length) {
+                return callback(null, false);
+            }
+            return callback(null, rows);
+        });
+    }
 
     static getLastTransfers(eventId: number, insertId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
