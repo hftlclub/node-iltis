@@ -32,9 +32,10 @@ export class EventController {
 
     checkPermission(req, res, next) {
         EventService.countOpenEventsWithCountAllowed((err, rows) => {
-            let permission = { createEventCountAllowed: true};
             if (err) return next(new InternalError());
-            if (rows[0].count !== 0) permission.createEventCountAllowed = false;
+            let permission = {
+                createEventCountAllowed: rows[0].count ? false : true
+            };
             res.send(permission, ContentType.ApplicationJSON);
         });
     }
