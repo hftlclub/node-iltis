@@ -41,7 +41,7 @@ export class EventTypeFactory {
         }
 
         if (obj.countAllowed) eventType.countAllowed = obj.countAllowed;
-        else eventType.deleted = !!ValueChecker.validBooleanNumber(obj.eventTypeCountAllowed);
+        else eventType.countAllowed = !!ValueChecker.validBooleanNumber(obj.eventTypeCountAllowed);
 
         return eventType;
     }
