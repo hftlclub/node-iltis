@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError } from 'restify';
+import { NotFoundError, BadRequestError, ConflictError, InternalError } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { SizeType, SizeTypeFactory } from '../shared/models/sizetype';
@@ -8,14 +8,10 @@ import { SizeTypeService } from '../services/sizetype-service';
 export class SizeTypeController {
 
     getAll(req, res, next) {
-        let sizeTypes: SizeType[] = [];
         SizeTypeService.getAll((err, rows) => {
-            if (err) return next(err);
-            if (!rows.length) {
-                // Todo: Implementet correct feedback (error 204)
-                res.send(sizeTypes, ContentType.ApplicationJSON);
-            }
-            sizeTypes = rows.map(row => SizeTypeFactory.fromObj(row));
+            if (err) return next(new InternalError());
+            if (!rows.length) res.send(204);
+            let sizeTypes: SizeType[] = rows.map(row => SizeTypeFactory.fromObj(row));
             res.send(sizeTypes, ContentType.ApplicationJSON);
         });
     };
@@ -24,9 +20,8 @@ export class SizeTypeController {
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         let sizeType: SizeType = SizeTypeFactory.empty();
         SizeTypeService.getById(sizeTypeId, (err, row) => {
-            if (err) return next(err);
+            if (err) return next(new BadRequestError('Invalid sizeTypeId'));
             if (!row) {
-                // Todo: Implementet correct feedback (error 204)
                 next(new NotFoundError('SizeType does not exist'));
             }
             sizeType = SizeTypeFactory.fromObj(row);
