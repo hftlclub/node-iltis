@@ -221,10 +221,9 @@ GROUP BY refProduct, refSizeType`;
         let query = `SELECT *
                     FROM (
                         SELECT transferId, refEvent, refProduct, refSizeType,
-                            (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS 'change'
+                            (transferChangeStorage + transferChangeCounter) AS 'change'
                         FROM event_transfers
-                        WHERE refEvent = ?
-                        GROUP BY refProduct, refSizeType) AS changes 
+                        WHERE refEvent = ?) AS changes 
                     INNER JOIN products ON (refProduct = productId)
                     INNER JOIN size_types ON (refSizeType = sizeTypeId)
                     INNER JOIN product_categories ON (refCategory = categoryId)
