@@ -112,7 +112,7 @@ INSERT INTO `transactions`(`refEvent`, `refProduct`, `refSizeType`, `transaction
 
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 2, 3, -100, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 1, 3, -80, 0);
-INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 2, 5, +20, 0);
+INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 2, 3, +20, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 1, 3, -20, 0);
 INSERT INTO `event_transfers`(`refEvent`, `refProduct`, `refSizeType`, `transferChangeStorage`, `transferChangeCounter`) VALUES (4, 1, 3, +10, 0);
 

@@ -225,8 +225,17 @@ export class EventController {
                     else event.eventCountedCounter = true;
                     EventService.updateEvent(event, (err, result) => {
                         if (err) return next(new BadRequestError());
-                        if (result) res.send(201);
-                        else next(new InternalError());
+                        if (result) {
+                            let transfers: Transfer[] = [];
+                            EventService.getTransfersByEventId(eventId, (err, rows) => {
+                                if (err) return next(err);
+                                if (!rows.length) {
+                                    res.send(201, transfers, ContentType.ApplicationJSON);
+                                }
+                                transfers = rows.map(row => TransferFactory.fromObj(row));
+                                res.send(201, transfers, ContentType.ApplicationJSON);
+                            });
+                        } else next(new InternalError());
                     });
                 } else next(new InternalError());
             });
@@ -264,34 +273,6 @@ export class EventController {
         let eventId = parseInt(req.params.eventId, 0);
         let transfers: Transfer[] = [];
         EventService.getTransfersByEventId(eventId, (err, rows) => {
-            if (err) return next(err);
-            if (!rows.length) {
-                // Todo: Implementet correct feedback (error 204)
-                res.send(transfers, ContentType.ApplicationJSON);
-            }
-            transfers = rows.map(row => TransferFactory.fromObj(row));
-            res.send(transfers, ContentType.ApplicationJSON);
-        });
-    };
-
-    getEventStorageTransfers(req, res, next) {
-        let eventId = parseInt(req.params.eventId, 0);
-        let transfers: Transfer[] = [];
-        EventService.getStorageTransfersByEventId(eventId, (err, rows) => {
-            if (err) return next(err);
-            if (!rows.length) {
-                // Todo: Implementet correct feedback (error 204)
-                res.send(transfers, ContentType.ApplicationJSON);
-            }
-            transfers = rows.map(row => TransferFactory.fromObj(row));
-            res.send(transfers, ContentType.ApplicationJSON);
-        });
-    };
-
-    getEventCounterTransfers(req, res, next) {
-        let eventId = parseInt(req.params.eventId, 0);
-        let transfers: Transfer[] = [];
-        EventService.getCounterTransfersByEventId(eventId, (err, rows) => {
             if (err) return next(err);
             if (!rows.length) {
                 // Todo: Implementet correct feedback (error 204)

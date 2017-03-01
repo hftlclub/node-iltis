@@ -145,11 +145,11 @@ export class EventService {
 
     static convertTransfersToTransactions(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT refEvent, refProduct, refSizeType,
-                            SUM(transferChangeCounter) AS transferChangeCounter,
-                            (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
-                    FROM event_transfers
-                    WHERE refEvent = ?
-                    GROUP BY refProduct, refSizeType`;
+        SUM(transferChangeCounter) AS transferChangeCounter,
+        (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
+FROM event_transfers
+WHERE refEvent = ?
+GROUP BY refProduct, refSizeType`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -220,64 +220,16 @@ export class EventService {
     static getTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
-                        SELECT *
-                        FROM (
-                            SELECT *
-                            FROM event_transfers
-                            INNER JOIN products ON (refProduct = productId)) AS transfersProducts
-                        INNER JOIN size_types ON (refSizeType = sizeTypeId)
+                        SELECT transferId, refEvent, refProduct, refSizeType,
+                            (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS 'change'
+                        FROM event_transfers
                         WHERE refEvent = ?
-                        ORDER BY transferId ASC) AS transfers
+                        GROUP BY refProduct, refSizeType) AS changes 
+                    INNER JOIN products ON (refProduct = productId)
+                    INNER JOIN size_types ON (refSizeType = sizeTypeId)
                     INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)`;
-        mysql.conn.query(query, eventId, (err, rows, fields) => {
-            if (err) {
-                return callback(err);
-            }
-            if (!rows.length) {
-                return callback(null, false);
-            }
-            return callback(null, rows);
-        });
-    };
-
-    static getStorageTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
-        let query = `SELECT *
-                    FROM (
-                        SELECT *
-                        FROM (
-                            SELECT *
-                            FROM event_transfers
-                            INNER JOIN products ON (refProduct = productId)) AS transfersProducts
-                        INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                        WHERE refEvent = ? AND transferChangeStorage != 0
-                        ORDER BY transferId ASC) AS transfers
-                    INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)`;
-        mysql.conn.query(query, eventId, (err, rows, fields) => {
-            if (err) {
-                return callback(err);
-            }
-            if (!rows.length) {
-                return callback(null, false);
-            }
-            return callback(null, rows);
-        });
-    };
-
-    static getCounterTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
-        let query = `SELECT *
-                    FROM (
-                        SELECT *
-                        FROM (
-                            SELECT *
-                            FROM event_transfers
-                            INNER JOIN products ON (refProduct = productId)) AS transfersProducts
-                        INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                        WHERE refEvent = ? AND transferChangeCounter != 0
-                        ORDER BY transferId ASC) AS transfers
-                    INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)`;
+                    INNER JOIN product_units ON (refUnit = unitId)
+                    ORDER BY transferId ASC`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);

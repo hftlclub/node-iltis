@@ -47,8 +47,6 @@ server.get('/event/checkpermission', eventController.checkPermission.bind(eventC
 server.get('/event/:eventId', eventController.getById.bind(eventController));
 server.get('/event/:eventId/inventory', eventController.getEventInventoryTransfers.bind(eventController));
 server.get('/event/:eventId/transfers', eventController.getEventTransfers.bind(eventController));
-server.get('/event/:eventId/transfers/storage', eventController.getEventStorageTransfers.bind(eventController));
-server.get('/event/:eventId/transfers/counter', eventController.getEventCounterTransfers.bind(eventController));
 server.get('/event/:eventId/transactions', eventController.getEventTransactions.bind(eventController));
 server.get('/event/:eventId/calculation', eventController.getCalculation.bind(eventController));
 server.get('/eventtypes', eventTypeController.getAll.bind(eventTypeController));

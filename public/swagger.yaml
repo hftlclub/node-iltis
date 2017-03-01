@@ -361,34 +361,6 @@ paths:
           in: path
           type: number
           required: true
-  '/event/{eventId}/transfers/storage':
-    get:
-      tags:
-        - event
-      summary: Get all storage transfer-records of a specific event
-      responses:
-        '200':
-          description: List of all storage transfer-records of an event with the requested Id
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-        '204':
-          description: Transfer-records has been deleted before
-        '404':
-          description: Event does not exist
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-      parameters:
-        - name: eventId
-          in: path
-          type: number
-          required: true
   '/event/{eventId}/transfers/storage/out':
     post:
       tags:
@@ -479,34 +451,6 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-  '/event/{eventId}/transfers/counter':
-    get:
-      tags:
-        - event
-      summary: Get all counter transfer-records of a specific event
-      responses:
-        '200':
-          description: List of all counter transfer-records of an event with the requested Id
-          schema:
-            title: Transfers
-            type: array
-            items:
-              $ref: '#/definitions/Transfer'
-        '204':
-          description: Transfer-records has been deleted before
-        '404':
-          description: Event does not exist
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-      parameters:
-        - name: eventId
-          in: path
-          type: number
-          required: true
   '/event/{eventId}/transfers/counter/out':
     post:
       tags:
