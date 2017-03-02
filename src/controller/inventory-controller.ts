@@ -10,7 +10,7 @@ export class InventoryController {
     getCurrent(req, res, next) {
         InventoryService.getCurrent((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let inventory: Inventory[] = rows.map(row => InventoryFactory.fromObj(row));
             res.send(inventory, ContentType.ApplicationJSON);
         });
@@ -20,7 +20,7 @@ export class InventoryController {
         let eventId = parseInt(req.params.eventId, 0);
         InventoryService.getByEventId(eventId, (err, rows) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let inventory: Inventory[] = rows.map(row => InventoryFactory.fromObj(row));
             res.send(inventory, ContentType.ApplicationJSON);
         });

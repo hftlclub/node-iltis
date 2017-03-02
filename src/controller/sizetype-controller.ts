@@ -10,7 +10,7 @@ export class SizeTypeController {
     getAll(req, res, next) {
         SizeTypeService.getAll((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let sizeTypes: SizeType[] = rows.map(row => SizeTypeFactory.fromObj(row));
             res.send(sizeTypes, ContentType.ApplicationJSON);
         });

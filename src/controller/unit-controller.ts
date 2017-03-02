@@ -10,7 +10,7 @@ export class UnitController {
     getAll(req, res, next) {
         UnitService.getAll((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let units: Unit[] = rows.map(row => UnitFactory.fromObj(row));
             res.send(units, ContentType.ApplicationJSON);
         });

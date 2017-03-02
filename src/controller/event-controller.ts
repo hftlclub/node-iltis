@@ -1,3 +1,4 @@
+import { Calculation } from './../shared/models/calculation/calculation';
 import { NotFoundError, BadRequestError, ConflictError, InternalError, ForbiddenError} from 'restify';
 
 import { ContentType } from '../contenttype';
@@ -15,7 +16,7 @@ export class EventController {
     getAll(req, res, next) {
         EventService.getAll((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let events: Event[] = rows.map(row => EventFactory.fromObj(row));
             res.send(events, ContentType.ApplicationJSON);
         });
@@ -150,7 +151,7 @@ export class EventController {
         let eventId = parseInt(req.params.eventId, 0);
         InventoryService.getCurrent((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let inventory: Inventory[] = rows.map(row => InventoryFactory.fromObj(row));
             let inventoryTransfers: Inventory[] = [];
             InventoryService.getTransferInventoryByEventId(eventId, (err, rows) => {
@@ -173,7 +174,7 @@ export class EventController {
         let eventId = parseInt(req.params.eventId, 0);
         EventService.getTransfersByEventId(eventId, (err, rows) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let transfers: Transfer[] = rows.map(row => TransferFactory.fromObj(row));
             res.send(transfers, ContentType.ApplicationJSON);
         });
@@ -285,7 +286,7 @@ export class EventController {
         let eventId = parseInt(req.params.eventId, 0);
         EventService.getTransactionsByEventId(eventId, (err, rows) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let transactions: Transaction[] = rows.map(row => TransactionFactory.fromObj(row));
             res.send(transactions, ContentType.ApplicationJSON);
         });
@@ -295,7 +296,7 @@ export class EventController {
         let eventId = parseInt(req.params.eventId, 0);
         EventService.getCalculation(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
-            if (!row) res.send(204);
+            if (!row) res.send(new NotFoundError('Calculation does not exist'));
             let calculation: CalculationFactory = CalculationFactory.fromObj(row);
             res.send(calculation, ContentType.ApplicationJSON);
         });

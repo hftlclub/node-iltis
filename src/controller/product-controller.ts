@@ -16,7 +16,7 @@ export class ProductController {
     getAll(req, res, next) {
         ProductService.getAll((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let products: Product[] = rows.map(row => ProductFactory.fromObj(row));
             CrateTypeService.getProductsCrates((err, rows) => {
                 if (err) return next(new InternalError());

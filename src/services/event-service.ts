@@ -145,11 +145,11 @@ export class EventService {
 
     static convertTransfersToTransactions(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT refEvent, refProduct, refSizeType,
-        SUM(transferChangeCounter) AS transferChangeCounter,
-        (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
-FROM event_transfers
-WHERE refEvent = ?
-GROUP BY refProduct, refSizeType`;
+                            SUM(transferChangeCounter) AS transferChangeCounter,
+                            (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
+                    FROM event_transfers
+                    WHERE refEvent = ?
+                    GROUP BY refProduct, refSizeType`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);

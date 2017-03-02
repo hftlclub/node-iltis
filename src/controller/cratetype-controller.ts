@@ -10,7 +10,7 @@ export class CrateTypeController {
     getAll(req, res, next) {
         CrateTypeService.getAll((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let crateTypes: CrateType[] = rows.map(row => CrateTypeFactory.fromObj(row));
             res.send(crateTypes, ContentType.ApplicationJSON);
         });

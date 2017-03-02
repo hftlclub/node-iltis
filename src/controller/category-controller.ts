@@ -10,7 +10,7 @@ export class CategoryController {
     getAll(req, res, next) {
         CategoryService.getAll((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let categories: Category[] = rows.map(row => CategoryFactory.fromObj(row));
             res.send(categories, ContentType.ApplicationJSON);
         });

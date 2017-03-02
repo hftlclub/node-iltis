@@ -10,7 +10,7 @@ export class EventTypeController {
     getAll(req, res, next) {
         EventTypeService.getAll((err, rows) => {
             if (err) return next(new InternalError());
-            if (!rows.length) res.send(204);
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let eventTypes: EventType[] = rows.map(row => EventTypeFactory.fromObj(row));
             res.send(eventTypes, ContentType.ApplicationJSON);
         });

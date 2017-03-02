@@ -45,8 +45,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Product'
-        '204':
-          description: No products found
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -165,8 +163,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Event'
-        '204':
-          description: No events found
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -318,10 +314,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Inventory'
-        '204':
-          description: No transfers or event is already closed
-          schema:
-            $ref: '#/definitions/RestError'
         '400':
           description: Invalid Id
           schema:
@@ -352,8 +344,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Transfer'
-        '204':
-          description: No Transfer-records to show
         '400':
           description: Invalid Id
           schema:
@@ -534,10 +524,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Transaction'
-        '204':
-          description: No transactions found for this event
-          schema:
-            $ref: '#/definitions/RestError'
         '400':
           description: Invalid Id
           schema:
@@ -557,12 +543,12 @@ paths:
           description: Get calculation
           schema:
             $ref: '#/definitions/Calculation'
-        '204':
-          description: No calculation found for this event
-          schema:
-            $ref: '#/definitions/RestError'
         '400':
           description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Event is still active
           schema:
             $ref: '#/definitions/RestError'
       parameters:
@@ -582,8 +568,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Inventory'
-        '204':
-          description: Inventory is empty
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -600,8 +584,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Inventory'
-        '204':
-          description: Inventory is empty
         '400':
           description: Invalid Id
           schema:
@@ -624,8 +606,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Category'
-        '204':
-          description: No categories found
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -744,8 +724,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Unit'
-        '204':
-          description: No units found
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -868,8 +846,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/CrateType'
-        '204':
-          description: No crate-types found
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -1010,8 +986,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/SizeType'
-        '204':
-          description: No product-sizes found
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -1187,8 +1161,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/EventType'
-        '204':
-          description: No event-types found
         '500':
           description: Unexpected Internal Server Error
           schema:
