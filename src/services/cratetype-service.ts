@@ -38,6 +38,7 @@ export class CrateTypeService {
         let query = `SELECT *
                     FROM crate_types
                     INNER JOIN product_crates ON (crateTypeId = refCrateType)
+                    INNER JOIN size_types ON (sizeTypeId = refSizeType)
                     ORDER BY crateTypeSlots DESC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
