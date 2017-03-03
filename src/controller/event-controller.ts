@@ -220,9 +220,9 @@ export class EventController {
 
     private deleteTransfers(req, res, next, isStorageChange) {
         let eventId = parseInt(req.context.eventId, 0);
-        EventService.getById(eventId, (err, rows) => {
+        EventService.getById(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
-            if (!EventFactory.fromObj(rows[0]).eventType.countAllowed) return next(new ForbiddenError());
+            if (!EventFactory.fromObj(row).eventType.countAllowed) return next(new ForbiddenError());
             if (isStorageChange) {
                 EventService.deleteStorageTransfers(eventId, (err, result) => {
                     if (err || !result) return next(new InternalError());
@@ -262,7 +262,7 @@ export class EventController {
             });
             transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter);
             EventService.addTransfers(transfers, (err, result) => {
-                if (err || !result) return next(new BadRequestError());
+                if ((err || !result) && transfers.length) return next(new BadRequestError());
                 let event: any = {};
                 if (isStorageChange) event.eventCountedStorage = true;
                 else event.eventCountedCounter = true;
