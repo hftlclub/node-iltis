@@ -196,7 +196,7 @@ export class EventController {
         let eventId = parseInt(req.context.eventId, 0);
         let transfers: any[] = [];
         req.body.forEach(obj => {
-            if (obj.change != 0) transfers.push(TransferFactory.toDbObject(obj, eventId, true, -1));
+            if (obj.change != 0) transfers.push(TransferFactory.toDbObject(obj, eventId, isStorageChange, sign));
         });
         EventService.addTransfers(transfers, (err, result) => {
             if (err) return next(new BadRequestError());
