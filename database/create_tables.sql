@@ -18,15 +18,15 @@ CREATE TABLE event_transfers (
 );
 
 CREATE TABLE event_types (
-   eventTypeId int NOT NULL AUTO_INCREMENT,
-   eventTypeDesc varchar(255) NOT NULL,
-   eventTypeIntern bool NOT NULL,
-   eventTypeRealEvent bool NOT NULL,
-   eventTypeDeleted bool NOT NULL,
-   eventTypeUiMode varchar(32) NOT NULL,
-   eventTypeIcon varchar(32) NOT NULL,
-   eventTypeCountAllowed bool NOT NULL,
-   CONSTRAINT event_types_pk PRIMARY KEY (eventTypeId)
+    eventTypeId int NOT NULL AUTO_INCREMENT,
+    eventTypeDesc varchar(255) NOT NULL,
+    eventTypeIntern bool NOT NULL,
+    eventTypeRealEvent bool NOT NULL,
+    eventTypeDeleted bool NOT NULL,
+    eventTypeUiMode varchar(32) NOT NULL,
+    eventTypeIcon varchar(32) NOT NULL,
+    eventTypeCountAllowed bool NOT NULL,
+    CONSTRAINT event_types_pk PRIMARY KEY (eventTypeId)
 );
 
 CREATE TABLE events (

@@ -13,3 +13,4 @@ src/**/*.js
 
 .DS_Store
 debug.log
+release.sh

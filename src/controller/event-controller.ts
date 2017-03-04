@@ -28,7 +28,7 @@ export class EventController {
                 if (err) return next(new InternalError());
                 if (rows[0].count !== 0) return next(new ForbiddenError());
             }
-            EventService.addEvent(EventFactory.toDbObject(req.body), (err, result) => {
+            EventService.addEvent(EventFactory.toDbObject(req.body, new Date(req.body.datetime)), (err, result) => {
                 if (err) return next(new BadRequestError());
                 if (result) {
                     EventService.getById(result.insertId, (err, row) => {
@@ -73,7 +73,7 @@ export class EventController {
 
     updateEvent(req, res, next) {
         let eventId = parseInt(req.context.eventId, 0);
-        let updatedEvent: any = EventFactory.toDbObject(req.body);
+        let updatedEvent: any = EventFactory.toDbObject(req.body, new Date(req.body.datetime));
         updatedEvent.eventId = eventId;
         delete updatedEvent.eventTS;
         delete updatedEvent.eventActive;
@@ -112,7 +112,7 @@ export class EventController {
         EventService.convertTransfersToTransactions(event.id, (err, transactions) => {
             if (err) return next(new InternalError());
             if (!transactions.length) {
-                let dbEvent = EventFactory.toDbObject(event);
+                let dbEvent = EventFactory.toDbObject(event, new Date(req.body.datetime));
                 dbEvent.eventId = event.id;
                 EventService.updateEvent(dbEvent, (err, result) => {
                     if (err || !result) return next(new InternalError());
@@ -136,7 +136,7 @@ export class EventController {
     }
 
     private closeEventAndDeleteTransfers(event: Event, req, res, next) {
-        let dbEvent = EventFactory.toDbObject(event);
+        let dbEvent = EventFactory.toDbObject(event, new Date(req.body.datetime));
         dbEvent.eventId = event.id;
         EventService.updateEvent(dbEvent, (err, result) => {
             if (err || !result) return next(new InternalError());
