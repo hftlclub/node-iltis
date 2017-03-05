@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError, ForbiddenError} from 'restify';
+import { NotFoundError, BadRequestError, InternalError, ForbiddenError} from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Event, EventFactory } from '../shared/models/event';

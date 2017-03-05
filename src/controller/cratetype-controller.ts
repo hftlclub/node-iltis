@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { CrateType, CrateTypeFactory } from '../shared/models/cratetype';
@@ -7,6 +7,7 @@ import { CrateTypeService } from '../services/cratetype-service';
 
 export class CrateTypeController {
 
+    // GET: Return all CrateTypes
     getAll(req, res, next) {
         CrateTypeService.getAll((err, rows) => {
             if (err) return next(new InternalError());
@@ -16,6 +17,7 @@ export class CrateTypeController {
         });
     };
 
+    // GET: Return single CrateType
     getById(req, res, next) {
         let crateTypeId = parseInt(req.params.crateTypeId, 0);
         let crateType: CrateType = CrateTypeFactory.empty();

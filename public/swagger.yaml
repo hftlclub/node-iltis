@@ -7,8 +7,8 @@ info:
     
     See [iltis.hftl.club](https://iltis.hftl.club) for more information.
 basePath: /
-#schemes:
-# - https
+schemes:
+  - https
 consumes:
   - application/json
 produces:

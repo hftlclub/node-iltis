@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { EventType, EventTypeFactory } from '../shared/models/eventtype';
@@ -7,6 +7,7 @@ import { EventTypeService } from '../services/eventtype-service';
 
 export class EventTypeController {
 
+    // GET: Return all EventTypes
     getAll(req, res, next) {
         EventTypeService.getAll((err, rows) => {
             if (err) return next(new InternalError());
@@ -16,6 +17,7 @@ export class EventTypeController {
         });
     };
 
+    // GET: Return single EventType
     getById(req, res, next) {
         let eventTypeId = parseInt(req.params.eventTypeId, 0);
         let eventType: EventType = EventTypeFactory.empty();

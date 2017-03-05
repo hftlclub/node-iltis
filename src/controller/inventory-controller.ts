@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError } from 'restify';
+import { BadRequestError, InternalError } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Inventory, InventoryFactory } from '../shared/models/inventory';
@@ -7,6 +7,7 @@ import { InventoryService } from '../services/inventory-service';
 
 export class InventoryController {
 
+    // GET: Return current inventory
     getCurrent(req, res, next) {
         InventoryService.getCurrent((err, rows) => {
             if (err) return next(new InternalError());
@@ -16,6 +17,7 @@ export class InventoryController {
         });
     };
 
+    // GET: Return inventory by closed event
     getByEventId(req, res, next) {
         let eventId = parseInt(req.params.eventId, 0);
         InventoryService.getByEventId(eventId, (err, rows) => {

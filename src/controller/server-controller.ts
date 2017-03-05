@@ -22,7 +22,7 @@ export class ServerController {
                 return next();
             }
             if (~req.headers.host.indexOf('localhost:3000')) {
-                file = file.replace('"https"', '"http"')
+                file = file.replace('"https"', '"http"');
             }
             res.writeHead(200, {
                 'Content-Length': Buffer.byteLength(file),

@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Category, CategoryFactory } from '../shared/models/category';
@@ -7,6 +7,7 @@ import { CategoryService } from '../services/category-service';
 
 export class CategoryController {
 
+    // GET: Return all categories
     getAll(req, res, next) {
         CategoryService.getAll((err, rows) => {
             if (err) return next(new InternalError());
@@ -16,6 +17,7 @@ export class CategoryController {
         });
     };
 
+    // GET: Return single category
     getById(req, res, next) {
         let categoryId = parseInt(req.params.categoryId, 0);
         let category: Category = CategoryFactory.empty();

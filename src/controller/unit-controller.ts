@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Unit, UnitFactory } from '../shared/models/unit';
@@ -7,6 +7,7 @@ import { UnitService } from '../services/unit-service';
 
 export class UnitController {
 
+    // GET: Return all units
     getAll(req, res, next) {
         UnitService.getAll((err, rows) => {
             if (err) return next(new InternalError());
@@ -16,6 +17,7 @@ export class UnitController {
         });
     };
 
+    // GET: Return single unit
     getById(req, res, next) {
         let unitId = parseInt(req.params.unitId, 0);
         let unit: Unit = UnitFactory.empty();

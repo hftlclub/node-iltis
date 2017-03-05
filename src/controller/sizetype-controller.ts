@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, ConflictError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { SizeType, SizeTypeFactory } from '../shared/models/sizetype';
@@ -7,6 +7,7 @@ import { SizeTypeService } from '../services/sizetype-service';
 
 export class SizeTypeController {
 
+    // GET: Return all SizeTypes
     getAll(req, res, next) {
         SizeTypeService.getAll((err, rows) => {
             if (err) return next(new InternalError());
@@ -16,6 +17,7 @@ export class SizeTypeController {
         });
     };
 
+    // GET: Return single SizeType
     getById(req, res, next) {
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         let sizeType: SizeType = SizeTypeFactory.empty();
