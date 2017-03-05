@@ -54,7 +54,7 @@ export class InventoryService {
                                 INNER JOIN events ON (eventId = refEvent)) AS tpse
                             WHERE eventDT <= dateOfEvent
                             GROUP BY refProduct, refSizeType) AS inventoryWithoutCosts
-                        WHERE productActive = true) AS inventoryWithCosts
+                        WHERE storage != 0 OR counter != 0) AS inventoryWithCosts
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
