@@ -263,7 +263,7 @@ export class EventController {
             transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter);
             EventService.addTransfers(transfers, (err, result) => {
                 if ((err || !result) && transfers.length) return next(new BadRequestError());
-                let event: any = {};
+                let event: any = { eventId: eventId };
                 if (isStorageChange) event.eventCountedStorage = true;
                 else event.eventCountedCounter = true;
                 EventService.updateEvent(event, (err, result) => {
