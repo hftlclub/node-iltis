@@ -64,7 +64,7 @@ export class EventFactory {
         return event;
     }
 
-    static toDbObject(obj: Event, datetime: Date): any {
+    static toDbObject(obj: Event): any {
 
         let  dbEntry: any = {};
 
@@ -78,7 +78,7 @@ export class EventFactory {
 
         if (ValueChecker.validNumber(obj.tip)) dbEntry.eventTip = obj.tip;
 
-        if (obj.datetime) dbEntry.eventDT = datetime.toLocaleString();
+        if (obj.datetime) dbEntry.eventDT = new Date(obj.datetime).toLocaleString();
 
         if (obj.active) dbEntry.eventActive = obj.active;
         else dbEntry.eventActive = false;
