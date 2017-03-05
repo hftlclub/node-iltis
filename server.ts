@@ -49,6 +49,7 @@ server.get('/event/:eventId/inventory', eventController.getEventInventoryTransfe
 server.get('/event/:eventId/transfers', eventController.getEventTransfers.bind(eventController));
 server.get('/event/:eventId/transactions', eventController.getEventTransactions.bind(eventController));
 server.get('/event/:eventId/calculation', eventController.getCalculation.bind(eventController));
+server.get('/event/:eventId/costs', eventController.getTransferCosts.bind(eventController));
 server.get('/eventtypes', eventTypeController.getAll.bind(eventTypeController));
 server.get('/eventtype/:eventTypeId', eventTypeController.getById.bind(eventTypeController));
 server.get('/categories', categoryController.getAll.bind(categoryController));

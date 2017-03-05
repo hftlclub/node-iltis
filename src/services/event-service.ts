@@ -284,4 +284,22 @@ export class EventService {
             return callback(null, rows[0]);
         });
     };
+
+    static getTransferCosts(eventId: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT (SUM(changes * additionDeliveryCosts) * (-1)) AS costs
+                    FROM (
+                        SELECT refEvent, refProduct AS productId, refSizeType AS sizeTypeId, (transferChangeStorage + transferChangeCounter) AS changes
+                        FROM event_transfers
+                        WHERE refEvent = ?) AS transfers
+                    INNER JOIN product_additions ON (refProduct = productId AND refSizeType = sizeTypeId)`;
+        mysql.conn.query(query, eventId, (err, rows, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!rows[0]) {
+                return callback(null, false);
+            }
+            return callback(null, rows[0]);
+        });
+    }
 }

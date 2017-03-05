@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.0.1
+  version: 0.1.1
   title: Internes Lagertransaktions- und Informationssystem (ILTIS) API
   description: |
     This is the backend for ILTIS (Internes Lagertransaktions- und Informationssystem).
@@ -549,6 +549,29 @@ paths:
             $ref: '#/definitions/RestError'
         '404':
           description: Event is still active
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  '/event/{eventId}/costs':
+    get:
+      tags:
+        - event
+      summary: Get costs of a specific unclosed event
+      responses:
+        '200':
+          description: Get costs
+          schema:
+            $ref: '#/definitions/Costs'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: No transfers were made
           schema:
             $ref: '#/definitions/RestError'
       parameters:
@@ -1564,6 +1587,14 @@ definitions:
         type: number
         format: double
         example: 60
+  Costs:
+    type: object
+    description: Contains the summarized costs of event-transfers
+    properties:
+      costs:
+        type: number
+        format: double
+        example: 2.5
   Permission:
     type: object
     description: Contains permission

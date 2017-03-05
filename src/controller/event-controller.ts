@@ -300,4 +300,13 @@ export class EventController {
             res.send(calculation, ContentType.ApplicationJSON);
         });
     };
+
+    getTransferCosts(req, res, next) {
+        let eventId = parseInt(req.params.eventId, 0);
+        EventService.getTransferCosts(eventId, (err, row) => {
+            if (err) return next(new BadRequestError('Invalid eventId'));
+            if (!row) res.send(new NotFoundError('No transfers found for this event'));
+            res.send(row, ContentType.ApplicationJSON);
+        });
+    };
 }
