@@ -31,17 +31,17 @@ INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDelete
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('Obst und Gemüse', 'Limetten, Gurken, ...', false);
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('Sonstiges', 'Sonstige Lebensmittel', false);
 
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Ur-Krostitzer', 'Sächsiches Bier', '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Augustiner', 'Bayrisches Bier', '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Fanta', 'Softdrink', '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Cola', 'Softdrink', '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Sekt', null, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Glühwein', 'Wintergetränk', '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Salzstangen', null, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Erdnüsse', null, '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Limetten', 'Für Cocktails', '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Gurken', 'Für Cocktails', '/images/sample.png', true, false);
-INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (6, 3, 'Eis', 'Für Cocktails', '/images/sample.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Ur-Krostitzer', 'Sächsiches Bier', 'urkrostitzer.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (1, 2, 'Augustiner', 'Bayrisches Bier', 'augustiner.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Fanta', 'Softdrink', 'fanta.png', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (2, 2, 'Cola', 'Softdrink', 'cola.gif', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Sekt', null, 'sekt.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (3, 2, 'Glühwein', 'Wintergetränk', 'gluehwein.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Salzstangen', null, 'salzstangen.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (4, 1, 'Erdnüsse', null, 'erdnuesse.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Limetten', 'Für Cocktails', 'limetten.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Gurken', 'Für Cocktails', 'gurken.jpg', true, false);
+INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (6, 3, 'Eis', 'Für Cocktails', 'eiswurfel.jpg', true, false);
 
 INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (1, 3);
 INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (2, 3);
