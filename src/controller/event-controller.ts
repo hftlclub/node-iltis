@@ -155,15 +155,16 @@ export class EventController {
             let inventoryTransfers: Inventory[] = [];
             InventoryService.getTransferInventoryByEventId(eventId, (err, rows) => {
                 if (err) return next(new BadRequestError('Invalid eventId'));
-                if (!rows.length) return next(new NotFoundError());
-                inventoryTransfers = rows.map(row => InventoryFactory.fromObj(row));
-                let iNew;
-                inventory.forEach(iOld => {
-                    if (iNew = inventoryTransfers.find(i => iOld.product.id === i.product.id && iOld.sizeType.id === i.sizeType.id)) {
-                        iOld.counter = iNew.counter;
-                        iOld.storage = iNew.storage;
-                    }
-                });
+                if (rows.length) {
+                    inventoryTransfers = rows.map(row => InventoryFactory.fromObj(row));
+                    let iNew;
+                    inventory.forEach(iOld => {
+                        if (iNew = inventoryTransfers.find(i => iOld.product.id === i.product.id && iOld.sizeType.id === i.sizeType.id)) {
+                            iOld.counter = iNew.counter;
+                            iOld.storage = iNew.storage;
+                        }
+                    });
+                }
                 res.send(inventory, ContentType.ApplicationJSON);
             });
         });
