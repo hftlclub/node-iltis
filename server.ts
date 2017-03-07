@@ -79,7 +79,7 @@ server.put('/event/:eventId', eventController.updateEvent.bind(eventController))
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
 
 // serve public folder
-server.get('/', serveStatic({
+server.get(/^\/*/, serveStatic({
     directory: __dirname + '/public/',
     default: 'index.html'
 }));
