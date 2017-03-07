@@ -318,10 +318,6 @@ paths:
           description: Invalid Id
           schema:
             $ref: '#/definitions/RestError'
-        '404':
-          description: Event does not exist
-          schema:
-            $ref: '#/definitions/RestError'
         '500':
           description: Unexpected Internal Server Error
           schema:

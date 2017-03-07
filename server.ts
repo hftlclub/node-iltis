@@ -1,4 +1,4 @@
-import { createServer, bodyParser, CORS, queryParser, serveStatic } from 'restify';
+import { createServer, bodyParser, CORS, queryParser, serveStatic, NotFoundError } from 'restify';
 import { ProductController } from './src/controller/product-controller';
 import { ServerController } from './src/controller/server-controller';
 import { CategoryController } from './src/controller/category-controller';
@@ -79,12 +79,11 @@ server.put('/event/:eventId', eventController.updateEvent.bind(eventController))
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
 
 // serve public folder
-server.get(/.*/, serveStatic({
+server.get('/', serveStatic({
     directory: __dirname + '/public/',
     default: 'index.html'
 }));
 
-// start server
 server.listen(config.port, () => {
     console.log('ILTIS API on %s', server.url);
 });
