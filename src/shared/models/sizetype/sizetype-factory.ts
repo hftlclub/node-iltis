@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { SizeType } from './';
+import { SizeType } from './sizetype';
 
 export class SizeTypeFactory {
 

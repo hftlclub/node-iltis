@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { MinimumStock } from './';
+import { MinimumStock } from './minimumstock';
 
 export class MinimumStockFactory {
 

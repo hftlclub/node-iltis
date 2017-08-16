@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { Product } from './';
+import { Product } from './product';
 import { CategoryFactory } from '../category';
 import { UnitFactory } from '../unit';
 import { SizeTypeFactory } from '../sizetype';

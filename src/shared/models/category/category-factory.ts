@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { Category } from './';
+import { Category } from './category';
 
 export class CategoryFactory {
 

@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { Transfer } from './';
+import { Transfer } from './transfer';
 import { ProductFactory } from '../product';
 import { SizeTypeFactory } from '../sizetype';
 import { Inventory, InventoryFactory} from '../inventory';

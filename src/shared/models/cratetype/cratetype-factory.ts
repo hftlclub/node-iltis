@@ -1,5 +1,5 @@
 import { ValueChecker } from '../../valuechecker';
-import { CrateType } from './';
+import { CrateType } from './cratetype';
 import { SizeTypeFactory } from '../sizetype';
 
 export class CrateTypeFactory {

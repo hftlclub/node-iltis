@@ -1,7 +1,6 @@
 import { ValueChecker } from '../../valuechecker';
-import { Event } from './';
+import { Event } from './event';
 import { EventTypeFactory } from '../eventtype';
-import * as fecha from 'fecha';
 
 export class EventFactory {
 
@@ -79,7 +78,7 @@ export class EventFactory {
 
         if (ValueChecker.validNumber(obj.tip)) dbEntry.eventTip = obj.tip;
 
-        if (obj.datetime) dbEntry.eventDT = fecha.format(new Date(obj.datetime), 'YYYY-MM-DD HH:mm:ss');
+        if (obj.datetime) dbEntry.eventDT = obj.datetime;
 
         if (obj.active) dbEntry.eventActive = obj.active;
         else dbEntry.eventActive = false;
