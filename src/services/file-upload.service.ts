@@ -4,7 +4,7 @@ import { FileUploadResponse } from '../shared/models/file-upload-response.interf
 const config = require('../../config');
 
 export class FileUploadService {
-    static async uploadFile(filename): Promise<FileUploadResponse> {
+    static async uploadFile(filename: string): Promise<FileUploadResponse> {
 
         const url = `${config.fileUploadUrl}?secret=${config.fileUploadSecret}`;
         const formData = {
