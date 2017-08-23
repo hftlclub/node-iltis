@@ -1,24 +1,28 @@
-var mysql = require('mysql');
-var config = require('../../config');
-var log = require('../modules/log');
+const mysql = require('mysql');
+const config = require('../../config');
+const log = require('../modules/log');
 
-function handleDBError() {
-    exports.conn = mysql.createConnection(config.dbcred);
+export class MySQLConnection {
+    static conn: any;
 
-    exports.conn.connect(err => {
-        if (err) {
-            log.error('Error connecting to MySQL database:', err);
-            setTimeout(handleDBError, 2000);
-        }
-    });
+    static establishConnection() {
+        MySQLConnection.conn = mysql.createConnection(config.dbcred);
+        MySQLConnection.conn.connect(err => {
+            if (err) {
+                log.error('Error connecting to MySQL database:', err);
+                setTimeout(() => MySQLConnection.establishConnection(), 2000);
+            }
+        });
 
-    exports.conn.on('error', err => {
-        log.error('MySQL database error', err);
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-            handleDBError();
-        } else {
-            throw err;
-        }
-    });
+        MySQLConnection.conn.on('error', err => {
+            log.error('MySQL database error', err);
+            if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+                MySQLConnection.establishConnection();
+            } else {
+                throw err;
+            }
+        });
+    }
 }
-handleDBError();
+
+MySQLConnection.establishConnection();

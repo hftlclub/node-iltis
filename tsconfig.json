@@ -9,13 +9,8 @@
     ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "declaration": true
+    "sourceMap": true
   },
-  "include": [
-      "server.ts",
-      "src/**/*"
-  ],
   "exclude": [
       "node_modules"
   ]

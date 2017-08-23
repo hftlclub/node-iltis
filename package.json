@@ -33,13 +33,19 @@
     "@types/lodash": "4.14.53",
     "@types/node": "7.0.5",
     "@types/restify": "2.0.41",
+    "awesome-typescript-loader": "^3.2.3",
     "fecha": "^2.3.0",
     "forever": "~0.15.3",
     "lodash": "~4.17.4",
     "mysql": "2.13.0",
     "restify": "4.3.0",
     "simple-node-logger": "0.93.16",
-    "typescript": "^2.2.1"
+    "source-map-loader": "^0.2.1",
+    "ts-loader": "^2.3.3",
+    "tslint-loader": "^3.5.3",
+    "typescript": "^2.4.2",
+    "webpack": "^3.5.5",
+    "webpack-dashboard": "^0.4.0"
   },
   "devDependencies": {
     "tslint": "^4.5.0"

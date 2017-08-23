@@ -1,4 +1,4 @@
-let mysql = require('../modules/mysql');
+import { MySQLConnection as mysql } from '../modules/mysql';
 
 export class CategoryService {
 

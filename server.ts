@@ -1,4 +1,6 @@
 import { createServer, bodyParser, CORS, queryParser, serveStatic, NotFoundError } from 'restify';
+
+const config = require('./config');
 import { ProductController } from './src/controller/product-controller';
 import { ServerController } from './src/controller/server-controller';
 import { CategoryController } from './src/controller/category-controller';
@@ -10,7 +12,6 @@ import { EventTypeController } from './src/controller/eventtype-controller';
 import { InventoryController } from './src/controller/inventory-controller';
 import { TinyJson } from './src/shared/tinyjson';
 
-const config = require('./config');
 
 const serverController = new ServerController();
 const productController = new ProductController();
