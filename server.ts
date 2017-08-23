@@ -1,3 +1,4 @@
+import { FileUploadService } from './src/services/file-upload.service';
 import { createServer, bodyParser, CORS, queryParser, serveStatic, NotFoundError } from 'restify';
 import { ProductController } from './src/controller/product-controller';
 import { ServerController } from './src/controller/server-controller';
@@ -77,6 +78,12 @@ server.put('/event/:eventId', eventController.updateEvent.bind(eventController))
 
 // API routes (DELETE)
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
+
+// to be removed. Just for demonstration
+server.get('/test/upload', async (req, res) => {
+    let fileInfo = await FileUploadService.uploadFile('./public/images/sample.png');
+    res.json(fileInfo);
+});
 
 // serve public folder
 server.get(/^\/*/, serveStatic({

@@ -37,17 +37,13 @@
     "forever": "~0.15.3",
     "lodash": "~4.17.4",
     "mysql": "2.13.0",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4",
     "restify": "4.3.0",
     "simple-node-logger": "0.93.16",
     "typescript": "^2.2.1"
   },
   "devDependencies": {
     "tslint": "^4.5.0"
-  },
-  "keywords": [
-    "rest",
-    "crud",
-    "restify",
-    "backend"
-  ]
+  }
 }
