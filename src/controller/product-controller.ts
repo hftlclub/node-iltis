@@ -5,10 +5,8 @@ import { Product, ProductFactory } from '../shared/models/product';
 import { ProductService } from '../services/product-service';
 import { CrateTypeFactory } from '../shared/models/cratetype';
 import { CrateTypeService } from '../services/cratetype-service';
-import { SizeTypeFactory } from '../shared/models/sizetype';
 import { SizeTypeService } from '../services/sizetype-service';
-import { DeliveryCostsFactory } from '../shared/models/deliverycosts';
-import { MinimumStockFactory } from '../shared/models/minimumstock';
+import { SizeFactory } from '../shared/models/size';
 
 
 export class ProductController {
@@ -27,16 +25,9 @@ export class ProductController {
                 SizeTypeService.getProductsSizes((err, rows) => {
                     if (err) return next(new InternalError());
                     rows.forEach(row => {
-                        products.find(f => f.id === row.refProduct).sizeTypes.push(SizeTypeFactory.fromObj(row));
+                        products.find(f => f.id === row.refProduct).sizes.push(SizeFactory.fromObj(row));
                     });
-                    ProductService.getProductsAdditions((err, rows) => {
-                        if (err) return next(new InternalError());
-                        rows.forEach(row => {
-                            products.find(f => f.id === row.refProduct).deliveryCosts.push(DeliveryCostsFactory.fromObj(row));
-                            products.find(f => f.id === row.refProduct).minimumStocks.push(MinimumStockFactory.fromObj(row));
-                        });
-                        res.send(products, ContentType.ApplicationJSON);
-                    });
+                    res.send(products, ContentType.ApplicationJSON);
                 });
             });
         });
@@ -52,19 +43,14 @@ export class ProductController {
             product = ProductFactory.fromObj(row);
             SizeTypeService.getProductSizesByProductId(product.id, (err, rows) => {
                 if (err) return next(new InternalError());
-                product.sizeTypes = rows.map(row => SizeTypeFactory.fromObj(row));
-                ProductService.getProductAdditionsByProductId(product.id, (err, rows) => {
+                product.sizes = rows.map(row => SizeFactory.fromObj(row));
+                CrateTypeService.getProductCratesByProductId(product.id, (err, rows) => {
                     if (err) return next(new InternalError());
-                    product.deliveryCosts = rows.map(row => DeliveryCostsFactory.fromObj(row));
-                    product.minimumStocks = rows.map(row => MinimumStockFactory.fromObj(row));
-                    CrateTypeService.getProductCratesByProductId(product.id, (err, rows) => {
-                        if (err) return next(new InternalError());
-                        if (!rows.length) {
-                            res.send(product, ContentType.ApplicationJSON);
-                        }
-                        product.crateTypes = rows.map(row => CrateTypeFactory.fromObj(row));
+                    if (!rows.length) {
                         res.send(product, ContentType.ApplicationJSON);
-                    });
+                    }
+                    product.crateTypes = rows.map(row => CrateTypeFactory.fromObj(row));
+                    res.send(product, ContentType.ApplicationJSON);
                 });
             });
         });

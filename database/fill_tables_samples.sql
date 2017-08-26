@@ -43,31 +43,18 @@ INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `
 INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (5, 1, 'Gurken', 'Für Cocktails', 'gurken.jpg', true, false);
 INSERT INTO `products`(`refCategory`, `refUnit`, `productName`, `productDesc`, `ProductImgFilename`, `ProductActive`, `ProductDeleted`) VALUES (6, 3, 'Eis', 'Für Cocktails', 'eiswurfel.jpg', true, false);
 
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (1, 3);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (2, 3);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (3, 5);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (4, 5);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (5, 1);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (5, 4);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (6, 5);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (7, 8);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (8, 7);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (9, 9);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (10, 9);
-INSERT INTO `product_sizes`(`refProduct`, `refSizeType`) VALUES (11, 10);
-
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (1, 3, 0.80, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (2, 3, 0.90, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (3, 5, 2.00, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (4, 5, 2.00, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (5, 1, 1.20, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (5, 4, 3.50, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (6, 5, 2.00, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (7, 8, 1.20, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (8, 7, 1.20, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (9, 9, 0.70, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (10, 9, 1.50, 0, false);
-INSERT INTO `product_additions`(`refProduct`, `refSizeType`, `additionDeliveryCosts`, `additionMinimumStock`, `additionWarningSend`) VALUES (11, 10, 4.00, 0, false);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (1, 3, 0.80, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (2, 3, 0.90, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (3, 5, 2.00, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (4, 5, 2.00, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (5, 1, 1.20, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (5, 4, 3.50, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (6, 5, 2.00, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (7, 8, 1.20, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (8, 7, 1.20, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (9, 9, 0.70, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (10, 9, 1.50, 0, true);
+INSERT INTO `product_sizes`(`refProduct`, `refSizeType`, `sizeDeliveryCosts`, `sizeMinimumStock`, `sizeActive`) VALUES (11, 10, 4.00, 0, true);
 
 INSERT INTO `crate_types`(`refSizeType`, `crateTypeDesc`, `crateTypeSlots`) VALUES (2, 'Kasten', 24);
 INSERT INTO `crate_types`(`refSizeType`, `crateTypeDesc`, `crateTypeSlots`) VALUES (3, 'Kasten', 20);

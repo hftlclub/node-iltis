@@ -44,15 +44,6 @@ CREATE TABLE events (
     CONSTRAINT events_pk PRIMARY KEY (eventId)
 );
 
-CREATE TABLE product_additions (
-    refProduct int NOT NULL,
-    refSizeType int NOT NULL,
-    additionDeliveryCosts decimal(5,2) NOT NULL,
-    additionMinimumStock int NOT NULL,
-    additionWarningSend bool NOT NULL,
-    CONSTRAINT product_additions_pk PRIMARY KEY (refProduct,refSizeType)
-);
-
 CREATE TABLE product_categories (
     categoryId int NOT NULL AUTO_INCREMENT,
     categoryName varchar(128) NOT NULL,
@@ -71,6 +62,9 @@ CREATE TABLE product_crates (
 CREATE TABLE product_sizes (
     refProduct int NOT NULL,
     refSizeType int NOT NULL,
+    sizeDeliveryCosts decimal(5,2) NOT NULL,
+    sizeMinimumStock int NOT NULL,
+    sizeActive bool NOT NULL,
     CONSTRAINT product_sizes_pk PRIMARY KEY (refProduct,refSizeType)
 );
 
@@ -137,9 +131,6 @@ ALTER TABLE events ADD CONSTRAINT events_event_types FOREIGN KEY events_event_ty
 ALTER TABLE product_additions ADD CONSTRAINT product_additions_products FOREIGN KEY product_additions_products (refProduct)
     REFERENCES products (productId)
     ON DELETE CASCADE;
-
-ALTER TABLE product_additions ADD CONSTRAINT product_additions_size_types FOREIGN KEY product_additions_size_types (refSizeType)
-    REFERENCES size_types (sizeTypeId);
 
 ALTER TABLE product_crates ADD CONSTRAINT product_crates_crate_types FOREIGN KEY product_crates_crate_types (refCrateType)
     REFERENCES crate_types (crateTypeId)

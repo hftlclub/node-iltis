@@ -267,12 +267,12 @@ export class EventService {
     static getCalculation(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT (eventCashAfter - eventCashBefore) AS sales, costs, ((eventCashAfter - eventCashBefore) - costs) AS profit
                     FROM (
-                        SELECT refEvent, (SUM(transactionChangeTotal * additionDeliveryCosts) * (-1)) AS costs
+                        SELECT refEvent, (SUM(transactionChangeTotal * sizeDeliveryCosts) * (-1)) AS costs
                         FROM (
                             SELECT refEvent, refProduct AS productId, refSizeType AS sizeTypeId, transactionChangeTotal
                             FROM transactions
                             WHERE refEvent = ?) AS transactions
-                        INNER JOIN product_additions ON (refProduct = productId AND refSizeType = sizeTypeId)) AS costsTable
+                        INNER JOIN product_sizes ON (refProduct = productId AND refSizeType = sizeTypeId)) AS costsTable
                     INNER JOIN events ON (refEvent = eventId)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
@@ -286,12 +286,12 @@ export class EventService {
     };
 
     static getTransferCosts(eventId: number, callback: (err: any, rows?: any) => void) {
-        let query = `SELECT (SUM(changes * additionDeliveryCosts) * (-1)) AS costs
+        let query = `SELECT (SUM(changes * sizeDeliveryCosts) * (-1)) AS costs
                     FROM (
                         SELECT refEvent, refProduct AS productId, refSizeType AS sizeTypeId, (transferChangeStorage + transferChangeCounter) AS changes
                         FROM event_transfers
                         WHERE refEvent = ?) AS transfers
-                    INNER JOIN product_additions ON (refProduct = productId AND refSizeType = sizeTypeId)`;
+                    INNER JOIN product_sizes ON (refProduct = productId AND refSizeType = sizeTypeId)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);

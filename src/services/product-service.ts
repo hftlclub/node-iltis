@@ -40,35 +40,4 @@ export class ProductService {
             return callback(null, rows[0]);
         });
     };
-
-    static getProductAdditionsByProductId(productId: number, callback: (err: any, rows?: any) => void) {
-        let query = `SELECT *
-                    FROM product_additions
-                    WHERE refProduct = ?
-                    ORDER BY refSizeType ASC`;
-        mysql.conn.query(query, productId, (err, rows, fields) => {
-            if (err) {
-                return callback(err);
-            }
-            if (!rows.length) {
-                return callback(null, false);
-            }
-            return callback(null, rows);
-        });
-    };
-
-    static getProductsAdditions(callback: (err: any, rows?: any) => void) {
-        let query = `SELECT *
-                    FROM product_additions
-                    ORDER BY refSizeType ASC`;
-        mysql.conn.query(query, (err, rows, fields) => {
-            if (err) {
-                return callback(err);
-            }
-            if (!rows.length) {
-                return callback(null, false);
-            }
-            return callback(null, rows);
-        });
-    };
 }
