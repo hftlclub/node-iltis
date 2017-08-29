@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
     <style>
           html {
-              font-family: Verdana, Arial, sans-serif;
+              font-family:'Courier New', Arial;
           }
     </style>
     <link rel="stylesheet" href="github.css" media="screen">
@@ -14,6 +14,12 @@
   <body>
     <h1>ILTIS API</h1>
     <img src="images/steckerlogo.svg" width="250">
+
+    <h3>REST-Documentation</h3>
+    Explorable API documentation: <a href="/swagger-ui/#">Swagger-UI</a><br>
+    OpenAPI Specification: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/swagger-ui/swagger.yaml">swagger.yaml</a><br>
+
+    <h3>GET-Examples</h3>
     <ul>
       <li><a style="color: rgb(0,200,0)" href="/products">GET /products</a></li>
       <li><a style="color: rgb(0,200,0)" href="/product/1">GET /product/{productId}</a></li>
@@ -37,8 +43,10 @@
       <li><a style="color: rgb(0,200,0)" href="/eventtypes">GET /eventtypes</a></li>
       <li><a style="color: rgb(0,200,0)" href="/eventtype/1">GET /eventtype/{eventTypeId}</a></li>
     </ul>
-    <hr> Explorable API documentation:
-      <a href="/swagger-ui/#!/default">/swagger-ui/</a><br>
-      OpenAPI Specification: <a href="/swagger.json">/swagger.json</a><br>
+
+    <h3>Git-Repositories</h3>
+    Frontend: &nbsp;<a href="https://github.com/hftlclub/ng-iltis">https://github.com/hftlclub/ng-iltis</a><br>
+    Backend: &nbsp; <a href="https://github.com/hftlclub/node-iltis">https://github.com/hftlclub/node-iltis</a><br>
+    
   </body>
 </html>

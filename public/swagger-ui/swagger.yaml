@@ -7,8 +7,6 @@ info:
     
     See [iltis.hftl.club](https://iltis.hftl.club) for more information.
 basePath: /
-schemes:
-  - https
 consumes:
   - application/json
 produces:
@@ -63,7 +61,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Product was created
+          description: Product has been created
         '400':
           description: Invalid data
           schema:
@@ -137,13 +135,107 @@ paths:
           required: true
       responses:
         '204':
-          description: Product was updated
+          description: Product has been updated
         '400':
           description: Invalid data
           schema:
             $ref: '#/definitions/RestError'
         '404':
           description: Product does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/thumbnail':
+    put:
+      tags:
+        - product
+      summary: Adds a thumbnail to an existing product
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          type: number
+        - name: file
+          in: formData
+          description: The uploaded file data
+          required: true
+          type: file
+      responses:
+        '204':
+          description: Product has been updated
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Product does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size':
+    post:
+      tags:
+        - product
+      summary: Creates a new relation (size) between a product and a size-type
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: Size
+          in: body
+          description: Size to be added to product
+          schema:
+            $ref: '#/definitions/Size'
+          required: true
+      responses:
+        '201':
+          description: Relation between product and size-type has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Relation does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size/{sizeTypeId}':
+    put:
+      tags:
+        - product
+      summary: Updates a specific size of a product
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+        - name: Size
+          in: body
+          description: Size to be added to product
+          schema:
+            $ref: '#/definitions/Size'
+          required: true
+      responses:
+        '204':
+          description: Size for the product with the requested Id has been updated
+        '404':
+          description: Relation does not exist
           schema:
             $ref: '#/definitions/RestError'
         '500':
@@ -181,7 +273,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Event was created
+          description: Event has been created
         '400':
           description: Invalid data
           schema:
@@ -269,7 +361,7 @@ paths:
           required: true
       responses:
         '204':
-          description: Event was updated
+          description: Event has been updated
         '400':
           description: Invalid data
           schema:
@@ -290,7 +382,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Event was closed
+          description: Event has been closed
         '400':
           description: Invalid Id
         '403':
@@ -370,7 +462,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-records were created
+          description: Transfer-records have been created
         '400':
           description: Invalid data
           schema:
@@ -400,7 +492,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-records were created
+          description: Transfer-records have been created
         '400':
           description: Invalid data
           schema:
@@ -430,7 +522,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-records were created
+          description: Transfer-records have been created
         '400':
           description: Invalid Id
           schema:
@@ -464,7 +556,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-records were created
+          description: Transfer-records have been created
         '400':
           description: Invalid data
           schema:
@@ -494,7 +586,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Transfer-records were created
+          description: Transfer-records have been created
         '400':
           description: Invalid Id
           schema:
@@ -567,7 +659,7 @@ paths:
           schema:
             $ref: '#/definitions/RestError'
         '404':
-          description: No transfers were made
+          description: No transfers have been recorded
           schema:
             $ref: '#/definitions/RestError'
       parameters:
@@ -643,7 +735,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Category was created
+          description: Category has been created
         '400':
           description: Invalid data
           schema:
@@ -717,7 +809,7 @@ paths:
           required: true
       responses:
         '204':
-          description: Category was updated
+          description: Category has been updated
         '400':
           description: Invalid data
           schema:
@@ -761,7 +853,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Unit was created
+          description: Unit has been created
         '400':
           description: Invalid data
           schema:
@@ -839,7 +931,7 @@ paths:
           required: true
       responses:
         '204':
-          description: Unit was updated
+          description: Unit has been updated
         '400':
           description: Invalid data
           schema:
@@ -883,7 +975,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Crate-type was created
+          description: Crate-type has been created
         '400':
           description: Invalid data
           schema:
@@ -979,7 +1071,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Relation between product and crate-type was created
+          description: Relation between product and crate-type has been created
         '400':
           description: Invalid data
           schema:
@@ -995,7 +1087,7 @@ paths:
   /sizetypes:
     get:
       tags:
-        - cratetype
+        - sizetype
       summary: Get all possible size-types
       responses:
         '200':
@@ -1023,7 +1115,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Size-type was created
+          description: Size-type has been created
         '400':
           description: Invalid data
           schema:
@@ -1097,70 +1189,13 @@ paths:
           required: true
       responses:
         '204':
-          description: Size-type was updated
+          description: Size-type has been updated
         '400':
           description: Invalid data
           schema:
             $ref: '#/definitions/RestError'
         '404':
           description: Size-type does not exist
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-  '/sizetype/{sizeTypeId}/{productId}':
-    delete:
-      tags:
-        - sizetype
-      summary: Deletes a specific size-type of a specific product
-      responses:
-        '204':
-          description: Size-type for the product with the requested Id has been deleted
-        '403':
-          description: Could not delete size-type because there has to be a minimum of one defined size-type per product
-          schema:
-            $ref: '#/definitions/RestError'
-        '404':
-          description: Relation does not exist
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-      parameters:
-        - name: productId
-          in: path
-          type: number
-          required: true
-        - name: sizeTypeId
-          in: path
-          type: number
-          required: true
-    post:
-      tags:
-        - sizetype
-      summary: Creates a new relation between a product and a size-type
-      parameters:
-        - name: productId
-          in: path
-          type: number
-          required: true
-        - name: sizeTypeId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Relation between product and size-type was created
-        '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '409':
-          description: Relation does already exist
           schema:
             $ref: '#/definitions/RestError'
         '500':
@@ -1198,7 +1233,7 @@ paths:
           required: true
       responses:
         '201':
-          description: Event-type was created
+          description: Event-type has been created
         '400':
           description: Invalid data
           schema:
@@ -1272,7 +1307,7 @@ paths:
           required: true
       responses:
         '204':
-          description: Event-type was updated
+          description: Event-type has been updated
         '400':
           description: Invalid data
           schema:
@@ -1305,18 +1340,14 @@ definitions:
         $ref: '#/definitions/Category'
       unit:
         $ref: '#/definitions/Unit'
-      sizeTypes:
+      sizes:
         type: array
         items:
-          $ref: '#/definitions/SizeType'
+          $ref: '#/definitions/Size'
       crateTypes:
         type: array
         items:
           $ref: '#/definitions/CrateType'
-      deliveryCosts:
-        type: array
-        items:
-          $ref: '#/definitions/DeliveryCosts'
       imgFilename:
         type: string
         example: 'JHS09234JKK.jpg'
@@ -1520,6 +1551,25 @@ definitions:
       deleted:
         type: boolean
         example: false
+  Size:
+    type: object
+    description: Additional product information for each product size
+    required:
+      - sizeType
+    properties:
+      sizeType:
+        $ref: '#/definitions/SizeType'
+      minStock:
+        type: number
+        format: int32
+        example: 0
+      costs:
+        type: number
+        format: double
+        example: 0.6
+      active:
+        type: boolean
+        example: true
   CrateType:
     type: object
     description: Contains all information about a crate-type
@@ -1555,18 +1605,6 @@ definitions:
         type: number
         format: double
         example: 60
-  DeliveryCosts:
-    type: object
-    description: Contains the delivery costs of a product related to its size
-    properties:
-      sizeTypeId:
-        type: number
-        format: double
-        example: 3
-      costs:
-        type: number
-        format: double
-        example: 0.80
   Calculation:
     type: object
     description: Contains the calculation of an event
@@ -1598,20 +1636,6 @@ definitions:
       createEventCountAllowed:
         type: boolean
         example: true
-#  MinimumStock:
-#    type: object
-#    description: Minimum stock of product related to its size
-#    properties:
-#      sizeTypeId:
-#        type: number
-#        format: double
-#        example: 3
-#      minStock:
-#        type: number
-#        format: double
-#      warningSend:
-#        type: boolean
-#        example: false
   RestError:
     type: object
     description: >-
