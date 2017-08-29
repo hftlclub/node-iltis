@@ -42,7 +42,7 @@ export class ProductFactory {
             product.unit = UnitFactory.fromObj(obj);
         }
 
-        if (obj.sizeTypes) product.sizes = obj.sizes.map(size => SizeFactory.fromObj(size));
+        if (obj.sizes) product.sizes = obj.sizes.map(size => SizeFactory.fromObj(size));
 
         if (obj.crateTypes) product.crateTypes = obj.crateTypes.map(crateType => CrateTypeFactory.fromObj(crateType));
 
