@@ -242,6 +242,87 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
+  '/product/{productId}/possible/cratetypes':
+    get:
+      tags:
+        - product
+      summary: Get all possible crate-types for a specific product
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: List of all possible crate-types
+          schema:
+            title: CrateTypes
+            type: array
+            items:
+              $ref: '#/definitions/CrateType'
+        '424':
+          description: 'There are no product sizes to suggest possible crate-types'
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/cratetype':
+    post:
+      tags:
+        - product
+      summary: Creates a new relation between a product and a crate-type
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: crateType
+          in: body
+          description: CrateType to be added to product
+          schema:
+            $ref: '#/definitions/CrateType'
+      responses:
+        '201':
+          description: Relation between product and crate-type has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Relation does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/cratetype/{crateTypeId}':
+    delete:
+      tags:
+        - product
+      summary: Deletes a specific crate-type of a specific product
+      responses:
+        '204':
+          description: Crate-type for the product with the requested Id has been deleted
+        '404':
+          description: Relation does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: crateTypeId
+          in: path
+          type: number
+          required: true
   /events:
     get:
       tags:
@@ -1031,53 +1112,31 @@ paths:
           in: path
           type: number
           required: true
-  '/cratetype/{crateTypeId}/{productId}':
-    delete:
+    put:
       tags:
         - cratetype
-      summary: Deletes a specific crate-type of a specific product
+      summary: Updates an existing crate-type
+      description: 'Requires a full crate-type entry'
+      parameters:
+        - name: crateTypeId
+          in: path
+          required: true
+          type: number
+        - name: CrateType
+          in: body
+          description: An existing crate-type to update
+          schema:
+            $ref: '#/definitions/CrateType'
+          required: true
       responses:
         '204':
-          description: Crate-type for the product with the requested Id has been deleted
-        '404':
-          description: Relation does not exist
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
-      parameters:
-        - name: productId
-          in: path
-          type: number
-          required: true
-        - name: crateTypeId
-          in: path
-          type: number
-          required: true
-    post:
-      tags:
-        - cratetype
-      summary: Creates a new relation between a product and a crate-type
-      parameters:
-        - name: productId
-          in: path
-          type: number
-          required: true
-        - name: crateTypeId
-          in: path
-          type: number
-          required: true
-      responses:
-        '201':
-          description: Relation between product and crate-type has been created
+          description: Size-type has been updated
         '400':
           description: Invalid data
           schema:
             $ref: '#/definitions/RestError'
-        '409':
-          description: Relation does already exist
+        '404':
+          description: Crate-type does not exist
           schema:
             $ref: '#/definitions/RestError'
         '500':
