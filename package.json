@@ -32,7 +32,7 @@
   "dependencies": {
     "@types/lodash": "4.14.53",
     "@types/node": "7.0.5",
-    "@types/restify": "2.0.41",
+    "@types/restify": "^4.3.5",
     "fecha": "^2.3.0",
     "forever": "~0.15.3",
     "gm": "^1.23.0",
