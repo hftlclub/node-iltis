@@ -128,10 +128,6 @@ ALTER TABLE event_transfers ADD CONSTRAINT event_transfers_size_types FOREIGN KE
 ALTER TABLE events ADD CONSTRAINT events_event_types FOREIGN KEY events_event_types (refEventType)
     REFERENCES event_types (eventTypeId);
 
-ALTER TABLE product_additions ADD CONSTRAINT product_additions_products FOREIGN KEY product_additions_products (refProduct)
-    REFERENCES products (productId)
-    ON DELETE CASCADE;
-
 ALTER TABLE product_crates ADD CONSTRAINT product_crates_crate_types FOREIGN KEY product_crates_crate_types (refCrateType)
     REFERENCES crate_types (crateTypeId)
     ON DELETE CASCADE;
