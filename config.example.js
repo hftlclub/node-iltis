@@ -15,3 +15,5 @@ exports.dbcred = {
 
 exports.fileUploadUrl = 'https://cdn.hftl.club/files/upload';
 exports.fileUploadSecret = 'foobar';
+exports.imageResizeLength = 300;
+exports.productDefaultImage = 'https://api.iltis.hftl.club/images/product-default.png';

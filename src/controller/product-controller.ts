@@ -73,6 +73,6 @@ export class ProductController {
         } catch (e) {
             next(new InternalError(e));
         }
-
+        
     }
 }
