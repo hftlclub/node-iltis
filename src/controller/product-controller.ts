@@ -1,5 +1,7 @@
 import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
+import { ImageService } from '../services/image.service';
+import { FileUploadService } from '../services/file-upload.service';
 import { ContentType } from '../contenttype';
 import { Product, ProductFactory } from '../shared/models/product';
 import { ProductService } from '../services/product-service';
@@ -56,4 +58,21 @@ export class ProductController {
             });
         });
     };
+
+    // PUT: Upload image for product
+    async uploadImage(req: Request | any, res: Response, next: Next) {
+        const productId = parseInt(req.params.productId, 0);
+        try {
+            let rawFile = await FileUploadService.uploadMultipartFile(req, res);
+            await ImageService.squareResizeExtend(rawFile.path, rawFile.path, config.imageResizeLength);
+
+            let uploadedImage = await FileUploadService.uploadFileToCDN(rawFile.path, rawFile.name);
+            await ProductService.setProductImage(productId, uploadedImage.fullUrl);
+
+            res.send(204);
+        } catch (e) {
+            next(new InternalError(e));
+        }
+
+    }
 }

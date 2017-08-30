@@ -19,7 +19,7 @@ export class ProductService {
             }
             return callback(null, rows);
         });
-    };
+    }
 
     static getById(productId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
@@ -39,5 +39,15 @@ export class ProductService {
             }
             return callback(null, rows[0]);
         });
-    };
+    }
+
+    static setProductImage(productId: number, imgFilename: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let query = `UPDATE products SET productImgFilename = ? WHERE productId = ?`;
+            mysql.conn.query(query, [imgFilename, productId], (err, result) => {
+                if (err) { reject(err); }
+                resolve(result);
+            });
+        });
+    }
 }

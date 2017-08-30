@@ -1,5 +1,7 @@
-import { FileUploadService } from './src/services/file-upload.service';
 import { createServer, bodyParser, CORS, queryParser, serveStatic, NotFoundError } from 'restify';
+import * as multer from 'multer';
+
+import { FileUploadService } from './src/services/file-upload.service';
 import { ProductController } from './src/controller/product-controller';
 import { ServerController } from './src/controller/server-controller';
 import { CategoryController } from './src/controller/category-controller';
@@ -43,6 +45,7 @@ server.get('/swagger.json', serverController.getFixedSwaggerJson.bind(serverCont
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
+server.put('/product/:productId/image', productController.uploadImage.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/checkpermission', eventController.checkPermission.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
@@ -78,12 +81,6 @@ server.put('/event/:eventId', eventController.updateEvent.bind(eventController))
 
 // API routes (DELETE)
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
-
-// to be removed. Just for demonstration
-server.get('/test/upload', async (req, res) => {
-    let fileInfo = await FileUploadService.uploadFile('./public/images/sample.png');
-    res.json(fileInfo);
-});
 
 // serve public folder
 server.get(/^\/*/, serveStatic({

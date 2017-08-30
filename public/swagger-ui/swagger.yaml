@@ -148,11 +148,11 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
-  '/product/{productId}/thumbnail':
+  '/product/{productId}/image':
     put:
       tags:
         - product
-      summary: Adds a thumbnail to an existing product
+      summary: Adds an image to an existing product
       consumes:
         - multipart/form-data
       parameters:
