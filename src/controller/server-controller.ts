@@ -1,3 +1,5 @@
+import { Request, Response, Next } from 'restify';
+
 import { ContentType } from '../contenttype';
 
 let pjson = require('../../package.json');
@@ -5,7 +7,7 @@ let fs = require('fs');
 
 export class ServerController {
 
-    info(req, res, next) {
+    info(req: Request, res: Response, next: Next) {
         let info = {
             version: pjson.version,
             time: process.uptime()
@@ -15,7 +17,7 @@ export class ServerController {
     }
 
     // swagger UI can only handle one scheme, so we have to fix the swagger.json
-    getFixedSwaggerJson(req, res, next) {
+    getFixedSwaggerJson(req: Request, res: Response, next: Next) {
         fs.readFile('./public/swagger.json', 'utf8', function (err, file: string) {
             if (err) {
                 res.send(500);

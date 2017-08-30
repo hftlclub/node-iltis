@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Product, ProductFactory } from '../shared/models/product';
@@ -12,7 +12,7 @@ import { SizeFactory } from '../shared/models/size';
 export class ProductController {
 
     // GET: Return all products
-    getAll(req, res, next) {
+    getAll(req: Request, res: Response, next: Next) {
         ProductService.getAll((err, rows) => {
             if (err) return next(new InternalError());
             if (!rows.length) res.send([], ContentType.ApplicationJSON);
@@ -34,13 +34,14 @@ export class ProductController {
     };
 
     // GET: Return single product
-    getById(req, res, next) {
+    getById(req: Request, res: Response, next: Next) {
         let productId = parseInt(req.params.productId, 0);
-        let product: Product = ProductFactory.empty();
+
         ProductService.getById(productId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid productId'));
             if (!row) next(new NotFoundError('Product does not exist'));
-            product = ProductFactory.fromObj(row);
+            let product: Product = ProductFactory.fromObj(row);
+
             SizeTypeService.getProductSizesByProductId(product.id, (err, rows) => {
                 if (err) return next(new InternalError());
                 product.sizes = rows.map(row => SizeFactory.fromObj(row));
