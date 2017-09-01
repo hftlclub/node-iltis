@@ -10,6 +10,7 @@ import { CrateTypeService } from '../services/cratetype-service';
 import { SizeTypeService } from '../services/sizetype-service';
 import { SizeFactory } from '../shared/models/size';
 
+const config = require('../../config');
 
 export class ProductController {
 
@@ -71,8 +72,8 @@ export class ProductController {
 
             res.send(204);
         } catch (e) {
+            console.log(e);
             next(new InternalError(e));
         }
-        
     }
 }
