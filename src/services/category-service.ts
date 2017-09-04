@@ -43,4 +43,15 @@ export class CategoryService {
             return callback(null, result);
         });
     };
+
+    static updateCategory(category: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE product_categories SET ?
+                    WHERE categoryId = ?`;
+        mysql.conn.query(query, [category, category.categoryId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
 }

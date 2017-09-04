@@ -56,6 +56,17 @@ export class ProductService {
         });
     };
 
+    static updateProduct(product: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE products SET ?
+                    WHERE productId = ?`;
+        mysql.conn.query(query, [product, product.productId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static setProductImage(productId: number, imgFilename: string): Promise<any> {
         return new Promise((resolve, reject) => {
             let query = `UPDATE products SET productImgFilename = ? WHERE productId = ?`;
@@ -70,6 +81,17 @@ export class ProductService {
         size.sizeActive = true;
         let query = `INSERT INTO product_sizes SET ?`;
         mysql.conn.query(query, size, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static updateSizeOfProduct(size: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE product_sizes SET ?
+                    WHERE refProduct = ? AND refSizeType = ?`;
+        mysql.conn.query(query, [size, size.refProduct, size.refSizeType], (err, result) => {
             if (err) {
                 return callback(err);
             }

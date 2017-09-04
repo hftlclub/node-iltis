@@ -43,4 +43,15 @@ export class CrateTypeController {
             } else next(new InternalError());
         });
     };
+
+    // PUT: Update CrateType
+    updateCrateType(req: Request, res: Response, next: Next) {
+        let crateTypeId = parseInt(req.params.crateTypeId, 0);
+        let updatedCrateType: any = CrateTypeFactory.toDbObject(req.body);
+        updatedCrateType.crateTypeId = crateTypeId;
+        CrateTypeService.updateCrateType(updatedCrateType, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
+        });
+    };
 }

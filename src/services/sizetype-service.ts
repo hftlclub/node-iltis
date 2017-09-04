@@ -79,4 +79,15 @@ export class SizeTypeService {
             return callback(null, result);
         });
     };
+
+    static updateSizeType(sizeType: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE size_types SET ?
+                    WHERE sizeTypeId = ?`;
+        mysql.conn.query(query, [sizeType, sizeType.sizeTypeId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
 }

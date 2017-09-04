@@ -68,9 +68,9 @@ server.get('/inventory', inventoryController.getCurrent.bind(inventoryController
 server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
 // API routes (POST)
-server.post('/product', productController.addProduct.bind(eventController));
-server.post('/product/:productId/size', productController.addSizeToProduct.bind(eventController));
-server.post('/product/:productId/cratetype', productController.addCrateTypeToProduct.bind(eventController));
+server.post('/product', productController.addProduct.bind(productController));
+server.post('/product/:productId/size', productController.addSizeToProduct.bind(productController));
+server.post('/product/:productId/cratetype', productController.addCrateTypeToProduct.bind(productController));
 server.post('/event', eventController.addEvent.bind(eventController));
 server.post('/event/:eventId/close', eventController.closeEvent.bind(eventController));
 server.post('/event/:eventId/transfers/storage/out', eventController.addTransferStorageOut.bind(eventController));
@@ -78,13 +78,19 @@ server.post('/event/:eventId/transfers/storage/in', eventController.addTransferS
 server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));
 server.post('/event/:eventId/transfers/storage/count', eventController.countStorage.bind(eventController));
 server.post('/event/:eventId/transfers/counter/count', eventController.countCounter.bind(eventController));
-server.post('/category', categoryController.addCategory.bind(eventController));
-server.post('/unit', unitController.addUnit.bind(eventController));
-server.post('/cratetype', crateTypeController.addCrateType.bind(eventController));
-server.post('/sizetype', sizeTypeController.addSizeType.bind(eventController));
+server.post('/category', categoryController.addCategory.bind(categoryController));
+server.post('/unit', unitController.addUnit.bind(unitController));
+server.post('/cratetype', crateTypeController.addCrateType.bind(crateTypeController));
+server.post('/sizetype', sizeTypeController.addSizeType.bind(sizeTypeController));
 
 // API routes (PUT)
+server.put('/product/:productId', productController.updateProduct.bind(productController));
+server.put('/product/:productId/size/:sizeTypeId', productController.updateSizeOfProduct.bind(productController));
 server.put('/event/:eventId', eventController.updateEvent.bind(eventController));
+server.put('/category/:categoryId', categoryController.updateCategory.bind(categoryController));
+server.put('/unit/:unitId', unitController.updateUnit.bind(unitController));
+server.put('/cratetype/:crateTypeId', crateTypeController.updateCrateType.bind(crateTypeController));
+server.put('/sizetype/:sizeTypeId', sizeTypeController.updateSizeType.bind(sizeTypeController));
 
 // API routes (DELETE)
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));

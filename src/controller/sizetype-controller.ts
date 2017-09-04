@@ -43,4 +43,17 @@ export class SizeTypeController {
             } else next(new InternalError());
         });
     };
+
+    // PUT: Update SizeType
+    updateSizeType(req: Request, res: Response, next: Next) {
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        let updatedSizeType: any = SizeTypeFactory.toDbObject(req.body);
+        updatedSizeType.sizeTypeId = sizeTypeId;
+        delete updatedSizeType.sizeTypeAmount;
+        delete updatedSizeType.sizeTypeDeleted;
+        SizeTypeService.updateSizeType(updatedSizeType, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
+        });
+    };
 }

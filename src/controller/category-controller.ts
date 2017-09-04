@@ -43,4 +43,16 @@ export class CategoryController {
             } else next(new InternalError());
         });
     };
+
+    // PUT: Update Category
+    updateCategory(req: Request, res: Response, next: Next) {
+        let categoryId = parseInt(req.params.categoryId, 0);
+        let updatedCategory: any = CategoryFactory.toDbObject(req.body);
+        updatedCategory.categoryId = categoryId;
+        CategoryService.updateCategory(updatedCategory, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
+        });
+    };
+
 }

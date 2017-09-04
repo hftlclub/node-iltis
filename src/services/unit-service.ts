@@ -43,4 +43,15 @@ export class UnitService {
             return callback(null, result);
         });
     };
+
+    static updateUnit(unit: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE product_units SET ?
+                    WHERE unitId = ?`;
+        mysql.conn.query(query, [unit, unit.unitId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
 }

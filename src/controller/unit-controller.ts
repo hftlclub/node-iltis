@@ -43,4 +43,15 @@ export class UnitController {
             } else next(new InternalError());
         });
     };
+
+    // PUT: Update Unit
+    updateUnit(req: Request, res: Response, next: Next) {
+        let unitId = parseInt(req.params.unitId, 0);
+        let updatedUnit: any = UnitFactory.toDbObject(req.body);
+        updatedUnit.unitId = unitId;
+        UnitService.updateUnit(updatedUnit, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
+        });
+    };
 }

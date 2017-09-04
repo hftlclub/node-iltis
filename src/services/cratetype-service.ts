@@ -82,4 +82,15 @@ export class CrateTypeService {
             return callback(null, result);
         });
     };
+
+    static updateCrateType(crateType: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE crate_types SET ?
+                    WHERE crateTypeId = ?`;
+        mysql.conn.query(query, [crateType, crateType.crateTypeId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
 }

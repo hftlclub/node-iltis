@@ -91,6 +91,20 @@ export class ProductController {
         });
     };
 
+    // PUT: Update Product
+    updateProduct(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        let updatedProduct: any = ProductFactory.toDbObject(req.body);
+        updatedProduct.productId = productId;
+        delete updatedProduct.productImgFilename;
+        delete updatedProduct.productDeleted;
+        delete updatedProduct.productTS;
+        ProductService.updateProduct(updatedProduct, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
+        });
+    };
+
     // POST: Add new Size to Product
     addSizeToProduct(req: Request, res: Response, next: Next) {
         const productId = parseInt(req.params.productId, 0);
@@ -98,6 +112,18 @@ export class ProductController {
             if (err) return next(new BadRequestError());
             if (result) res.send(201);
             else next(new InternalError());
+        });
+    };
+
+    // PUT: Update Size of Product
+    updateSizeOfProduct(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        let updatedSize: any = SizeFactory.toDbObject(req.body, productId);
+        updatedSize.refSizeType = sizeTypeId;
+        ProductService.updateSizeOfProduct(updatedSize, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
         });
     };
 
