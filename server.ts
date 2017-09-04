@@ -40,7 +40,6 @@ server.use(queryParser());
 
 // other routes
 server.get('/info', serverController.info.bind(serverController));
-server.get('/swagger.json', serverController.getFixedSwaggerJson.bind(serverController));
 
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
