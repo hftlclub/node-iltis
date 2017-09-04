@@ -1,7 +1,7 @@
 import { createServer, bodyParser, CORS, queryParser, serveStatic, NotFoundError } from 'restify';
 import * as multer from 'multer';
 
-import { FileUploadService } from './src/services/file-upload.service';
+import { FileUploadService } from './src/services/file-upload-service';
 import { ProductController } from './src/controller/product-controller';
 import { ServerController } from './src/controller/server-controller';
 import { CategoryController } from './src/controller/category-controller';
@@ -68,6 +68,9 @@ server.get('/inventory', inventoryController.getCurrent.bind(inventoryController
 server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
 // API routes (POST)
+server.post('/product', productController.addProduct.bind(eventController));
+server.post('/product/:productId/size', productController.addSizeToProduct.bind(eventController));
+server.post('/product/:productId/cratetype', productController.addCrateTypeToProduct.bind(eventController));
 server.post('/event', eventController.addEvent.bind(eventController));
 server.post('/event/:eventId/close', eventController.closeEvent.bind(eventController));
 server.post('/event/:eventId/transfers/storage/out', eventController.addTransferStorageOut.bind(eventController));
@@ -75,6 +78,10 @@ server.post('/event/:eventId/transfers/storage/in', eventController.addTransferS
 server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));
 server.post('/event/:eventId/transfers/storage/count', eventController.countStorage.bind(eventController));
 server.post('/event/:eventId/transfers/counter/count', eventController.countCounter.bind(eventController));
+server.post('/category', categoryController.addCategory.bind(eventController));
+server.post('/unit', unitController.addUnit.bind(eventController));
+server.post('/cratetype', crateTypeController.addCrateType.bind(eventController));
+server.post('/sizetype', sizeTypeController.addSizeType.bind(eventController));
 
 // API routes (PUT)
 server.put('/event/:eventId', eventController.updateEvent.bind(eventController));

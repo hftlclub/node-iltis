@@ -30,4 +30,17 @@ export class CrateTypeController {
             res.send(crateType, ContentType.ApplicationJSON);
         });
     };
+
+    // POST: Add new CrateType
+    addCrateType(req: Request, res: Response, next: Next) {
+        CrateTypeService.addCrateType(CrateTypeFactory.toDbObject(req.body), (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) {
+                CrateTypeService.getById(result.insertId, (err, row) => {
+                    if (err) return next(new InternalError());
+                    res.send(201, CrateTypeFactory.fromObj(row), ContentType.ApplicationJSON);
+                });
+            } else next(new InternalError());
+        });
+    };
 }

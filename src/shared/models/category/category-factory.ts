@@ -32,4 +32,16 @@ export class CategoryFactory {
         return category;
     }
 
+    static toDbObject(obj: Category): any {
+        let dbEntry: any = {};
+
+        if (obj.name) dbEntry.categoryName = obj.name;
+        if (obj.description) dbEntry.categoryDesc = obj.description;
+
+        if (obj.deleted) dbEntry.categoryDeleted = obj.deleted;
+        else dbEntry.categoryDeleted = false;
+
+        return dbEntry;
+    }
+
 }

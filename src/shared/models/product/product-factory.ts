@@ -66,4 +66,21 @@ export class ProductFactory {
         return product;
     }
 
+    static toDbObject(obj: Product): any {
+        let dbEntry: any = {};
+
+        if (obj.category) dbEntry.refCategory = obj.category.id;
+        if (obj.unit) dbEntry.refUnit = obj.unit.id;
+        if (obj.name) dbEntry.productName = obj.name;
+        if (obj.description) dbEntry.productDesc = obj.description;
+
+        if (obj.active) dbEntry.productActive = obj.active;
+        else dbEntry.productActive = false;
+
+        if (obj.deleted) dbEntry.productDeleted = obj.deleted;
+        else dbEntry.productDeleted = false;
+
+        return dbEntry;
+    }
+
 }

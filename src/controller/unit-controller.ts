@@ -7,7 +7,7 @@ import { UnitService } from '../services/unit-service';
 
 export class UnitController {
 
-    // GET: Return all units
+    // GET: Return all Units
     getAll(req: Request, res: Response, next: Next) {
         UnitService.getAll((err, rows) => {
             if (err) return next(new InternalError());
@@ -17,7 +17,7 @@ export class UnitController {
         });
     };
 
-    // GET: Return single unit
+    // GET: Return single Unit
     getById(req: Request, res: Response, next: Next) {
         let unitId = parseInt(req.params.unitId, 0);
 
@@ -28,6 +28,19 @@ export class UnitController {
             }
             let unit: Unit = UnitFactory.fromObj(row);
             res.send(unit, ContentType.ApplicationJSON);
+        });
+    };
+
+    // POST: Add new Unit
+    addUnit(req: Request, res: Response, next: Next) {
+        UnitService.addUnit(UnitFactory.toDbObject(req.body), (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) {
+                UnitService.getById(result.insertId, (err, row) => {
+                    if (err) return next(new InternalError());
+                    res.send(201, UnitFactory.fromObj(row), ContentType.ApplicationJSON);
+                });
+            } else next(new InternalError());
         });
     };
 }

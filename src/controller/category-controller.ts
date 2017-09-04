@@ -7,7 +7,7 @@ import { CategoryService } from '../services/category-service';
 
 export class CategoryController {
 
-    // GET: Return all categories
+    // GET: Return all Categories
     getAll(req: Request, res: Response, next: Next) {
         CategoryService.getAll((err, rows) => {
             if (err) return next(new InternalError());
@@ -17,7 +17,7 @@ export class CategoryController {
         });
     };
 
-    // GET: Return single category
+    // GET: Return single Category
     getById(req: Request, res: Response, next: Next) {
         let categoryId = parseInt(req.params.categoryId, 0);
         let category: Category = CategoryFactory.empty();
@@ -28,6 +28,19 @@ export class CategoryController {
             }
             category = CategoryFactory.fromObj(row);
             res.send(category, ContentType.ApplicationJSON);
+        });
+    };
+
+    // POST: Add new Category
+    addCategory(req: Request, res: Response, next: Next) {
+        CategoryService.addCategory(CategoryFactory.toDbObject(req.body), (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) {
+                CategoryService.getById(result.insertId, (err, row) => {
+                    if (err) return next(new InternalError());
+                    res.send(201, CategoryFactory.fromObj(row), ContentType.ApplicationJSON);
+                });
+            } else next(new InternalError());
         });
     };
 }

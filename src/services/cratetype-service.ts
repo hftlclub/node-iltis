@@ -1,3 +1,4 @@
+import { CrateTypeFactory } from './../shared/models/cratetype/cratetype-factory';
 let mysql = require('../modules/mysql');
 
 export class CrateTypeService {
@@ -69,6 +70,16 @@ export class CrateTypeService {
                 return callback(null, false);
             }
             return callback(null, rows);
+        });
+    };
+
+    static addCrateType(crateType: any, callback: (err: any, result?: any) => void) {
+        let query = `INSERT INTO crate_types SET ?`;
+        mysql.conn.query(query, crateType, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
         });
     };
 }

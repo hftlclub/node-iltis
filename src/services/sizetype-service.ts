@@ -1,3 +1,5 @@
+import { SizeTypeFactory } from './../shared/models/sizetype/sizetype-factory';
+import { SizeType } from './../shared/models/sizetype/sizetype';
 let mysql = require('../modules/mysql');
 
 export class SizeTypeService {
@@ -64,6 +66,17 @@ export class SizeTypeService {
                 return callback(null, false);
             }
             return callback(null, rows);
+        });
+    };
+
+    static addSizeType(sizeType: any, callback: (err: any, result?: any) => void) {
+        sizeType.sizeTypeDeleted = false;
+        let query = `INSERT INTO size_types SET ?`;
+        mysql.conn.query(query, sizeType, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
         });
     };
 }

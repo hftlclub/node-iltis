@@ -29,4 +29,13 @@ export class UnitFactory {
         return unit;
     }
 
+    static toDbObject(obj: Unit): any {
+        let dbEntry: any = {};
+
+        if (obj.short) dbEntry.unitShort = obj.short;
+        if (obj.full) dbEntry.unitFull = obj.full;
+
+        return dbEntry;
+    }
+
 }

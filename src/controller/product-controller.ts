@@ -1,7 +1,7 @@
 import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
-import { ImageService } from '../services/image.service';
-import { FileUploadService } from '../services/file-upload.service';
+import { ImageService } from '../services/image-service';
+import { FileUploadService } from '../services/file-upload-service';
 import { ContentType } from '../contenttype';
 import { Product, ProductFactory } from '../shared/models/product';
 import { ProductService } from '../services/product-service';
@@ -44,10 +44,9 @@ export class ProductController {
             if (err) return next(new BadRequestError('Invalid productId'));
             if (!row) next(new NotFoundError('Product does not exist'));
             let product: Product = ProductFactory.fromObj(row);
-
             SizeTypeService.getProductSizesByProductId(product.id, (err, rows) => {
                 if (err) return next(new InternalError());
-                product.sizes = rows.map(row => SizeFactory.fromObj(row));
+                if (rows.length) product.sizes = rows.map(row => SizeFactory.fromObj(row));
                 CrateTypeService.getProductCratesByProductId(product.id, (err, rows) => {
                     if (err) return next(new InternalError());
                     if (!rows.length) {
@@ -76,4 +75,40 @@ export class ProductController {
             next(new InternalError(e));
         }
     }
+
+    // POST: Add new Product
+    addProduct(req: Request, res: Response, next: Next) {
+        let product = ProductFactory.toDbObject(req.body);
+        product.productImgFilename = config.productDefaultImage;
+        ProductService.addProduct(product, (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) {
+                ProductService.getById(result.insertId, (err, row) => {
+                    if (err) return next(new InternalError());
+                    res.send(201, ProductFactory.fromObj(row), ContentType.ApplicationJSON);
+                });
+            } else next(new InternalError());
+        });
+    };
+
+    // POST: Add new Size to Product
+    addSizeToProduct(req: Request, res: Response, next: Next) {
+        const productId = parseInt(req.params.productId, 0);
+        ProductService.addSizeToProduct(SizeFactory.toDbObject(req.body, productId), (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) res.send(201);
+            else next(new InternalError());
+        });
+    };
+
+    // POST: Add new CrateType to Product
+    addCrateTypeToProduct(req: Request, res: Response, next: Next) {
+        const productId = parseInt(req.params.productId, 0);
+        const crateTypeId = CrateTypeFactory.fromObj(req.body).id;
+        ProductService.addCrateTypeToProduct(productId, crateTypeId, (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) res.send(201);
+            else next(new InternalError());
+        });
+    };
 }

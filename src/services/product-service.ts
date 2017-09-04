@@ -1,3 +1,6 @@
+import { SizeFactory } from './../shared/models/size/size-factory';
+import { ProductFactory } from './../shared/models/product/product-factory';
+
 let mysql = require('../modules/mysql');
 
 export class ProductService {
@@ -41,6 +44,18 @@ export class ProductService {
         });
     }
 
+    static addProduct(product: any, callback: (err: any, result?: any) => void) {
+        product.productActive = true;
+        product.productDeleted = false;
+        let query = `INSERT INTO products SET ?`;
+        mysql.conn.query(query, product, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static setProductImage(productId: number, imgFilename: string): Promise<any> {
         return new Promise((resolve, reject) => {
             let query = `UPDATE products SET productImgFilename = ? WHERE productId = ?`;
@@ -50,4 +65,25 @@ export class ProductService {
             });
         });
     }
+
+    static addSizeToProduct(size: any, callback: (err: any, result?: any) => void) {
+        size.sizeActive = true;
+        let query = `INSERT INTO product_sizes SET ?`;
+        mysql.conn.query(query, size, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static addCrateTypeToProduct(productId: number, crateTypeId: number, callback: (err: any, result?: any) => void) {
+        let query = `INSERT INTO product_crates SET ?`;
+        mysql.conn.query(query, { refProduct : productId, refCrateType : crateTypeId }, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
 }

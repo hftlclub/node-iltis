@@ -33,4 +33,18 @@ export class SizeFactory {
         return size;
     }
 
+    static toDbObject(obj: Size, refProduct: number): any {
+        let dbEntry: any = {};
+
+        dbEntry.refProduct = refProduct;
+
+        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
+        if (ValueChecker.validNumber(obj.costs)) dbEntry.sizeDeliveryCosts = obj.costs;
+        if (ValueChecker.validNumber(obj.minStock)) dbEntry.sizeMinimumStock = obj.minStock;
+        if (obj.active) dbEntry.sizeActive = obj.active;
+        else dbEntry.sizeActive = false;
+
+        return dbEntry;
+    }
+
 }

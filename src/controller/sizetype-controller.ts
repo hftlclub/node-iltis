@@ -30,4 +30,17 @@ export class SizeTypeController {
             res.send(sizeType, ContentType.ApplicationJSON);
         });
     };
+
+    // POST: Add new SizeType
+    addSizeType(req: Request, res: Response, next: Next) {
+        SizeTypeService.addSizeType(SizeTypeFactory.toDbObject(req.body), (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) {
+                SizeTypeService.getById(result.insertId, (err, row) => {
+                    if (err) return next(new InternalError());
+                    res.send(201, SizeTypeFactory.fromObj(row), ContentType.ApplicationJSON);
+                });
+            } else next(new InternalError());
+        });
+    };
 }

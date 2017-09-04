@@ -35,4 +35,14 @@ export class CrateTypeFactory {
         return crateType;
     }
 
+    static toDbObject(obj: CrateType): any {
+        let dbEntry: any = {};
+
+        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
+        if (obj.description) dbEntry.crateTypeDesc = obj.description;
+        if (ValueChecker.validNumber(obj.slots)) dbEntry.crateTypeSlots = obj.slots;
+
+        return dbEntry;
+    }
+
 }

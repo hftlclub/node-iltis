@@ -1,3 +1,5 @@
+import { UnitFactory } from './../shared/models/unit/unit-factory';
+import { Unit } from './../shared/models/unit/unit';
 let mysql = require('../modules/mysql');
 
 export class UnitService {
@@ -29,6 +31,16 @@ export class UnitService {
                 return callback(null, false);
             }
             return callback(null, rows[0]);
+        });
+    };
+
+    static addUnit(unit: any, callback: (err: any, result?: any) => void) {
+        let query = `INSERT INTO product_units SET ?`;
+        mysql.conn.query(query, unit, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
         });
     };
 }

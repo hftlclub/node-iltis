@@ -1,3 +1,4 @@
+import { CategoryFactory } from './../shared/models/category/category-factory';
 let mysql = require('../modules/mysql');
 
 export class CategoryService {
@@ -29,6 +30,17 @@ export class CategoryService {
                 return callback(null, false);
             }
             return callback(null, rows[0]);
+        });
+    };
+
+    static addCategory(category: any, callback: (err: any, result?: any) => void) {
+        category.categoryDeleted = false;
+        let query = `INSERT INTO product_categories SET ?`;
+        mysql.conn.query(query, category, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
         });
     };
 }
