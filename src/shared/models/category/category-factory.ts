@@ -38,8 +38,7 @@ export class CategoryFactory {
         if (obj.name) dbEntry.categoryName = obj.name;
         if (obj.description) dbEntry.categoryDesc = obj.description;
 
-        if (obj.deleted) dbEntry.categoryDeleted = obj.deleted;
-        else dbEntry.categoryDeleted = false;
+        dbEntry.categoryDeleted = false;
 
         return dbEntry;
     }

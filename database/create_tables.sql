@@ -72,6 +72,7 @@ CREATE TABLE product_units (
     unitId int NOT NULL AUTO_INCREMENT,
     unitShort varchar(8) NULL,
     unitFull varchar(64) NULL,
+    unitDeleted bool NOT NULL,
     UNIQUE INDEX shortUnique (unitShort),
     UNIQUE INDEX fullUnique (unitFull),
     CONSTRAINT product_units_pk PRIMARY KEY (unitId)

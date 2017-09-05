@@ -38,8 +38,7 @@ export class SizeTypeFactory {
         if (ValueChecker.validNumber(obj.amount)) dbEntry.sizeTypeAmount = obj.amount;
         if (obj.description) dbEntry.sizeTypeDesc = obj.description;
 
-        if (obj.deleted) dbEntry.sizeTypeDeleted = obj.deleted;
-        else dbEntry.sizeTypeDeleted = false;
+        dbEntry.sizeTypeDeleted = false;
 
         return dbEntry;
     }

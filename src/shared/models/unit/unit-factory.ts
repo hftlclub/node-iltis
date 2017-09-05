@@ -26,6 +26,9 @@ export class UnitFactory {
             unit.full = obj.unitFull.trim();
         }
 
+        if (obj.deleted) unit.deleted = obj.deleted;
+        else unit.deleted = !!ValueChecker.validBooleanNumber(obj.unitDeleted);
+
         return unit;
     }
 
@@ -34,6 +37,8 @@ export class UnitFactory {
 
         if (obj.short) dbEntry.unitShort = obj.short;
         if (obj.full) dbEntry.unitFull = obj.full;
+
+        dbEntry.unitDeleted = false;
 
         return dbEntry;
     }

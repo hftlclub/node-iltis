@@ -13,9 +13,9 @@ INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VA
 INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (5, 'Beutel', false);
 INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (2, 'Beutel', false);
 
-INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES (null, null);
-INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES ('l', 'Liter');
-INSERT INTO `product_units`(`unitShort`, `unitFull`) VALUES ('kg', 'Kilogramm');
+INSERT INTO `product_units`(`unitShort`, `unitFull`, `unitDeleted`) VALUES (null, null, false);
+INSERT INTO `product_units`(`unitShort`, `unitFull`, `unitDeleted`) VALUES ('l', 'Liter', false);
+INSERT INTO `product_units`(`unitShort`, `unitFull`, `unitDeleted`) VALUES ('kg', 'Kilogramm', false);
 
 INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Afterwork', false, true, false, 'event', 'fa-beer', true);
 INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Privatparty', false, true, false, 'event' , 'fa-glass', true);
