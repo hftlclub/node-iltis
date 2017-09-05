@@ -16,7 +16,6 @@ export class ProductService {
                     ORDER BY categoryId ASC`;
         if (!showInactive) query = query.replace('WHERE productDeleted = false',
             'WHERE productDeleted = false AND productActive = true');
-        console.log(query);
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);

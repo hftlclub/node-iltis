@@ -28,7 +28,7 @@ export class ProductController {
                 rows.forEach(row => {
                     products.find(f => f.id === row.refProduct).crateTypes.push(CrateTypeFactory.fromObj(row));
                 });
-                let showInactiveSizes: boolean = req.query.showInactiveProducts == 'true' ? true : false;                
+                let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;                
                 SizeTypeService.getProductsSizes(showInactiveSizes, (err, rows) => {
                     if (err) return next(new InternalError());
                     rows.forEach(row => {
@@ -48,7 +48,7 @@ export class ProductController {
             if (err) return next(new BadRequestError('Invalid productId'));
             if (!row) next(new NotFoundError('Product does not exist'));
             let product: Product = ProductFactory.fromObj(row);
-            let showInactiveSizes: boolean = req.query.showInactiveProducts == 'true' ? true : false;                            
+            let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;                            
             SizeTypeService.getProductSizesByProductId(product.id, showInactiveSizes, (err, rows) => {
                 if (err) return next(new InternalError());
                 if (rows.length) product.sizes = rows.map(row => SizeFactory.fromObj(row));
