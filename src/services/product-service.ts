@@ -5,15 +5,18 @@ let mysql = require('../modules/mysql');
 
 export class ProductService {
 
-    static getAll(callback: (err: any, rows?: any) => void) {
+    static getAll(showInactive: boolean, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM products
                         INNER JOIN product_categories ON (categoryId = refCategory)) AS productCategories
                     INNER JOIN product_units ON (unitId = refUnit)
-                    WHERE productDeleted = false AND productActive = true                                      
+                    WHERE productDeleted = false
                     ORDER BY categoryId ASC`;
+        if (!showInactive) query = query.replace('WHERE productDeleted = false',
+            'WHERE productDeleted = false AND productActive = true');
+        console.log(query);
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
