@@ -4,7 +4,7 @@ import { Unit } from './unit';
 export class UnitFactory {
 
     static empty(): Unit {
-        return new Unit(0, '', '');
+        return new Unit(0, '', '', false);
     }
 
     static fromObj(obj: any): Unit {
