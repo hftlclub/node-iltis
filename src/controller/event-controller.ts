@@ -50,7 +50,7 @@ export class EventController {
     }
 
     deleteEvent(req: Request, res: Response, next: Next) {
-        let eventId = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req['context'].eventId, 0);
         EventService.deleteEvent(eventId, (err, result) => {
             if (err || !result) return next(new ForbiddenError());
             res.send(204);
@@ -71,7 +71,7 @@ export class EventController {
     };
 
     updateEvent(req: Request, res: Response, next: Next) {
-        let eventId = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req['context'].eventId, 0);
         let updatedEvent: any = EventFactory.toDbObject(req.body);
         updatedEvent.eventId = eventId;
         delete updatedEvent.eventTS;
@@ -85,7 +85,7 @@ export class EventController {
     };
 
     closeEvent(req: Request, res: Response, next: Next) {
-        let eventId = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req['context'].eventId, 0);
         let event: Event;
         EventService.getById(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
@@ -193,7 +193,7 @@ export class EventController {
     };
 
     private addTransfer(req: Request, res: Response, next: Next, isStorageChange: boolean, sign: number) {
-        let eventId = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req['context'].eventId, 0);
         let transfers: any[] = [];
         req.body.forEach(obj => {
             if (obj.change != 0) transfers.push(TransferFactory.toDbObject(obj, eventId, isStorageChange, sign));
@@ -219,7 +219,7 @@ export class EventController {
     }
 
     private deleteTransfers(req: Request, res: Response, next: Next, isStorageChange: boolean) {
-        let eventId = parseInt(req.params.eventId, 0);
+        let eventId = parseInt(req['context'].eventId, 0);
         EventService.getById(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
             if (!EventFactory.fromObj(row).eventType.countAllowed) return next(new ForbiddenError());
