@@ -7,6 +7,7 @@ export class SizeTypeService {
     static getAll(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM size_types
+                    WHERE sizeTypeDeleted = false                                        
                     ORDER BY sizeTypeDesc ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
@@ -40,7 +41,7 @@ export class SizeTypeService {
                         SELECT *
                         FROM size_types
                     INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable
-                    WHERE refProduct = ?
+                    WHERE refProduct = ? AND sizeActive = true
                     ORDER BY sizeTypeAmount DESC`;
         mysql.conn.query(query, productId, (err, rows, fields) => {
             if (err) {
@@ -57,6 +58,7 @@ export class SizeTypeService {
         let query = `SELECT *
                     FROM size_types
                     INNER JOIN product_sizes ON (sizeTypeId = refSizeType)
+                    WHERE sizeActive = true
                     ORDER BY sizeTypeAmount DESC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
@@ -86,6 +88,24 @@ export class SizeTypeService {
         mysql.conn.query(query, [sizeType, sizeType.sizeTypeId], (err, result) => {
             if (err) {
                 return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteSizeType(sizeTypeId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM size_types
+                    WHERE sizeTypeId = ?`;
+        mysql.conn.query(query, sizeTypeId, (err, result) => {
+            if (err) {
+                query = `UPDATE size_types SET sizeTypeDeleted = true
+                WHERE sizeTypeId = ?`;
+                mysql.conn.query(query, sizeTypeId, (err, result) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    return callback(null, result);
+                });
             }
             return callback(null, result);
         });

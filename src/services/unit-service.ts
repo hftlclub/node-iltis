@@ -7,6 +7,7 @@ export class UnitService {
     static getAll(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM product_units
+                    WHERE unitDeleted = false
                     ORDER BY unitId ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
@@ -50,6 +51,24 @@ export class UnitService {
         mysql.conn.query(query, [unit, unit.unitId], (err, result) => {
             if (err) {
                 return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteUnit(unitId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM product_units
+                    WHERE unitId = ?`;
+        mysql.conn.query(query, unitId, (err, result) => {
+            if (err) {
+                query = `UPDATE product_units SET unitDeleted = true
+                WHERE unitId = ?`;
+                mysql.conn.query(query, unitId, (err, result) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    return callback(null, result);
+                });
             }
             return callback(null, result);
         });

@@ -55,4 +55,13 @@ export class CategoryController {
         });
     };
 
+    // DELETE: Remove Category
+    deleteCategory(req: Request, res: Response, next: Next) {
+        let categoryId = parseInt(req.params.categoryId, 0);
+        CategoryService.deleteCategory(categoryId, (err, result) => {
+            if (err || !result) return next(new NotFoundError());
+            res.send(204);
+        });
+    };
+
 }

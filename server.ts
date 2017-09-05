@@ -44,7 +44,6 @@ server.get('/info', serverController.info.bind(serverController));
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
-server.put('/product/:productId/image', productController.uploadImage.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/checkpermission', eventController.checkPermission.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
@@ -84,6 +83,7 @@ server.post('/sizetype', sizeTypeController.addSizeType.bind(sizeTypeController)
 
 // API routes (PUT)
 server.put('/product/:productId', productController.updateProduct.bind(productController));
+server.put('/product/:productId/image', productController.uploadImage.bind(productController));
 server.put('/product/:productId/size/:sizeTypeId', productController.updateSizeOfProduct.bind(productController));
 server.put('/event/:eventId', eventController.updateEvent.bind(eventController));
 server.put('/category/:categoryId', categoryController.updateCategory.bind(categoryController));
@@ -92,7 +92,13 @@ server.put('/cratetype/:crateTypeId', crateTypeController.updateCrateType.bind(c
 server.put('/sizetype/:sizeTypeId', sizeTypeController.updateSizeType.bind(sizeTypeController));
 
 // API routes (DELETE)
+server.del('/product/:productId', productController.deleteProduct.bind(productController));
+server.del('/product/:productId/cratetype/:crateTypeId', productController.deleteCrateTypeOfProduct.bind(productController));
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
+server.del('/category/:categoryId', categoryController.deleteCategory.bind(categoryController));
+server.del('/unit/:unitId', unitController.deleteUnit.bind(unitController));
+server.del('/cratetype/:crateTypeId', crateTypeController.deleteCrateType.bind(crateTypeController));
+server.del('/sizetype/:sizeTypeId', sizeTypeController.deleteSizeType.bind(sizeTypeController));
 
 // serve public folder
 server.get(/^\/*/, serveStatic({

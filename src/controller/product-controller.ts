@@ -1,4 +1,5 @@
-import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
+import { InventoryService } from './../services/inventory-service';
+import { LockedError, NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ImageService } from '../services/image-service';
 import { FileUploadService } from '../services/file-upload-service';
@@ -9,6 +10,7 @@ import { CrateTypeFactory } from '../shared/models/cratetype';
 import { CrateTypeService } from '../services/cratetype-service';
 import { SizeTypeService } from '../services/sizetype-service';
 import { SizeFactory } from '../shared/models/size';
+import { Inventory, InventoryFactory } from '../shared/models/inventory';
 
 const config = require('../../config');
 
@@ -99,9 +101,39 @@ export class ProductController {
         delete updatedProduct.productImgFilename;
         delete updatedProduct.productDeleted;
         delete updatedProduct.productTS;
-        ProductService.updateProduct(updatedProduct, (err, result) => {
-            if (err || !result) return next(new BadRequestError());
-            res.send(204);
+        if (updatedProduct.productActive) {
+            ProductService.updateProduct(updatedProduct, (err, result) => {
+                if (err || !result) return next(new BadRequestError());
+                res.send(204);
+            });
+        } else {
+            InventoryService.getCurrent((err, rows) => {
+                if (err) return next(new InternalError());
+                let inventory: Inventory[] = !rows.length ? [] : rows.map(row => InventoryFactory.fromObj(row));
+                if (inventory.find(i => i.product.id == productId)) return next(new LockedError());
+                else {
+                    ProductService.updateProduct(updatedProduct, (err, result) => {
+                        if (err || !result) return next(new BadRequestError());
+                        res.send(204);
+                    });
+                }
+            });
+        }
+    };
+
+    // PUT: Remove Product
+    deleteProduct(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        InventoryService.getCurrent((err, rows) => {
+            if (err) return next(new InternalError());
+            let inventory: Inventory[] = !rows.length ? [] : rows.map(row => InventoryFactory.fromObj(row));
+            if (inventory.find(i => i.product.id == productId)) return next(new LockedError());
+            else {
+                ProductService.deleteProduct(productId, (err, result) => {
+                    if (err || !result) return next(new NotFoundError());
+                    res.send(204);
+                });
+            }
         });
     };
 
@@ -135,6 +167,16 @@ export class ProductController {
             if (err) return next(new BadRequestError());
             if (result) res.send(201);
             else next(new InternalError());
+        });
+    };
+
+    // DELETE: Remove CrateType of Product
+    deleteCrateTypeOfProduct(req: Request, res: Response, next: Next) {
+        const productId = parseInt(req.params.productId, 0);
+        const crateTypeId = parseInt(req.params.crateTypeId, 0);
+        ProductService.deleteCrateTypeOfProduct(productId, crateTypeId, (err, result) => {
+            if (err || !result) return next(new NotFoundError());
+            res.send(204);
         });
     };
 }

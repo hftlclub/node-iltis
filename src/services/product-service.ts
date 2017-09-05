@@ -12,6 +12,7 @@ export class ProductService {
                         FROM products
                         INNER JOIN product_categories ON (categoryId = refCategory)) AS productCategories
                     INNER JOIN product_units ON (unitId = refUnit)
+                    WHERE productDeleted = false AND productActive = true                                      
                     ORDER BY categoryId ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
@@ -56,6 +57,24 @@ export class ProductService {
         });
     };
 
+    static deleteProduct(productId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM products
+                    WHERE productId = ?`;
+        mysql.conn.query(query, productId, (err, result) => {
+            if (err) {
+                query = `UPDATE products SET productDeleted = true
+                WHERE productId = ?`;
+                mysql.conn.query(query, productId, (err, result) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    return callback(null, result);
+                });
+            }
+            return callback(null, result);
+        });
+    };
+
     static updateProduct(product: any, callback: (err: any, result?: any) => void) {
         let query = `UPDATE products SET ?
                     WHERE productId = ?`;
@@ -95,6 +114,22 @@ export class ProductService {
             if (err) {
                 return callback(err);
             }
+            if (!size.sizeActive) {
+                query = `DELETE FROM product_crates
+                WHERE (product_crates.refProduct, product_crates.refCrateType) IN (
+                    SELECT x.refProduct, x.refCrateType
+                    FROM (SELECT * FROM product_crates) AS x
+                    INNER JOIN crate_types ON (refCrateType = crateTypeId)
+                    INNER JOIN size_types ON (refSizeType = sizeTypeId)
+                    WHERE refProduct = ? AND sizeTypeId = ?
+                )`;
+                mysql.conn.query(query, [size.refProduct, size.refSizeType], (err, result) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    return callback(null, result);
+                });
+            }
             return callback(null, result);
         });
     };
@@ -102,6 +137,17 @@ export class ProductService {
     static addCrateTypeToProduct(productId: number, crateTypeId: number, callback: (err: any, result?: any) => void) {
         let query = `INSERT INTO product_crates SET ?`;
         mysql.conn.query(query, { refProduct : productId, refCrateType : crateTypeId }, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteCrateTypeOfProduct(productId: number, crateTypeId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM product_crates
+                    WHERE refProduct = ? AND refCrateType = ?`;
+        mysql.conn.query(query, [productId, crateTypeId], (err, result) => {
             if (err) {
                 return callback(err);
             }

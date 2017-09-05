@@ -93,4 +93,15 @@ export class CrateTypeService {
             return callback(null, result);
         });
     };
+
+    static deleteCrateType(unitId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM crate_types
+                    WHERE crateTypeId = ?`;
+        mysql.conn.query(query, unitId, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
 }

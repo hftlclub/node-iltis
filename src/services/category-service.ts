@@ -6,6 +6,7 @@ export class CategoryService {
     static getAll(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM product_categories
+                    WHERE categoryDeleted = false
                     ORDER BY categoryId ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
@@ -50,6 +51,24 @@ export class CategoryService {
         mysql.conn.query(query, [category, category.categoryId], (err, result) => {
             if (err) {
                 return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteCategory(categoryId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM product_categories
+                    WHERE categoryId = ?`;
+        mysql.conn.query(query, categoryId, (err, result) => {
+            if (err) {
+                query = `UPDATE product_categories SET categoryDeleted = true
+                WHERE categoryId = ?`;
+                mysql.conn.query(query, categoryId, (err, result) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    return callback(null, result);
+                });
             }
             return callback(null, result);
         });

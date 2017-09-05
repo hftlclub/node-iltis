@@ -54,4 +54,13 @@ export class UnitController {
             res.send(204);
         });
     };
+
+    // DELETE: Remove Unit
+    deleteUnit(req: Request, res: Response, next: Next) {
+        let unitId = parseInt(req.params.unitId, 0);
+        UnitService.deleteUnit(unitId, (err, result) => {
+            if (err || !result) return next(new NotFoundError());
+            res.send(204);
+        });
+    };
 }

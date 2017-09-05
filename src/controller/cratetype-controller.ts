@@ -54,4 +54,13 @@ export class CrateTypeController {
             res.send(204);
         });
     };
+
+    // DELETE: Remove CrateType
+    deleteCrateType(req: Request, res: Response, next: Next) {
+        let crateTypeId = parseInt(req.params.crateTypeId, 0);
+        CrateTypeService.deleteCrateType(crateTypeId, (err, result) => {
+            if (err || !result) return next(new NotFoundError());
+            res.send(204);
+        });
+    };
 }

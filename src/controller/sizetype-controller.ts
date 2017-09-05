@@ -56,4 +56,13 @@ export class SizeTypeController {
             res.send(204);
         });
     };
+
+    // DELETE: Remove SizeType
+    deleteSizeType(req: Request, res: Response, next: Next) {
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        SizeTypeService.deleteSizeType(sizeTypeId, (err, result) => {
+            if (err || !result) return next(new NotFoundError());
+            res.send(204);
+        });
+    };
 }
