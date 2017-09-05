@@ -86,6 +86,10 @@ paths:
           description: Product does not exist
           schema:
             $ref: '#/definitions/RestError'
+        '423':
+          description: Product is still in use
+          schema:
+            $ref: '#/definitions/RestError'
         '500':
           description: Unexpected Internal Server Error
           schema:
@@ -137,11 +141,11 @@ paths:
         '204':
           description: Product has been updated
         '400':
-          description: Invalid data
+          description: Relation does not exist or Invalid Data Error
           schema:
             $ref: '#/definitions/RestError'
-        '404':
-          description: Product does not exist
+        '423':
+          description: Product is still in use
           schema:
             $ref: '#/definitions/RestError'
         '500':
@@ -227,15 +231,15 @@ paths:
           required: true
         - name: Size
           in: body
-          description: Size to be added to product
+          description: Updated size to be of product
           schema:
             $ref: '#/definitions/Size'
           required: true
       responses:
         '204':
           description: Size for the product with the requested Id has been updated
-        '404':
-          description: Relation does not exist
+        '400':
+          description: Relation does not exist or Invalid Data Error
           schema:
             $ref: '#/definitions/RestError'
         '500':
@@ -308,10 +312,6 @@ paths:
           description: Crate-type for the product with the requested Id has been deleted
         '404':
           description: Relation does not exist
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
       parameters:
@@ -391,10 +391,6 @@ paths:
           description: Event with the requested Id has been deleted
         '403':
           description: Event is already closed
-          schema:
-            $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
       parameters:
@@ -841,10 +837,6 @@ paths:
           description: Category does not exist
           schema:
             $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
       parameters:
         - name: categoryId
           in: path
@@ -892,11 +884,7 @@ paths:
         '204':
           description: Category has been updated
         '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '404':
-          description: Category does not exist
+          description: Relation does not exist or Invalid Data Error
           schema:
             $ref: '#/definitions/RestError'
         '500':
@@ -963,10 +951,6 @@ paths:
           description: Unit does not exist
           schema:
             $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
       parameters:
         - name: unitId
           in: path
@@ -1014,11 +998,7 @@ paths:
         '204':
           description: Unit has been updated
         '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '404':
-          description: Unit does not exist
+          description: Relation does not exist or Invalid Data Error
           schema:
             $ref: '#/definitions/RestError'
         '500':
@@ -1081,10 +1061,6 @@ paths:
           description: Crate-type does not exist
           schema:
             $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
       parameters:
         - name: crateTypeId
           in: path
@@ -1132,11 +1108,7 @@ paths:
         '204':
           description: Size-type has been updated
         '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '404':
-          description: Crate-type does not exist
+          description: Relation does not exist or Invalid Data Error
           schema:
             $ref: '#/definitions/RestError'
         '500':
@@ -1199,10 +1171,6 @@ paths:
           description: Size-type does not exist
           schema:
             $ref: '#/definitions/RestError'
-        '500':
-          description: Unexpected Internal Server Error
-          schema:
-            $ref: '#/definitions/RestError'
       parameters:
         - name: sizeTypeId
           in: path
@@ -1250,11 +1218,7 @@ paths:
         '204':
           description: Size-type has been updated
         '400':
-          description: Invalid data
-          schema:
-            $ref: '#/definitions/RestError'
-        '404':
-          description: Size-type does not exist
+          description: Relation does not exist or Invalid Data Error
           schema:
             $ref: '#/definitions/RestError'
         '500':
