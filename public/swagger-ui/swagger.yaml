@@ -246,6 +246,59 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
+    delete:
+      tags:
+        - product
+      summary: Deletes a specific size of a product
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+      responses:
+        '204':
+          description: Size for the product with the requested Id has been updated
+        '403':
+          description: Product size has been used before
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Relation does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size/{sizeTypeId}/deletable':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific size of a product is deletable
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Size for the product is deletable
+        '403':
+          description: Product size has been used before
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
   '/product/{productId}/possible/cratetypes':
     get:
       tags:

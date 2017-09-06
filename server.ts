@@ -45,6 +45,7 @@ server.get('/healthcheck', serverController.healthcheck.bind(serverController));
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
+server.get('/product/:productId/size/:sizeTypeId/deletable', productController.checkDelete.bind(productController));
 server.get('/product/:productId/possible/cratetypes', productController.getPossibleCrateTypesForProduct.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/checkpermission', eventController.checkPermission.bind(eventController));
@@ -95,6 +96,7 @@ server.put('/sizetype/:sizeTypeId', sizeTypeController.updateSizeType.bind(sizeT
 
 // API routes (DELETE)
 server.del('/product/:productId', productController.deleteProduct.bind(productController));
+server.del('/product/:productId/size/:sizeTypeId', productController.deleteSizeOfProduct.bind(productController));
 server.del('/product/:productId/cratetype/:crateTypeId', productController.deleteCrateTypeOfProduct.bind(productController));
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
 server.del('/category/:categoryId', categoryController.deleteCategory.bind(categoryController));

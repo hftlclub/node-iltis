@@ -1,6 +1,5 @@
 import { InventoryService } from './../services/inventory-service';
-import { LockedError, NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
-
+import { LockedError, NotFoundError, BadRequestError, InternalError, Request, Response, Next, ForbiddenError } from 'restify';
 import { ImageService } from '../services/image-service';
 import { FileUploadService } from '../services/file-upload-service';
 import { ContentType } from '../contenttype';
@@ -159,6 +158,31 @@ export class ProductController {
         ProductService.updateSizeOfProduct(updatedSize, (err, result) => {
             if (err || !result) return next(new BadRequestError());
             res.send(204);
+        });
+    };
+
+    // GET: Check if Size of Product is deletable
+    checkDelete(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        ProductService.countOccurrenceOfProductSizes(productId, sizeTypeId, (err, result) => {
+            if (err || !result) return next(new InternalError());
+            if (result.counter !== 0) return next(new ForbiddenError());
+            res.send(200);
+        });
+    };
+
+    // DELETE: Remove Size of Product
+    deleteSizeOfProduct(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        ProductService.countOccurrenceOfProductSizes(productId, sizeTypeId, (err, result) => {
+            if (err || !result) return next(new InternalError());
+            if (result.counter !== 0) return next(new ForbiddenError());
+            ProductService.deleteSizeOfProduct(productId, sizeTypeId, (err, result) => {
+                if (err || !result) return next(new NotFoundError());
+                res.send(204);
+            });
         });
     };
 

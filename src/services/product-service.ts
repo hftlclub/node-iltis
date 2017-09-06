@@ -135,6 +135,35 @@ export class ProductService {
         });
     };
 
+    static countOccurrenceOfProductSizes(productId: number, sizeTypeId: number, callback: (err: any, result?: any) => void) {
+        let query = `SELECT COUNT(*) AS counter
+                    FROM (
+                        SELECT *
+                        FROM transactions
+                        UNION ALL
+                        SELECT *
+                        FROM event_transfers
+                    ) AS combinedTables
+                    WHERE refProduct = ? AND refSizeType = ?`;
+        mysql.conn.query(query, [productId, sizeTypeId], (err, row) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, row[0]);
+        });
+    };
+
+    static deleteSizeOfProduct(productId: number, sizeTypeId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM product_sizes
+                    WHERE refProduct = ? AND refSizeType = ?`;
+        mysql.conn.query(query, [productId, sizeTypeId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static getPossibleCrateTypesForProduct(productId: number, callback: (err: any, result?: any) => void) {
         let query = `SELECT *
                     FROM (
@@ -145,8 +174,7 @@ export class ProductService {
                     INNER JOIN size_types ON (sizeTypeId = refSizeType)
                     WHERE (refProduct, crateTypeId) NOT IN (
                         SELECT *
-                        FROM product_crates
-                    )`;
+                        FROM product_crates)`;
         mysql.conn.query(query, productId, (err, result) => {
             if (err) {
                 return callback(err);
