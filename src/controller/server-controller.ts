@@ -1,5 +1,5 @@
-import { Request, Response, Next } from 'restify';
-
+import { Request, Response, Next, ServiceUnavailableError } from 'restify';
+import { HelperService } from './../services/helper-service';
 import { ContentType } from '../contenttype';
 
 let pjson = require('../../package.json');
@@ -14,5 +14,12 @@ export class ServerController {
         };
         res.send(info, ContentType.ApplicationJSON);
         next();
+    }
+
+    healthcheck(req: Request, res: Response, next: Next) {
+        HelperService.healthcheck(healthy => {
+            if (!healthy) return next(new ServiceUnavailableError());
+            res.send(200);
+        });
     }
 }

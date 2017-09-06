@@ -40,6 +40,7 @@ server.use(queryParser());
 
 // other routes
 server.get('/info', serverController.info.bind(serverController));
+server.get('/healthcheck', serverController.healthcheck.bind(serverController));
 
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
