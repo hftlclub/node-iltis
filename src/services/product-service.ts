@@ -135,6 +135,22 @@ export class ProductService {
         });
     };
 
+    static getPossibleCrateTypesForProduct(productId: number, callback: (err: any, result?: any) => void) {
+        let query = `SELECT *
+                    FROM (
+                        SELECT crateTypeId, crate_types.refSizeType, crateTypeDesc, crateTypeSlots
+                        FROM product_sizes
+                        INNER JOIN crate_types ON (product_sizes.refSizeType = crate_types.refSizeType)
+                        WHERE refProduct = ?) AS possibleCrateTypes
+                    INNER JOIN size_types ON (sizeTypeId = refSizeType)`;
+        mysql.conn.query(query, productId, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
     static addCrateTypeToProduct(productId: number, crateTypeId: number, callback: (err: any, result?: any) => void) {
         let query = `INSERT INTO product_crates SET ?`;
         mysql.conn.query(query, { refProduct : productId, refCrateType : crateTypeId }, (err, result) => {

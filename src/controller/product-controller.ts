@@ -6,7 +6,7 @@ import { FileUploadService } from '../services/file-upload-service';
 import { ContentType } from '../contenttype';
 import { Product, ProductFactory } from '../shared/models/product';
 import { ProductService } from '../services/product-service';
-import { CrateTypeFactory } from '../shared/models/cratetype';
+import { CrateType, CrateTypeFactory } from '../shared/models/cratetype';
 import { CrateTypeService } from '../services/cratetype-service';
 import { SizeTypeService } from '../services/sizetype-service';
 import { SizeFactory } from '../shared/models/size';
@@ -28,7 +28,7 @@ export class ProductController {
                 rows.forEach(row => {
                     products.find(f => f.id === row.refProduct).crateTypes.push(CrateTypeFactory.fromObj(row));
                 });
-                let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;                
+                let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;
                 SizeTypeService.getProductsSizes(showInactiveSizes, (err, rows) => {
                     if (err) return next(new InternalError());
                     rows.forEach(row => {
@@ -48,7 +48,7 @@ export class ProductController {
             if (err) return next(new BadRequestError('Invalid productId'));
             if (!row) next(new NotFoundError('Product does not exist'));
             let product: Product = ProductFactory.fromObj(row);
-            let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;                            
+            let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;
             SizeTypeService.getProductSizesByProductId(product.id, showInactiveSizes, (err, rows) => {
                 if (err) return next(new InternalError());
                 if (rows.length) product.sizes = rows.map(row => SizeFactory.fromObj(row));
@@ -142,7 +142,7 @@ export class ProductController {
 
     // POST: Add new Size to Product
     addSizeToProduct(req: Request, res: Response, next: Next) {
-        const productId = parseInt(req.params.productId, 0);
+        let productId = parseInt(req.params.productId, 0);
         ProductService.addSizeToProduct(SizeFactory.toDbObject(req.body, productId), (err, result) => {
             if (err) return next(new BadRequestError());
             if (result) res.send(201);
@@ -162,10 +162,21 @@ export class ProductController {
         });
     };
 
+    // GET: Return all possible CrateTypes for a certain product
+    getPossibleCrateTypesForProduct(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        ProductService.getPossibleCrateTypesForProduct(productId, (err, rows) => {
+            if (err) return next(new InternalError());
+            if (!rows.length) res.send([], ContentType.ApplicationJSON);
+            let crateTypes: CrateType[] = rows.map(row => CrateTypeFactory.fromObj(row));
+            res.send(crateTypes, ContentType.ApplicationJSON);
+        });
+    };
+
     // POST: Add new CrateType to Product
     addCrateTypeToProduct(req: Request, res: Response, next: Next) {
-        const productId = parseInt(req.params.productId, 0);
-        const crateTypeId = CrateTypeFactory.fromObj(req.body).id;
+        let productId = parseInt(req.params.productId, 0);
+        let crateTypeId = CrateTypeFactory.fromObj(req.body).id;
         ProductService.addCrateTypeToProduct(productId, crateTypeId, (err, result) => {
             if (err) return next(new BadRequestError());
             if (result) res.send(201);
@@ -175,8 +186,8 @@ export class ProductController {
 
     // DELETE: Remove CrateType of Product
     deleteCrateTypeOfProduct(req: Request, res: Response, next: Next) {
-        const productId = parseInt(req.params.productId, 0);
-        const crateTypeId = parseInt(req.params.crateTypeId, 0);
+        let productId = parseInt(req.params.productId, 0);
+        let crateTypeId = parseInt(req.params.crateTypeId, 0);
         ProductService.deleteCrateTypeOfProduct(productId, crateTypeId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
             res.send(204);

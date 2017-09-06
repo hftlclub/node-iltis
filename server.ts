@@ -45,6 +45,7 @@ server.get('/healthcheck', serverController.healthcheck.bind(serverController));
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
+server.get('/product/:productId/possible/cratetypes', productController.getPossibleCrateTypesForProduct.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/checkpermission', eventController.checkPermission.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
