@@ -138,11 +138,15 @@ export class ProductService {
     static getPossibleCrateTypesForProduct(productId: number, callback: (err: any, result?: any) => void) {
         let query = `SELECT *
                     FROM (
-                        SELECT crateTypeId, crate_types.refSizeType, crateTypeDesc, crateTypeSlots
+                        SELECT refProduct, crateTypeId, crate_types.refSizeType, crateTypeDesc, crateTypeSlots
                         FROM product_sizes
                         INNER JOIN crate_types ON (product_sizes.refSizeType = crate_types.refSizeType)
                         WHERE refProduct = ?) AS possibleCrateTypes
-                    INNER JOIN size_types ON (sizeTypeId = refSizeType)`;
+                    INNER JOIN size_types ON (sizeTypeId = refSizeType)
+                    WHERE (refProduct, crateTypeId) NOT IN (
+                        SELECT *
+                        FROM product_crates
+                    )`;
         mysql.conn.query(query, productId, (err, result) => {
             if (err) {
                 return callback(err);
