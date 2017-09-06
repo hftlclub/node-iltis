@@ -99,7 +99,6 @@ export class ProductService {
     }
 
     static addSizeToProduct(size: any, callback: (err: any, result?: any) => void) {
-        size.sizeActive = true;
         let query = `INSERT INTO product_sizes SET ?`;
         mysql.conn.query(query, size, (err, result) => {
             if (err) {
