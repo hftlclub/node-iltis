@@ -41,10 +41,10 @@ export class SizeTypeService {
                         SELECT *
                         FROM size_types
                     INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable
-                    WHERE refProduct = ?
-                    ORDER BY sizeTypeAmount DESC`;
-        if (!showInactive) query = query.replace('WHERE refProduct = ?',
-            'WHERE refProduct = ? AND sizeActive = true');
+                    WHERE refProduct = ?`;
+        if (!showInactive) { query += ' AND sizeActive = true'; }
+        query += ' ORDER BY sizeTypeAmount DESC';
+
         mysql.conn.query(query, productId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -59,10 +59,10 @@ export class SizeTypeService {
     static getProductsSizes(showInactive: boolean, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM size_types
-                    INNER JOIN product_sizes ON (sizeTypeId = refSizeType)
-                    ORDER BY sizeTypeAmount DESC`;
-        if (!showInactive) query = query.replace('ORDER BY sizeTypeAmount DESC',
-            'WHERE sizeActive = true ORDER BY sizeTypeAmount DESC');
+                    INNER JOIN product_sizes ON (sizeTypeId = refSizeType)`;
+        if (!showInactive) { query += ' AND sizeActive = true'; }
+        query += ' ORDER BY sizeTypeAmount DESC';
+
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
