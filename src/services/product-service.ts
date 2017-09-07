@@ -170,7 +170,7 @@ export class ProductService {
                         SELECT refProduct, crateTypeId, crate_types.refSizeType, crateTypeDesc, crateTypeSlots
                         FROM product_sizes
                         INNER JOIN crate_types ON (product_sizes.refSizeType = crate_types.refSizeType)
-                        WHERE refProduct = ?) AS possibleCrateTypes
+                        WHERE refProduct = ? AND sizeActive = true) AS possibleCrateTypes
                     INNER JOIN size_types ON (sizeTypeId = refSizeType)
                     WHERE (refProduct, crateTypeId) NOT IN (
                         SELECT *
