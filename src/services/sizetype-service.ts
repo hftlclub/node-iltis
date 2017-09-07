@@ -60,7 +60,7 @@ export class SizeTypeService {
         let query = `SELECT *
                     FROM size_types
                     INNER JOIN product_sizes ON (sizeTypeId = refSizeType)`;
-        if (!showInactive) { query += ' AND sizeActive = true'; }
+        if (!showInactive) { query += ' WHERE sizeActive = true'; }
         query += ' ORDER BY sizeTypeAmount DESC';
 
         mysql.conn.query(query, (err, rows, fields) => {
