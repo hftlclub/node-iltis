@@ -42,7 +42,6 @@ export class ProductController {
     // GET: Return single product
     getById(req: Request, res: Response, next: Next) {
         let productId = parseInt(req.params.productId, 0);
-
         ProductService.getById(productId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid productId'));
             if (!row) next(new NotFoundError('Product does not exist'));

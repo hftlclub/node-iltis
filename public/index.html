@@ -22,7 +22,9 @@
     <h3>GET-Examples</h3>
     <ul>
       <li><a style="color: rgb(0,200,0)" href="/products">GET /products</a></li>
-      <li><a style="color: rgb(0,200,0)" href="/product/1">GET /product/{productId}</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/products?showInactiveProducts=true">GET /products?showInactiveProducts=true</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/product/1">GET /product/{productId}</a></li>      
+      <li><a style="color: rgb(0,200,0)" href="/product/1?showInactiveSizes=true">GET /product/{productId}?showInactiveSizes=true</a></li>
       <li><a style="color: rgb(0,200,0)" href="/product/3/size/6/deletable">GET /product/{productId}/size/{sizeTypeId}/deletable</a></li>
       <li><a style="color: rgb(0,200,0)" href="/product/1/possible/cratetypes">GET /product/{productId}/possible/cratetypes</a></li>
       <li><a style="color: rgb(0,200,0)" href="/events">GET /events</a></li>
@@ -35,6 +37,7 @@
       <li><a style="color: rgb(0,200,0)" href="/inventory">GET /inventory</a></li>
       <li><a style="color: rgb(0,200,0)" href="/inventory/2">GET /inventory/{eventId}</a></li>
       <li><a style="color: rgb(0,200,0)" href="/categories">GET /categories</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/categories?productCount=true">GET /categories?productCount=true</a></li>      
       <li><a style="color: rgb(0,200,0)" href="/category/1">GET /category/{categoryId}</a></li>
       <li><a style="color: rgb(0,200,0)" href="/units">GET /units</a></li>
       <li><a style="color: rgb(0,200,0)" href="/unit/2">GET /unit/{unitId}</a></li>

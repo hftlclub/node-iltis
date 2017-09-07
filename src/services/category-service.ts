@@ -3,12 +3,18 @@ let mysql = require('../modules/mysql');
 
 export class CategoryService {
 
-    static getAll(callback: (err: any, rows?: any) => void) {
-        let query = `SELECT *
+    static getAll(productCount: boolean, callback: (err: any, rows?: any) => void) {
+        let queryCountFalse = `SELECT *
                     FROM product_categories
                     WHERE categoryDeleted = false
                     ORDER BY categoryId ASC`;
-        mysql.conn.query(query, (err, rows, fields) => {
+        let queryCountTrue = `SELECT categoryId, categoryName, categoryDesc, categoryDeleted, COUNT(*) productCount
+                    FROM product_categories
+                    INNER JOIN products ON (categoryId = refCategory)
+                    WHERE categoryDeleted = false
+                    GROUP BY categoryId
+                    ORDER BY categoryId ASC`;
+        mysql.conn.query(productCount ? queryCountTrue : queryCountFalse, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }

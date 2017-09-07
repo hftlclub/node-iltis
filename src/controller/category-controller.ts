@@ -9,7 +9,8 @@ export class CategoryController {
 
     // GET: Return all Categories
     getAll(req: Request, res: Response, next: Next) {
-        CategoryService.getAll((err, rows) => {
+        let productCount: boolean = req.query.productCount == 'true' ? true : false;
+        CategoryService.getAll(productCount, (err, rows) => {
             if (err) return next(new InternalError());
             if (!rows.length) res.send([], ContentType.ApplicationJSON);
             let categories: Category[] = rows.map(row => CategoryFactory.fromObj(row));
