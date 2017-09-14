@@ -8,12 +8,15 @@ let fs = require('fs');
 export class ServerController {
 
     info(req: Request, res: Response, next: Next) {
-        let info = {
-            version: pjson.version,
-            time: process.uptime()
-        };
-        res.send(info, ContentType.ApplicationJSON);
-        next();
+        require('child_process').exec('git rev-parse HEAD', (err, stdout) => {
+            let info = {
+                version: pjson.version,
+                commit: stdout,
+                time: process.uptime()
+            };
+            res.send(info, ContentType.ApplicationJSON);
+            next();
+        });
     }
 
     healthcheck(req: Request, res: Response, next: Next) {

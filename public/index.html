@@ -15,6 +15,11 @@
     <h1>ILTIS API</h1>
     <img src="images/steckerlogo.svg" width="250">
 
+    <h3>Backend Info</h3>
+    Version: &nbsp;&nbsp; <span id="version"></span><br>
+    Git-Commit: <span id="commit"></span>
+    Uptime: &nbsp;&nbsp;&nbsp; <span id="time"></span>
+
     <h3>REST-Documentation</h3>
     Explorable API documentation: <a href="/swagger-ui/#">Swagger-UI</a><br>
     OpenAPI Specification: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/swagger-ui/swagger.yaml">swagger.yaml</a><br>
@@ -56,5 +61,25 @@
     Frontend: &nbsp;<a href="https://github.com/hftlclub/ng-iltis">https://github.com/hftlclub/ng-iltis</a><br>
     Backend: &nbsp; <a href="https://github.com/hftlclub/node-iltis">https://github.com/hftlclub/node-iltis</a><br>
     
+    <script>
+      var format = function (seconds) {
+        var pad = function (s) {
+          return (s < 10 ? '0' : '') + s;
+        }
+        var hours = Math.floor(seconds / (60 * 60));
+        var minutes = Math.floor(seconds % (60 * 60) / 60);
+        var seconds = Math.floor(seconds % 60);
+        return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+      }
+      var r = new XMLHttpRequest();
+      r.addEventListener("load", function () {
+        var json = JSON.parse(this.responseText);
+        document.getElementById('version').innerText = json.version;
+        document.getElementById('commit').innerText = json.commit;
+        document.getElementById('time').innerText = format(json.time);
+      });
+      r.open("GET", "/info");
+      r.send();
+  </script>
   </body>
 </html>
