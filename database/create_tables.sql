@@ -44,6 +44,15 @@ CREATE TABLE events (
     CONSTRAINT events_pk PRIMARY KEY (eventId)
 );
 
+CREATE TABLE event_notes (
+   eventNoteId int NOT NULL AUTO_INCREMENT,
+   refEvent int NOT NULL,
+   eventNoteText text NOT NULL,
+   eventNoteTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   eventNoteUser varchar(64) NOT NULL DEFAULT 'Anonymous',
+   CONSTRAINT event_notes_pk PRIMARY KEY (eventNoteId)
+);
+
 CREATE TABLE product_categories (
     categoryId int NOT NULL AUTO_INCREMENT,
     categoryName varchar(128) NOT NULL,
@@ -128,6 +137,10 @@ ALTER TABLE event_transfers ADD CONSTRAINT event_transfers_size_types FOREIGN KE
 
 ALTER TABLE events ADD CONSTRAINT events_event_types FOREIGN KEY events_event_types (refEventType)
     REFERENCES event_types (eventTypeId);
+
+ALTER TABLE event_notes ADD CONSTRAINT event_notes_events FOREIGN KEY event_notes_events (refEvent)
+   REFERENCES events (eventId)
+   ON DELETE CASCADE;
 
 ALTER TABLE product_crates ADD CONSTRAINT product_crates_crate_types FOREIGN KEY product_crates_crate_types (refCrateType)
     REFERENCES crate_types (crateTypeId)

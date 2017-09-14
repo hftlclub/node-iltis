@@ -1,6 +1,7 @@
 import { ValueChecker } from '../../valuechecker';
 import { Event } from './event';
 import { EventTypeFactory } from '../eventtype';
+import { EventNoteFactory } from '../eventnote';
 
 export class EventFactory {
 
@@ -60,6 +61,13 @@ export class EventFactory {
 
         if (obj.countedStorage) event.countedStorage = obj.countedStorage;
         else event.countedStorage = !!ValueChecker.validBooleanNumber(obj.eventCountedStorage);
+
+        if (obj.note) event.note = EventNoteFactory.fromObj(obj.note);
+        else if (ValueChecker.validNumber(obj.eventNoteId)) {
+            event.note = EventNoteFactory.fromObj(obj);
+        }
+
+        if (obj.noteCount) event.noteHistoryCount = obj.noteCount;
 
         return event;
     }

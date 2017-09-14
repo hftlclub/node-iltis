@@ -864,6 +864,51 @@ paths:
           in: path
           type: number
           required: true
+  '/event/{eventId}/note':
+    post:
+      tags:
+        - event
+      summary: Get all notes of a specific event
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+        - name: EventNote
+          in: body
+          description: Note to be stored
+          schema:
+            $ref: '#/definitions/EventNote'
+          required: true
+      responses:
+        '201':
+          description: Note has been created
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/note/history':
+    get:
+      tags:
+        - event
+      summary: Get all notes of a specific event
+      responses:
+        '200':
+          description: List of all notes of an event with the requested Id
+          schema:
+            title: Notes
+            type: array
+            items:
+              $ref: '#/definitions/EventNote'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
   /inventory:
     get:
       tags:
@@ -1557,6 +1602,12 @@ definitions:
       countedStorage:
         type: boolean
         example: false
+      note:
+        $ref: '#/definitions/EventNote'
+      noteHistoryCount:
+        type: number
+        format: int32
+        example: 3
   Transaction:
     type: object
     description: Contains the inventory-changes of a product related to an event
@@ -1674,6 +1725,29 @@ definitions:
       countAllowed:
         type: boolean
         example: true
+  EventNote:
+    type: object
+    description: Contains all information about an event-type
+    required:
+      - text
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 4
+      text:
+        type: string
+        example: This is a note
+      timestamp:
+        type: string
+        format: date-time
+        example: '2017-03-01T00:00:00.000Z'
+        description: >-
+          date-time as defined by RFC3339 (http://www.ietf.org/rfc/rfc3339.txt)
+          - like new Date().toISOString();
+      user:
+        type: string
+        example: Anonymous
   SizeType:
     type: object
     description: Contains all information about a size-type

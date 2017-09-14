@@ -10,6 +10,7 @@ import { SizeTypeController } from './src/controller/sizetype-controller';
 import { CrateTypeController } from './src/controller/cratetype-controller';
 import { EventController } from './src/controller/event-controller';
 import { EventTypeController } from './src/controller/eventtype-controller';
+import { EventNoteController } from './src/controller/eventnote-controller';
 import { InventoryController } from './src/controller/inventory-controller';
 import { TinyJson } from './src/shared/tinyjson';
 
@@ -23,6 +24,7 @@ const sizeTypeController = new SizeTypeController();
 const crateTypeController = new CrateTypeController();
 const eventController = new EventController();
 const eventTypeController = new EventTypeController();
+const eventNoteController = new EventNoteController();
 const inventoryController = new InventoryController();
 const inventoryTypeController = new InventoryController();
 
@@ -58,6 +60,7 @@ server.get('/event/:eventId/transfers', eventController.getEventTransfers.bind(e
 server.get('/event/:eventId/transactions', eventController.getEventTransactions.bind(eventController));
 server.get('/event/:eventId/calculation', eventController.getCalculation.bind(eventController));
 server.get('/event/:eventId/costs', eventController.getTransferCosts.bind(eventController));
+server.get('/event/:eventId/note/history', eventNoteController.getEventNoteHistory.bind(eventNoteController));
 server.get('/eventtypes', eventTypeController.getAll.bind(eventTypeController));
 server.get('/eventtype/:eventTypeId', eventTypeController.getById.bind(eventTypeController));
 server.get('/categories', categoryController.getAll.bind(categoryController));
@@ -82,6 +85,7 @@ server.post('/event/:eventId/transfers/storage/in', eventController.addTransferS
 server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));
 server.post('/event/:eventId/transfers/storage/count', eventController.countStorage.bind(eventController));
 server.post('/event/:eventId/transfers/counter/count', eventController.countCounter.bind(eventController));
+server.post('/event/:eventId/note', eventNoteController.addEventNote.bind(eventNoteController));
 server.post('/category', categoryController.addCategory.bind(categoryController));
 server.post('/unit', unitController.addUnit.bind(unitController));
 server.post('/cratetype', crateTypeController.addCrateType.bind(crateTypeController));

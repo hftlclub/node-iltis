@@ -97,9 +97,15 @@ export class EventService {
 
     static getAll(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
-                    FROM event_types
-                    INNER JOIN events ON(eventTypeId = refEventType)
-                    ORDER BY eventDT DESC`;
+                    FROM (
+                        SELECT *
+                        FROM event_types
+                        INNER JOIN events ON(eventTypeId = refEventType)) AS event
+                    LEFT JOIN (SELECT *
+                    FROM event_notes en1, (SELECT refEvent AS 'dummy', COUNT(*) AS 'noteCount'
+                        FROM event_notes
+                        GROUP BY refEvent) en3
+                    WHERE eventNoteTS = (SELECT MAX(eventNoteTS) FROM event_notes en2 WHERE en1.refEvent = en2.refEvent) AND dummy = refEvent) AS note ON (eventId = refEvent)`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -129,10 +135,18 @@ export class EventService {
 
     static getById(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
-                    FROM event_types
-                    INNER JOIN events ON(eventTypeId = refEventType)
-                    WHERE eventId = ?`;
-        mysql.conn.query(query, eventId, (err, rows, fields) => {
+                    FROM (
+                        SELECT *
+                        FROM event_types
+                        INNER JOIN events ON(eventTypeId = refEventType)
+                        WHERE eventId = ? ) AS event
+                    LEFT JOIN (SELECT *
+                    FROM event_notes en1, (SELECT COUNT(*) AS 'noteCount'
+                        FROM event_notes
+                        WHERE refEvent = ?
+                        GROUP BY refEvent) en3
+                    WHERE eventNoteTS = (SELECT MAX(eventNoteTS) FROM event_notes en2 WHERE en1.refEvent = en2.refEvent) AND refEvent = ?) AS note ON (eventId = refEvent)`;
+        mysql.conn.query(query, [eventId, eventId, eventId], (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
