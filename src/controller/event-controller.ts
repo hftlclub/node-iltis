@@ -257,7 +257,7 @@ export class EventController {
             }
             transfers = transfers.map(t => {
                 let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.refProduct && inv.sizeType.id === t.refSizeType));
-                t[tKey] -= inventoryForTransfer[iKey];
+                if (inventoryForTransfer) t[tKey] -= inventoryForTransfer[iKey];
                 return t;
             });
             transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter);
