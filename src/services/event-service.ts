@@ -240,6 +240,30 @@ export class EventService {
         });
     };
 
+    static countCurrentTransfersByProductId(productId: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT COUNT(*) AS counter
+                    FROM event_transfers
+                    WHERE refProduct = ?`;
+        mysql.conn.query(query, productId, (err, row, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, row[0]);
+        });
+    };
+
+    static countCurrentTransfersByProductAndSizeTypeId(productId: number, sizeTypeId: number, callback: (err: any, rows?: any) => void) {
+        let query = `SELECT COUNT(*) AS counter
+                    FROM event_transfers
+                    WHERE refProduct = ? AND refSizeType = ?`;
+        mysql.conn.query(query, [productId, sizeTypeId], (err, row, fields) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, row[0]);
+        });
+    };
+
     static getTransactionsByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (

@@ -1,3 +1,4 @@
+import { EventService } from './../services/event-service';
 import { InventoryService } from './../services/inventory-service';
 import { LockedError, NotFoundError, BadRequestError, InternalError, Request, Response, Next, ForbiddenError } from 'restify';
 import { ImageService } from '../services/image-service';
@@ -113,9 +114,14 @@ export class ProductController {
                 let inventory: Inventory[] = !rows.length ? [] : rows.map(row => InventoryFactory.fromObj(row));
                 if (inventory.find(i => i.product.id == productId)) return next(new LockedError());
                 else {
-                    ProductService.updateProduct(updatedProduct, (err, result) => {
-                        if (err || !result) return next(new BadRequestError());
-                        res.send(204);
+                    EventService.countCurrentTransfersByProductId(productId, (err, result) => {
+                        if (err || !result) return next(new InternalError());
+                        if (result.counter !== 0) return next(new LockedError());
+                        res.send(200);
+                        ProductService.updateProduct(updatedProduct, (err, result) => {
+                            if (err || !result) return next(new BadRequestError());
+                            res.send(204);
+                        });
                     });
                 }
             });
@@ -130,9 +136,14 @@ export class ProductController {
             let inventory: Inventory[] = !rows.length ? [] : rows.map(row => InventoryFactory.fromObj(row));
             if (inventory.find(i => i.product.id == productId)) return next(new LockedError());
             else {
-                ProductService.deleteProduct(productId, (err, result) => {
-                    if (err || !result) return next(new NotFoundError());
-                    res.send(204);
+                EventService.countCurrentTransfersByProductId(productId, (err, result) => {
+                    if (err || !result) return next(new InternalError());
+                    if (result.counter !== 0) return next(new LockedError());
+                    res.send(200);
+                    ProductService.deleteProduct(productId, (err, result) => {
+                        if (err || !result) return next(new NotFoundError());
+                        res.send(204);
+                    });
                 });
             }
         });
@@ -161,13 +172,49 @@ export class ProductController {
     };
 
     // GET: Check if Size of Product is deletable
-    checkDelete(req: Request, res: Response, next: Next) {
+    isProductSizeDeletable(req: Request, res: Response, next: Next) {
         let productId = parseInt(req.params.productId, 0);
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         ProductService.countOccurrenceOfProductSizes(productId, sizeTypeId, (err, result) => {
             if (err || !result) return next(new InternalError());
             if (result.counter !== 0) return next(new ForbiddenError());
             res.send(200);
+        });
+    };
+
+    // GET: Check if Size of Product is deactivatable
+    isProductSizeUnused(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        InventoryService.getCurrent((err, rows) => {
+            if (err) return next(new InternalError());
+            let inventory: Inventory[] = !rows.length ? [] : rows.map(row => InventoryFactory.fromObj(row));
+            if (inventory.find(i => i.product.id == productId && i.sizeType.id == sizeTypeId)) return next(new ForbiddenError());
+            else {
+                EventService.countCurrentTransfersByProductAndSizeTypeId(productId, sizeTypeId, (err, result) => {
+                    if (err || !result) return next(new InternalError());
+                    if (result.counter !== 0) return next(new ForbiddenError());
+                    res.send(200);
+                });
+            }
+        });
+        res.send(200);
+    };
+
+    // GET: Check if Product is deletable or deactivatable
+    isProductUnused(req: Request, res: Response, next: Next) {
+        let productId = parseInt(req.params.productId, 0);
+        InventoryService.getCurrent((err, rows) => {
+            if (err) return next(new InternalError());
+            let inventory: Inventory[] = !rows.length ? [] : rows.map(row => InventoryFactory.fromObj(row));
+            if (inventory.find(i => i.product.id == productId)) return next(new ForbiddenError());
+            else {
+                EventService.countCurrentTransfersByProductId(productId, (err, result) => {
+                    if (err || !result) return next(new InternalError());
+                    if (result.counter !== 0) return next(new ForbiddenError());
+                    res.send(200);
+                });
+            }
         });
     };
 

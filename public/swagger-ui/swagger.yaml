@@ -152,6 +152,48 @@ paths:
           description: Unexpected Internal Server Error
           schema:
             $ref: '#/definitions/RestError'
+  '/product/{productId}/deletable':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific product is deletable
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Product is deletable
+        '403':
+          description: Product is used
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/unused':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific a product is unused
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Product is unused
+        '403':
+          description: Product is used
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
   '/product/{productId}/image':
     put:
       tags:
@@ -293,6 +335,31 @@ paths:
           description: Size for the product is deletable
         '403':
           description: Product size has been used before
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size/{sizeTypeId}/unused':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific size of a product is unused
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Size for the product is unused
+        '403':
+          description: Product size is used
           schema:
             $ref: '#/definitions/RestError'
         '500':

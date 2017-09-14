@@ -45,7 +45,10 @@ server.get('/healthcheck', serverController.healthcheck.bind(serverController));
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
-server.get('/product/:productId/size/:sizeTypeId/deletable', productController.checkDelete.bind(productController));
+server.get('/product/:productId/deletable', productController.isProductUnused.bind(productController));
+server.get('/product/:productId/unused', productController.isProductUnused.bind(productController));
+server.get('/product/:productId/size/:sizeTypeId/deletable', productController.isProductSizeDeletable.bind(productController));
+server.get('/product/:productId/size/:sizeTypeId/unused', productController.isProductSizeUnused.bind(productController));
 server.get('/product/:productId/possible/cratetypes', productController.getPossibleCrateTypesForProduct.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/checkpermission', eventController.checkPermission.bind(eventController));
