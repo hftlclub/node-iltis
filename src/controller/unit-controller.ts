@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Unit, UnitFactory } from '../shared/models/unit';
@@ -7,8 +7,8 @@ import { UnitService } from '../services/unit-service';
 
 export class UnitController {
 
-    // GET: Return all units
-    getAll(req, res, next) {
+    // GET: Return all Units
+    getAll(req: Request, res: Response, next: Next) {
         UnitService.getAll((err, rows) => {
             if (err) return next(new InternalError());
             if (!rows.length) res.send([], ContentType.ApplicationJSON);
@@ -17,17 +17,50 @@ export class UnitController {
         });
     };
 
-    // GET: Return single unit
-    getById(req, res, next) {
+    // GET: Return single Unit
+    getById(req: Request, res: Response, next: Next) {
         let unitId = parseInt(req.params.unitId, 0);
-        let unit: Unit = UnitFactory.empty();
+
         UnitService.getById(unitId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid unitId'));
             if (!row) {
                 next(new NotFoundError('Unit does not exist'));
             }
-            unit = UnitFactory.fromObj(row);
+            let unit: Unit = UnitFactory.fromObj(row);
             res.send(unit, ContentType.ApplicationJSON);
+        });
+    };
+
+    // POST: Add new Unit
+    addUnit(req: Request, res: Response, next: Next) {
+        UnitService.addUnit(UnitFactory.toDbObject(req.body), (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) {
+                UnitService.getById(result.insertId, (err, row) => {
+                    if (err) return next(new InternalError());
+                    res.send(201, UnitFactory.fromObj(row), ContentType.ApplicationJSON);
+                });
+            } else next(new InternalError());
+        });
+    };
+
+    // PUT: Update Unit
+    updateUnit(req: Request, res: Response, next: Next) {
+        let unitId = parseInt(req.params.unitId, 0);
+        let updatedUnit: any = UnitFactory.toDbObject(req.body);
+        updatedUnit.unitId = unitId;
+        UnitService.updateUnit(updatedUnit, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
+        });
+    };
+
+    // DELETE: Remove Unit
+    deleteUnit(req: Request, res: Response, next: Next) {
+        let unitId = parseInt(req.params.unitId, 0);
+        UnitService.deleteUnit(unitId, (err, result) => {
+            if (err || !result) return next(new NotFoundError());
+            res.send(204);
         });
     };
 }

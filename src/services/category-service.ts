@@ -2,11 +2,18 @@ import { MySQLConnection as mysql } from '../modules/mysql';
 
 export class CategoryService {
 
-    static getAll(callback: (err: any, rows?: any) => void) {
-        let query = `SELECT *
+    static getAll(productCount: boolean, callback: (err: any, rows?: any) => void) {
+        let queryCountFalse = `SELECT *
                     FROM product_categories
+                    WHERE categoryDeleted = false
                     ORDER BY categoryId ASC`;
-        mysql.conn.query(query, (err, rows, fields) => {
+        let queryCountTrue = `SELECT categoryId, categoryName, categoryDesc, categoryDeleted, COUNT(*) productCount
+                    FROM product_categories
+                    INNER JOIN products ON (categoryId = refCategory)
+                    WHERE categoryDeleted = false
+                    GROUP BY categoryId
+                    ORDER BY categoryId ASC`;
+        mysql.conn.query(productCount ? queryCountTrue : queryCountFalse, (err, rows, fields) => {
             if (err) {
                 return callback(err);
             }
@@ -29,6 +36,46 @@ export class CategoryService {
                 return callback(null, false);
             }
             return callback(null, rows[0]);
+        });
+    };
+
+    static addCategory(category: any, callback: (err: any, result?: any) => void) {
+        category.categoryDeleted = false;
+        let query = `INSERT INTO product_categories SET ?`;
+        mysql.conn.query(query, category, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static updateCategory(category: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE product_categories SET ?
+                    WHERE categoryId = ?`;
+        mysql.conn.query(query, [category, category.categoryId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteCategory(categoryId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM product_categories
+                    WHERE categoryId = ?`;
+        mysql.conn.query(query, categoryId, (err, result) => {
+            if (err) {
+                query = `UPDATE product_categories SET categoryDeleted = true
+                WHERE categoryId = ?`;
+                mysql.conn.query(query, categoryId, (err, result) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    return callback(null, result);
+                });
+            }
+            return callback(null, result);
         });
     };
 }

@@ -4,14 +4,13 @@ import { CategoryFactory } from '../category';
 import { UnitFactory } from '../unit';
 import { SizeTypeFactory } from '../sizetype';
 import { CrateTypeFactory } from '../cratetype';
-import { DeliveryCostsFactory } from '../deliverycosts';
-import { MinimumStockFactory } from '../minimumstock';
+import { SizeFactory } from '../size';
 
 
 export class ProductFactory {
 
     static empty(): Product {
-        return new Product(0, '', '', CategoryFactory.empty(), UnitFactory.empty(), [], [], [], [], '', true, false, null);
+        return new Product(0, '', '', CategoryFactory.empty(), UnitFactory.empty(), [], [], '', true, false, null);
     }
 
     static fromObj(obj: any): Product {
@@ -43,13 +42,9 @@ export class ProductFactory {
             product.unit = UnitFactory.fromObj(obj);
         }
 
-        if (obj.sizeTypes) product.sizeTypes = obj.sizeTypes.map(sizeTypes => SizeTypeFactory.fromObj(sizeTypes));
+        if (obj.sizes) product.sizes = obj.sizes.map(size => SizeFactory.fromObj(size));
 
         if (obj.crateTypes) product.crateTypes = obj.crateTypes.map(crateType => CrateTypeFactory.fromObj(crateType));
-
-        if (obj.deliveryCosts) product.deliveryCosts = obj.deliveryCosts.map(deliveryCosts => DeliveryCostsFactory.fromObj(deliveryCosts));
-
-        if (obj.minimumStocks) product.minimumStocks = obj.minimumStocks.map(minimumStock => MinimumStockFactory.fromObj(minimumStock));
 
         if (obj.imgFilename) product.imgFilename = obj.imgFilename;
         else if (ValueChecker.validString(obj.productImgFilename)) {
@@ -69,6 +64,23 @@ export class ProductFactory {
         }
 
         return product;
+    }
+
+    static toDbObject(obj: Product): any {
+        let dbEntry: any = {};
+
+        if (obj.category) dbEntry.refCategory = obj.category.id;
+        if (obj.unit) dbEntry.refUnit = obj.unit.id;
+        if (obj.name) dbEntry.productName = obj.name;
+        if (obj.description) dbEntry.productDesc = obj.description;
+
+        if (obj.active) dbEntry.productActive = obj.active;
+        else dbEntry.productActive = false;
+
+        if (obj.deleted) dbEntry.productDeleted = obj.deleted;
+        else dbEntry.productDeleted = false;
+
+        return dbEntry;
     }
 
 }

@@ -32,4 +32,15 @@ export class SizeTypeFactory {
         return sizeType;
     }
 
+    static toDbObject(obj: SizeType): any {
+        let dbEntry: any = {};
+
+        if (ValueChecker.validNumber(obj.amount)) dbEntry.sizeTypeAmount = obj.amount;
+        if (obj.description) dbEntry.sizeTypeDesc = obj.description;
+
+        dbEntry.sizeTypeDeleted = false;
+
+        return dbEntry;
+    }
+
 }

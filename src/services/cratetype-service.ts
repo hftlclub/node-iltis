@@ -1,3 +1,4 @@
+import { CrateTypeFactory } from './../shared/models/cratetype/cratetype-factory';
 let mysql = require('../modules/mysql');
 
 export class CrateTypeService {
@@ -69,6 +70,38 @@ export class CrateTypeService {
                 return callback(null, false);
             }
             return callback(null, rows);
+        });
+    };
+
+    static addCrateType(crateType: any, callback: (err: any, result?: any) => void) {
+        let query = `INSERT INTO crate_types SET ?`;
+        mysql.conn.query(query, crateType, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static updateCrateType(crateType: any, callback: (err: any, result?: any) => void) {
+        let query = `UPDATE crate_types SET ?
+                    WHERE crateTypeId = ?`;
+        mysql.conn.query(query, [crateType, crateType.crateTypeId], (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
+        });
+    };
+
+    static deleteCrateType(unitId: number, callback: (err: any, result?: any) => void) {
+        let query = `DELETE FROM crate_types
+                    WHERE crateTypeId = ?`;
+        mysql.conn.query(query, unitId, (err, result) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, result);
         });
     };
 }

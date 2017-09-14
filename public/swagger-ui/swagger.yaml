@@ -1,0 +1,1795 @@
+swagger: '2.0'
+info:
+  version: 0.1.1
+  title: Internes Lagertransaktions- und Informationssystem (ILTIS) API
+  description: |
+    This is the backend for ILTIS (Internes Lagertransaktions- und Informationssystem).
+    
+    See [iltis.hftl.club](https://iltis.hftl.club) for more information.
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  - name: product
+    description: Product Ressources
+  - name: event
+    description: Event Ressources
+  - name: inventory
+    description: Inventory Ressources
+  - name: category
+    description: Category Ressources
+  - name: unit
+    description: Unit Ressources
+  - name: cratetype
+    description: CrateType Ressources
+  - name: sizetype
+    description: SizeType Ressources
+  - name: eventtype
+    description: EventType Ressources
+# Ressources
+paths:
+  /products:
+    get:
+      tags:
+        - product
+      summary: Get all products
+      responses:
+        '200':
+          description: List of all products
+          schema:
+            title: Products
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /product:
+    post:
+      tags:
+        - product
+      summary: Creates a new product
+      parameters:
+        - name: Product
+          in: body
+          description: A new product to be stored
+          schema:
+            $ref: '#/definitions/Product'
+          required: true
+      responses:
+        '201':
+          description: Product has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Product does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}':
+    delete:
+      tags:
+        - product
+      summary: Deletes a specific product
+      responses:
+        '204':
+          description: Product with the requested Id has been deleted
+        '404':
+          description: Product does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '423':
+          description: Product is still in use
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+    get:
+      tags:
+        - product
+      summary: Get a specific product
+      responses:
+        '200':
+          description: Returns a product with the requested Id
+          schema:
+            $ref: '#/definitions/Product'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Product does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+    put:
+      tags:
+        - product
+      summary: Updates an existing product
+      description: 'Requires a full product entry'
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          type: number
+        - name: Product
+          in: body
+          description: An existing product to update
+          schema:
+            $ref: '#/definitions/Product'
+          required: true
+      responses:
+        '204':
+          description: Product has been updated
+        '400':
+          description: Relation does not exist or Invalid Data Error
+          schema:
+            $ref: '#/definitions/RestError'
+        '423':
+          description: Product is still in use
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/deletable':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific product is deletable
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Product is deletable
+        '403':
+          description: Product is used
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/unused':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific a product is unused
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Product is unused
+        '403':
+          description: Product is used
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/image':
+    put:
+      tags:
+        - product
+      summary: Adds an image to an existing product
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          type: number
+        - name: file
+          in: formData
+          description: The uploaded file data
+          required: true
+          type: file
+      responses:
+        '204':
+          description: Product has been updated
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Product does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size':
+    post:
+      tags:
+        - product
+      summary: Creates a new relation (size) between a product and a size-type
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: Size
+          in: body
+          description: Size to be added to product
+          schema:
+            $ref: '#/definitions/Size'
+          required: true
+      responses:
+        '201':
+          description: Relation between product and size-type has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Relation does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size/{sizeTypeId}':
+    put:
+      tags:
+        - product
+      summary: Updates a specific size of a product
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+        - name: Size
+          in: body
+          description: Updated size to be of product
+          schema:
+            $ref: '#/definitions/Size'
+          required: true
+      responses:
+        '204':
+          description: Size for the product with the requested Id has been updated
+        '400':
+          description: Relation does not exist or Invalid Data Error
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+    delete:
+      tags:
+        - product
+      summary: Deletes a specific size of a product
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+      responses:
+        '204':
+          description: Size for the product with the requested Id has been updated
+        '403':
+          description: Product size has been used before
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Relation does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size/{sizeTypeId}/deletable':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific size of a product is deletable
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Size for the product is deletable
+        '403':
+          description: Product size has been used before
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/size/{sizeTypeId}/unused':
+    get:
+      tags:
+        - product
+      summary: Checks if a specific size of a product is unused
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: Size for the product is unused
+        '403':
+          description: Product size is used
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/possible/cratetypes':
+    get:
+      tags:
+        - product
+      summary: Get all possible crate-types for a specific product
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+      responses:
+        '200':
+          description: List of all possible crate-types
+          schema:
+            title: CrateTypes
+            type: array
+            items:
+              $ref: '#/definitions/CrateType'
+        '424':
+          description: 'There are no product sizes to suggest possible crate-types'
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/cratetype':
+    post:
+      tags:
+        - product
+      summary: Creates a new relation between a product and a crate-type
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: crateType
+          in: body
+          description: CrateType to be added to product
+          schema:
+            $ref: '#/definitions/CrateType'
+      responses:
+        '201':
+          description: Relation between product and crate-type has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Relation does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/product/{productId}/cratetype/{crateTypeId}':
+    delete:
+      tags:
+        - product
+      summary: Deletes a specific crate-type of a specific product
+      responses:
+        '204':
+          description: Crate-type for the product with the requested Id has been deleted
+        '404':
+          description: Relation does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: productId
+          in: path
+          type: number
+          required: true
+        - name: crateTypeId
+          in: path
+          type: number
+          required: true
+  /events:
+    get:
+      tags:
+        - event
+      summary: Get all events
+      responses:
+        '200':
+          description: List of all events
+          schema:
+            title: Events
+            type: array
+            items:
+              $ref: '#/definitions/Event'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /event:
+    post:
+      tags:
+        - event
+      summary: Creates a new event
+      parameters:
+        - name: Event
+          in: body
+          description: A new event to be stored
+          schema:
+            $ref: '#/definitions/Event'
+          required: true
+      responses:
+        '201':
+          description: Event has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '403':
+          description: There is already one other event opened with property countAllowed
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/checkpermission':
+    get:
+      tags:
+        - event
+      summary: Ask for permission to create new event with countableAllowed property
+      responses:
+        '200':
+          description: Get boolean for allowed / not allowed.
+          schema:
+            $ref: '#/definitions/Permission'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}':
+    delete:
+      tags:
+        - event
+      summary: Deletes a specific event
+      responses:
+        '204':
+          description: Event with the requested Id has been deleted
+        '403':
+          description: Event is already closed
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+    get:
+      tags:
+        - event
+      summary: Get a specific event
+      responses:
+        '200':
+          description: Returns an event with the requested Id
+          schema:
+            $ref: '#/definitions/Event'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Event does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+    put:
+      tags:
+        - event
+      summary: Updates an existing event
+      description: 'Requires a full event entry'
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          type: number
+        - name: Event
+          in: body
+          description: An existing event to update
+          schema:
+            $ref: '#/definitions/Event'
+          required: true
+      responses:
+        '204':
+          description: Event has been updated
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/close':
+    post:
+      tags:
+        - event
+      summary: Closes an event, saves transactions and deletes transfers
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Event has been closed
+        '400':
+          description: Invalid Id
+        '403':
+          description: Event is already closed
+        '404':
+          description: Event does not exist
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/inventory':
+    get:
+      tags:
+        - event
+      summary: Get all transfers converted to inventory of a specific event
+      responses:
+        '200':
+          description: List of all transfers converted to inventory of an event with the requested Id
+          schema:
+            title: Inventory
+            type: array
+            items:
+              $ref: '#/definitions/Inventory'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  '/event/{eventId}/transfers':
+    get:
+      tags:
+        - event
+      summary: Get all transfer-records of a specific event
+      responses:
+        '200':
+          description: List of all transfer-records of an event with the requested Id
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  '/event/{eventId}/transfers/storage/out':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the storage (taking)
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+          required: true
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Transfer-records have been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/transfers/storage/in':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the storage (stock up)
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+          required: true
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Transfer-records have been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/transfers/storage/count':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the storage (counting), deletes existing I/O transfer records
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+          required: true
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Transfer-records have been created
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '403':
+          description: It is not allowed for this event to count the inventory
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/transfers/counter/out':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the counter (taking)
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+          required: true
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Transfer-records have been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/transfers/counter/count':
+    post:
+      tags:
+        - event
+      summary: Creates multiple new transfer-records for the counter (counting), deletes existing I/O transfer records
+      parameters:
+        - name: Transfers
+          in: body
+          description: Multiple new transfer-records to be stored
+          schema:
+            title: Transfers
+            type: array
+            items:
+              $ref: '#/definitions/Transfer'
+          required: true
+        - name: eventId
+          in: path
+          type: number
+          required: true
+      responses:
+        '201':
+          description: Transfer-records have been created
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '403':
+          description: It is not allowed for this event to count the inventory
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/event/{eventId}/transactions':
+    get:
+      tags:
+        - event
+      summary: Get transactions of a specific closed event
+      responses:
+        '200':
+          description: List of transactions of a closed event with the requested Id
+          schema:
+            title: Transactions
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  '/event/{eventId}/calculation':
+    get:
+      tags:
+        - event
+      summary: Get calculation of a specific closed event
+      responses:
+        '200':
+          description: Get calculation
+          schema:
+            $ref: '#/definitions/Calculation'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Event is still active
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  '/event/{eventId}/costs':
+    get:
+      tags:
+        - event
+      summary: Get costs of a specific unclosed event
+      responses:
+        '200':
+          description: Get costs
+          schema:
+            $ref: '#/definitions/Costs'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: No transfers have been recorded
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  /inventory:
+    get:
+      tags:
+        - inventory
+      summary: Get current inventory
+      responses:
+        '200':
+          description: List of current inventory
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Inventory'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/inventory/{eventId}':
+    get:
+      tags:
+        - inventory
+      summary: Get inventory after a specific closed event
+      responses:
+        '200':
+          description: List of inventory after a closed event with the requested Id
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Inventory'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventId
+          in: path
+          type: number
+          required: true
+  /categories:
+    get:
+      tags:
+        - category
+      summary: Get all possible product-categories
+      responses:
+        '200':
+          description: List of all possible categories
+          schema:
+            title: Categories
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /category:
+    post:
+      tags:
+        - category
+      summary: Creates a new category
+      parameters:
+        - name: Category
+          in: body
+          description: A new category to be stored
+          schema:
+            $ref: '#/definitions/Category'
+          required: true
+      responses:
+        '201':
+          description: Category has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Category does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/category/{categoryId}':
+    delete:
+      tags:
+        - category
+      summary: Deletes a specific category
+      responses:
+        '204':
+          description: Category with the requested Id has been deleted
+        '404':
+          description: Category does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: categoryId
+          in: path
+          type: number
+          required: true
+    get:
+      tags:
+        - category
+      summary: Get a specific category
+      responses:
+        '200':
+          description: Returns a category with the requested Id
+          schema:
+            $ref: '#/definitions/Category'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Category does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: categoryId
+          in: path
+          type: number
+          required: true
+    put:
+      tags:
+        - category
+      summary: Updates an existing category
+      description: 'Requires a full category entry'
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          type: number
+        - name: Category
+          in: body
+          description: An existing category to update
+          schema:
+            $ref: '#/definitions/Category'
+          required: true
+      responses:
+        '204':
+          description: Category has been updated
+        '400':
+          description: Relation does not exist or Invalid Data Error
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /units:
+    get:
+      tags:
+        - unit
+      summary: Get all possible units
+      responses:
+        '200':
+          description: List of all possible units
+          schema:
+            title: Units
+            type: array
+            items:
+              $ref: '#/definitions/Unit'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /unit:
+    post:
+      tags:
+        - unit
+      summary: Creates a new unit
+      parameters:
+        - name: Unit
+          in: body
+          description: A new unit to be stored
+          schema:
+            $ref: '#/definitions/Unit'
+          required: true
+      responses:
+        '201':
+          description: Unit has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Unit does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/unit/{unitId}':
+    delete:
+      tags:
+        - unit
+      summary: Deletes a specific unit
+      responses:
+        '204':
+          description: Unit with the requested Id has been deleted
+        '403':
+          description: Unit is still in use
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Unit does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: unitId
+          in: path
+          type: number
+          required: true
+    get:
+      tags:
+        - unit
+      summary: Get a specific unit
+      responses:
+        '200':
+          description: Returns a unit with the requested Id
+          schema:
+            $ref: '#/definitions/Unit'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Unit does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: unitId
+          in: path
+          type: number
+          required: true
+    put:
+      tags:
+        - unit
+      summary: Updates an existing unit
+      description: 'Requires a full unit entry'
+      parameters:
+        - name: unitId
+          in: path
+          required: true
+          type: number
+        - name: Unit
+          in: body
+          description: An existing unit to update
+          schema:
+            $ref: '#/definitions/Unit'
+          required: true
+      responses:
+        '204':
+          description: Unit has been updated
+        '400':
+          description: Relation does not exist or Invalid Data Error
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /cratetypes:
+    get:
+      tags:
+        - cratetype
+      summary: Get all possible crate-types
+      responses:
+        '200':
+          description: List of all possible crate-types
+          schema:
+            title: CrateTypes
+            type: array
+            items:
+              $ref: '#/definitions/CrateType'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /cratetype:
+    post:
+      tags:
+        - cratetype
+      summary: Creates a new crate-type
+      parameters:
+        - name: CrateType
+          in: body
+          description: A new crate-type to be stored
+          schema:
+            $ref: '#/definitions/CrateType'
+          required: true
+      responses:
+        '201':
+          description: Crate-type has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Crate-type does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/cratetype/{crateTypeId}':
+    delete:
+      tags:
+        - cratetype
+      summary: Deletes a specific crate-type
+      responses:
+        '204':
+          description: Crate-type with the requested Id has been deleted
+        '404':
+          description: Crate-type does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: crateTypeId
+          in: path
+          type: number
+          required: true
+    get:
+      tags:
+        - cratetype
+      summary: Get a specific crate-type
+      responses:
+        '200':
+          description: Returns a crate-type with the requested Id
+          schema:
+            $ref: '#/definitions/CrateType'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Crate-type does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: crateTypeId
+          in: path
+          type: number
+          required: true
+    put:
+      tags:
+        - cratetype
+      summary: Updates an existing crate-type
+      description: 'Requires a full crate-type entry'
+      parameters:
+        - name: crateTypeId
+          in: path
+          required: true
+          type: number
+        - name: CrateType
+          in: body
+          description: An existing crate-type to update
+          schema:
+            $ref: '#/definitions/CrateType'
+          required: true
+      responses:
+        '204':
+          description: Size-type has been updated
+        '400':
+          description: Relation does not exist or Invalid Data Error
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /sizetypes:
+    get:
+      tags:
+        - sizetype
+      summary: Get all possible size-types
+      responses:
+        '200':
+          description: List of all possible size-types
+          schema:
+            title: SizeTypes
+            type: array
+            items:
+              $ref: '#/definitions/SizeType'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /sizetype:
+    post:
+      tags:
+        - sizetype
+      summary: Creates a new size-type
+      parameters:
+        - name: SizeType
+          in: body
+          description: A new size-type to be stored
+          schema:
+            $ref: '#/definitions/SizeType'
+          required: true
+      responses:
+        '201':
+          description: Size-type has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Size-type does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/sizetype/{sizeTypeId}':
+    delete:
+      tags:
+        - sizetype
+      summary: Deletes a specific size-type
+      responses:
+        '204':
+          description: Size-type with the requested Id has been deleted
+        '404':
+          description: Size-type does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+    get:
+      tags:
+        - sizetype
+      summary: Get a specific size-type
+      responses:
+        '200':
+          description: Returns a size-type with the requested Id
+          schema:
+            $ref: '#/definitions/SizeType'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Size-type does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: sizeTypeId
+          in: path
+          type: number
+          required: true
+    put:
+      tags:
+        - sizetype
+      summary: Updates an existing size-type
+      description: 'Requires a full size-type entry'
+      parameters:
+        - name: sizeTypeId
+          in: path
+          required: true
+          type: number
+        - name: SizeType
+          in: body
+          description: An existing size-type to update
+          schema:
+            $ref: '#/definitions/SizeType'
+          required: true
+      responses:
+        '204':
+          description: Size-type has been updated
+        '400':
+          description: Relation does not exist or Invalid Data Error
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /eventtypes:
+    get:
+      tags:
+        - eventtype
+      summary: Get all possible event-types
+      responses:
+        '200':
+          description: List of all possible event-types
+          schema:
+            title: EventTypes
+            type: array
+            items:
+              $ref: '#/definitions/EventType'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  /eventtype:
+    post:
+      tags:
+        - eventtype
+      summary: Creates a new event-type
+      parameters:
+        - name: EventType
+          in: body
+          description: A new event-type to be stored
+          schema:
+            $ref: '#/definitions/EventType'
+          required: true
+      responses:
+        '201':
+          description: Event-type has been created
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '409':
+          description: Event-type does already exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+  '/eventtype/{eventTypeId}':
+    delete:
+      tags:
+        - eventtype
+      summary: Deletes a specific event-type
+      responses:
+        '204':
+          description: Event-type with the requested Id has been deleted
+        '404':
+          description: Event-type does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventTypeId
+          in: path
+          type: number
+          required: true
+    get:
+      tags:
+        - eventtype
+      summary: Get a specific event-type
+      responses:
+        '200':
+          description: Returns a event-type with the requested Id
+          schema:
+            $ref: '#/definitions/EventType'
+        '400':
+          description: Invalid Id
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Event-type does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+      parameters:
+        - name: eventTypeId
+          in: path
+          type: number
+          required: true
+    put:
+      tags:
+        - eventtype
+      summary: Updates an existing event-type
+      description: 'Requires a full event-type entry'
+      parameters:
+        - name: eventTypeId
+          in: path
+          required: true
+          type: number
+        - name: EventType
+          in: body
+          description: An existing event-type to update
+          schema:
+            $ref: '#/definitions/EventType'
+          required: true
+      responses:
+        '204':
+          description: Event-type has been updated
+        '400':
+          description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '404':
+          description: Event-type does not exist
+          schema:
+            $ref: '#/definitions/RestError'
+        '500':
+          description: Unexpected Internal Server Error
+          schema:
+            $ref: '#/definitions/RestError'
+# Models
+definitions:
+  Product:
+    type: object
+    description: Contains all information about a product
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 1
+      name:
+        type: string
+        example: 'Ur Krostitzer'
+      description:
+        type: string
+        example: 'Wahre Helden stehen mitten im Leben.'
+      category:
+        $ref: '#/definitions/Category'
+      unit:
+        $ref: '#/definitions/Unit'
+      sizes:
+        type: array
+        items:
+          $ref: '#/definitions/Size'
+      crateTypes:
+        type: array
+        items:
+          $ref: '#/definitions/CrateType'
+      imgFilename:
+        type: string
+        example: 'JHS09234JKK.jpg'
+      active:
+        type: boolean
+        example: true
+      deleted:
+        type: boolean
+        example: false
+      timestamp:
+        type: string
+        format: date-time
+        example: '2017-03-01T00:00:00.000Z'
+        description: >-
+          date-time as defined by RFC3339 (http://www.ietf.org/rfc/rfc3339.txt)
+          - like new Date().toISOString();
+  Event:
+    type: object
+    description: Contains all information about an event
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 3
+      eventType:
+        $ref: '#/definitions/EventType'
+      description:
+        type: string
+        example: 'BV Lina, MA Arjuna'
+      cashBefore:
+        type: number
+        format: double
+        example: 500
+      cashAfter:
+        type: number
+        format: double
+        example: 756.5
+      tip:
+        type: number
+        format: double
+        example: 4.32
+      datetime:
+        type: string
+        format: date-time
+        example: '2017-03-01T00:00:00.000Z'
+        description: >-
+          date-time as defined by RFC3339 (http://www.ietf.org/rfc/rfc3339.txt)
+          - like new Date().toISOString();
+      timestamp:
+        type: string
+        format: date-time
+        example: '2017-03-01T00:00:00.000Z'
+        description: >-
+          date-time as defined by RFC3339 (http://www.ietf.org/rfc/rfc3339.txt)
+          - like new Date().toISOString();
+      active:
+        type: boolean
+        example: false
+      countedCounter:
+        type: boolean
+        example: false
+      countedStorage:
+        type: boolean
+        example: false
+  Transaction:
+    type: object
+    description: Contains the inventory-changes of a product related to an event
+    required:
+      - product
+      - sizeType
+    properties:
+      product:
+        $ref: '#/definitions/Product'
+      sizeType:
+        $ref: '#/definitions/SizeType'
+      changeTotal:
+        type: number
+        format: double
+        example: -87
+      changeCounter:
+        type: number
+        format: double
+        example: 0
+      timestamp:
+        type: string
+        format: date-time
+        example: '2017-03-01T00:00:00.000Z'
+        description: >-
+          date-time as defined by RFC3339 (http://www.ietf.org/rfc/rfc3339.txt)
+          - like new Date().toISOString();
+  Transfer:
+    type: object
+    description: Contains the cached information about an inventory-change of a product related to an event
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 15
+      product:
+        $ref: '#/definitions/Product'
+      sizeType:
+        $ref: '#/definitions/SizeType'
+      change:
+        type: number
+        format: int32
+        example: 5
+      timestamp:
+        type: string
+        format: date-time
+        example: '2017-03-01T00:00:00.000Z'
+        description: >-
+          date-time as defined by RFC3339 (http://www.ietf.org/rfc/rfc3339.txt)
+          - like new Date().toISOString();
+  Category:
+    type: object
+    description: Contains all information about a category
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 2
+      name:
+        type: string
+        example: Bier und Mischgetränke
+      description:
+        type: string
+        example: Bier, alkoholfreies Bier, Mixery, Radler
+      deleted:
+        type: boolean
+        example: false
+  Unit:
+    type: object
+    description: Contains all information about an unit
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 4
+      short:
+        type: string
+        example: l
+      full:
+        type: string
+        example: Liter
+  EventType:
+    type: object
+    description: Contains all information about an event-type
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 2
+      description:
+        type: string
+        example: Afterwork
+      intern:
+        type: boolean
+        example: false
+      realEvent:
+        type: boolean
+        example: true
+      deleted:
+        type: boolean
+        example: false
+      uiMode:
+        type: string
+        example: event
+      icon:
+        type: string
+        example: fa-glass
+      countAllowed:
+        type: boolean
+        example: true
+  SizeType:
+    type: object
+    description: Contains all information about a size-type
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 3
+      amount:
+        type: number
+        format: double
+        example: 0.5
+      description:
+        type: string
+        example: Flasche
+      deleted:
+        type: boolean
+        example: false
+  Size:
+    type: object
+    description: Additional product information for each product size
+    required:
+      - sizeType
+    properties:
+      sizeType:
+        $ref: '#/definitions/SizeType'
+      minStock:
+        type: number
+        format: int32
+        example: 0
+      costs:
+        type: number
+        format: double
+        example: 0.6
+      active:
+        type: boolean
+        example: true
+  CrateType:
+    type: object
+    description: Contains all information about a crate-type
+    required:
+      - id
+    properties:
+      id:
+        type: number
+        format: int32
+        example: 5
+      sizeType:
+        $ref: '#/definitions/SizeType'
+      description:
+        type: string
+        example: Kasten
+      slots:
+        type: number
+        format: double
+        example: 20
+  Inventory:
+    type: object
+    description: Contains the inventory of a product related to its size
+    properties:
+      product:
+        $ref: '#/definitions/Product'
+      sizeType:
+        $ref: '#/definitions/SizeType'
+      storage:
+        type: number
+        format: double
+        example: 1600
+      counter:
+        type: number
+        format: double
+        example: 60
+  Calculation:
+    type: object
+    description: Contains the calculation of an event
+    properties:
+      sales:
+        type: number
+        format: double
+        example: 365.5
+      costs:
+        type: number
+        format: double
+        example: 205.5
+      profit:
+        type: number
+        format: double
+        example: 60
+  Costs:
+    type: object
+    description: Contains the summarized costs of event-transfers
+    properties:
+      costs:
+        type: number
+        format: double
+        example: 2.5
+  Permission:
+    type: object
+    description: Contains permission
+    properties:
+      createEventCountAllowed:
+        type: boolean
+        example: true
+  RestError:
+    type: object
+    description: >-
+      object which is following the convention of restify, see
+      http://restify.com/#resterror
+    required:
+      - code
+    properties:
+      code:
+        type: string
+        description: Short error code
+      message:
+        type: string
+        description: Detailed description

@@ -1,6 +1,9 @@
 import { createServer, bodyParser, CORS, queryParser, serveStatic, NotFoundError } from 'restify';
 
 const config = require('./config');
+import * as multer from 'multer';
+
+import { FileUploadService } from './src/services/file-upload-service';
 import { ProductController } from './src/controller/product-controller';
 import { ServerController } from './src/controller/server-controller';
 import { CategoryController } from './src/controller/category-controller';
@@ -38,11 +41,16 @@ server.use(queryParser());
 
 // other routes
 server.get('/info', serverController.info.bind(serverController));
-server.get('/swagger.json', serverController.getFixedSwaggerJson.bind(serverController));
+server.get('/healthcheck', serverController.healthcheck.bind(serverController));
 
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
 server.get('/product/:productId', productController.getById.bind(productController));
+server.get('/product/:productId/deletable', productController.isProductUnused.bind(productController));
+server.get('/product/:productId/unused', productController.isProductUnused.bind(productController));
+server.get('/product/:productId/size/:sizeTypeId/deletable', productController.isProductSizeDeletable.bind(productController));
+server.get('/product/:productId/size/:sizeTypeId/unused', productController.isProductSizeUnused.bind(productController));
+server.get('/product/:productId/possible/cratetypes', productController.getPossibleCrateTypesForProduct.bind(productController));
 server.get('/events', eventController.getAll.bind(eventController));
 server.get('/event/checkpermission', eventController.checkPermission.bind(eventController));
 server.get('/event/:eventId', eventController.getById.bind(eventController));
@@ -65,6 +73,9 @@ server.get('/inventory', inventoryController.getCurrent.bind(inventoryController
 server.get('/inventory/:eventId', inventoryController.getByEventId.bind(inventoryController));
 
 // API routes (POST)
+server.post('/product', productController.addProduct.bind(productController));
+server.post('/product/:productId/size', productController.addSizeToProduct.bind(productController));
+server.post('/product/:productId/cratetype', productController.addCrateTypeToProduct.bind(productController));
 server.post('/event', eventController.addEvent.bind(eventController));
 server.post('/event/:eventId/close', eventController.closeEvent.bind(eventController));
 server.post('/event/:eventId/transfers/storage/out', eventController.addTransferStorageOut.bind(eventController));
@@ -72,12 +83,30 @@ server.post('/event/:eventId/transfers/storage/in', eventController.addTransferS
 server.post('/event/:eventId/transfers/counter/out', eventController.addTransferCounterOut.bind(eventController));
 server.post('/event/:eventId/transfers/storage/count', eventController.countStorage.bind(eventController));
 server.post('/event/:eventId/transfers/counter/count', eventController.countCounter.bind(eventController));
+server.post('/category', categoryController.addCategory.bind(categoryController));
+server.post('/unit', unitController.addUnit.bind(unitController));
+server.post('/cratetype', crateTypeController.addCrateType.bind(crateTypeController));
+server.post('/sizetype', sizeTypeController.addSizeType.bind(sizeTypeController));
 
 // API routes (PUT)
+server.put('/product/:productId', productController.updateProduct.bind(productController));
+server.put('/product/:productId/image', productController.uploadImage.bind(productController));
+server.put('/product/:productId/size/:sizeTypeId', productController.updateSizeOfProduct.bind(productController));
 server.put('/event/:eventId', eventController.updateEvent.bind(eventController));
+server.put('/category/:categoryId', categoryController.updateCategory.bind(categoryController));
+server.put('/unit/:unitId', unitController.updateUnit.bind(unitController));
+server.put('/cratetype/:crateTypeId', crateTypeController.updateCrateType.bind(crateTypeController));
+server.put('/sizetype/:sizeTypeId', sizeTypeController.updateSizeType.bind(sizeTypeController));
 
 // API routes (DELETE)
+server.del('/product/:productId', productController.deleteProduct.bind(productController));
+server.del('/product/:productId/size/:sizeTypeId', productController.deleteSizeOfProduct.bind(productController));
+server.del('/product/:productId/cratetype/:crateTypeId', productController.deleteCrateTypeOfProduct.bind(productController));
 server.del('/event/:eventId', eventController.deleteEvent.bind(eventController));
+server.del('/category/:categoryId', categoryController.deleteCategory.bind(categoryController));
+server.del('/unit/:unitId', unitController.deleteUnit.bind(unitController));
+server.del('/cratetype/:crateTypeId', crateTypeController.deleteCrateType.bind(crateTypeController));
+server.del('/sizetype/:sizeTypeId', sizeTypeController.deleteSizeType.bind(sizeTypeController));
 
 // serve public folder
 server.get(/^\/*/, serveStatic({

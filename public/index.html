@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
     <style>
           html {
-              font-family: Verdana, Arial, sans-serif;
+              font-family:'Courier New', Arial;
           }
     </style>
     <link rel="stylesheet" href="github.css" media="screen">
@@ -14,22 +14,41 @@
   <body>
     <h1>ILTIS API</h1>
     <img src="images/steckerlogo.svg" width="250">
+
+    <h3>Backend Info</h3>
+    Version: &nbsp;&nbsp; <span id="version"></span><br>
+    Git-Commit: <span id="commit"></span>
+    Uptime: &nbsp;&nbsp;&nbsp; <span id="time"></span>
+
+    <h3>REST-Documentation</h3>
+    Explorable API documentation: <a href="/swagger-ui/#">Swagger-UI</a><br>
+    OpenAPI Specification: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/swagger-ui/swagger.yaml">swagger.yaml</a><br>
+
+    <h3>GET-Examples</h3>
     <ul>
       <li><a style="color: rgb(0,200,0)" href="/products">GET /products</a></li>
-      <li><a style="color: rgb(0,200,0)" href="/product/1">GET /product/{productId}</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/products?showInactiveProducts=true">GET /products?showInactiveProducts=true</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/product/1">GET /product/{productId}</a></li>      
+      <li><a style="color: rgb(0,200,0)" href="/product/1?showInactiveSizes=true">GET /product/{productId}?showInactiveSizes=true</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/product/3/deletable">GET /product/{productId}/deletable</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/product/3/unused">GET /product/{productId}/unused</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/product/3/size/6/deletable">GET /product/{productId}/size/{sizeTypeId}/deletable</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/product/3/size/6/unused">GET /product/{productId}/size/{sizeTypeId}/unused</a></li>      
+      <li><a style="color: rgb(0,200,0)" href="/product/1/possible/cratetypes">GET /product/{productId}/possible/cratetypes</a></li>
       <li><a style="color: rgb(0,200,0)" href="/events">GET /events</a></li>
       <li><a style="color: rgb(0,200,0)" href="/event/4">GET /event/{eventId}</a></li>
       <li><a style="color: rgb(0,200,0)" href="/event/4/inventory">GET /event/{eventId}/inventory</a></li>
       <li><a style="color: rgb(0,200,0)" href="/event/4/transfers">GET /event/{eventId}/transfers</a></li>
-      <li><a style="color: rgb(0,200,0)" href="/event/3/transactions">GET /event/{eventId}/transactions</a></li>
-      <li><a style="color: rgb(0,200,0)" href="/event/3/calculation">GET /event/{eventId}/calculation</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/event/2/transactions">GET /event/{eventId}/transactions</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/event/2/calculation">GET /event/{eventId}/calculation</a></li>
       <li><a style="color: rgb(0,200,0)" href="/event/4/costs">GET /event/{eventId}/costs</a></li>
       <li><a style="color: rgb(0,200,0)" href="/inventory">GET /inventory</a></li>
       <li><a style="color: rgb(0,200,0)" href="/inventory/2">GET /inventory/{eventId}</a></li>
       <li><a style="color: rgb(0,200,0)" href="/categories">GET /categories</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/categories?productCount=true">GET /categories?productCount=true</a></li>      
       <li><a style="color: rgb(0,200,0)" href="/category/1">GET /category/{categoryId}</a></li>
       <li><a style="color: rgb(0,200,0)" href="/units">GET /units</a></li>
-      <li><a style="color: rgb(0,200,0)" href="/unit/1">GET /unit/{unitId}</a></li>
+      <li><a style="color: rgb(0,200,0)" href="/unit/2">GET /unit/{unitId}</a></li>
       <li><a style="color: rgb(0,200,0)" href="/cratetypes">GET /cratetypes</a></li>
       <li><a style="color: rgb(0,200,0)" href="/cratetype/1">GET /cratetype/{crateTypeId}</a></li>
       <li><a style="color: rgb(0,200,0)" href="/sizetypes">GET /sizetypes</a></li>
@@ -37,8 +56,30 @@
       <li><a style="color: rgb(0,200,0)" href="/eventtypes">GET /eventtypes</a></li>
       <li><a style="color: rgb(0,200,0)" href="/eventtype/1">GET /eventtype/{eventTypeId}</a></li>
     </ul>
-    <hr> Explorable API documentation:
-      <a href="/swagger-ui/#!/default">/swagger-ui/</a><br>
-      OpenAPI Specification: <a href="/swagger.json">/swagger.json</a><br>
+
+    <h3>Git-Repositories</h3>
+    Frontend: &nbsp;<a href="https://github.com/hftlclub/ng-iltis">https://github.com/hftlclub/ng-iltis</a><br>
+    Backend: &nbsp; <a href="https://github.com/hftlclub/node-iltis">https://github.com/hftlclub/node-iltis</a><br>
+    
+    <script>
+      var format = function (seconds) {
+        var pad = function (s) {
+          return (s < 10 ? '0' : '') + s;
+        }
+        var hours = Math.floor(seconds / (60 * 60));
+        var minutes = Math.floor(seconds % (60 * 60) / 60);
+        var seconds = Math.floor(seconds % 60);
+        return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+      }
+      var r = new XMLHttpRequest();
+      r.addEventListener("load", function () {
+        var json = JSON.parse(this.responseText);
+        document.getElementById('version').innerText = json.version;
+        document.getElementById('commit').innerText = json.commit;
+        document.getElementById('time').innerText = format(json.time);
+      });
+      r.open("GET", "/info");
+      r.send();
+  </script>
   </body>
 </html>

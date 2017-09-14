@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, InternalError } from 'restify';
+import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { SizeType, SizeTypeFactory } from '../shared/models/sizetype';
@@ -8,7 +8,7 @@ import { SizeTypeService } from '../services/sizetype-service';
 export class SizeTypeController {
 
     // GET: Return all SizeTypes
-    getAll(req, res, next) {
+    getAll(req: Request, res: Response, next: Next) {
         SizeTypeService.getAll((err, rows) => {
             if (err) return next(new InternalError());
             if (!rows.length) res.send([], ContentType.ApplicationJSON);
@@ -18,7 +18,7 @@ export class SizeTypeController {
     };
 
     // GET: Return single SizeType
-    getById(req, res, next) {
+    getById(req: Request, res: Response, next: Next) {
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         let sizeType: SizeType = SizeTypeFactory.empty();
         SizeTypeService.getById(sizeTypeId, (err, row) => {
@@ -28,6 +28,41 @@ export class SizeTypeController {
             }
             sizeType = SizeTypeFactory.fromObj(row);
             res.send(sizeType, ContentType.ApplicationJSON);
+        });
+    };
+
+    // POST: Add new SizeType
+    addSizeType(req: Request, res: Response, next: Next) {
+        SizeTypeService.addSizeType(SizeTypeFactory.toDbObject(req.body), (err, result) => {
+            if (err) return next(new BadRequestError());
+            if (result) {
+                SizeTypeService.getById(result.insertId, (err, row) => {
+                    if (err) return next(new InternalError());
+                    res.send(201, SizeTypeFactory.fromObj(row), ContentType.ApplicationJSON);
+                });
+            } else next(new InternalError());
+        });
+    };
+
+    // PUT: Update SizeType
+    updateSizeType(req: Request, res: Response, next: Next) {
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        let updatedSizeType: any = SizeTypeFactory.toDbObject(req.body);
+        updatedSizeType.sizeTypeId = sizeTypeId;
+        delete updatedSizeType.sizeTypeAmount;
+        delete updatedSizeType.sizeTypeDeleted;
+        SizeTypeService.updateSizeType(updatedSizeType, (err, result) => {
+            if (err || !result) return next(new BadRequestError());
+            res.send(204);
+        });
+    };
+
+    // DELETE: Remove SizeType
+    deleteSizeType(req: Request, res: Response, next: Next) {
+        let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
+        SizeTypeService.deleteSizeType(sizeTypeId, (err, result) => {
+            if (err || !result) return next(new NotFoundError());
+            res.send(204);
         });
     };
 }

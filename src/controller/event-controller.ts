@@ -1,4 +1,4 @@
-import { NotFoundError, BadRequestError, InternalError, ForbiddenError} from 'restify';
+import { NotFoundError, BadRequestError, InternalError, ForbiddenError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
 import { Event, EventFactory } from '../shared/models/event';
@@ -12,7 +12,7 @@ import { InventoryService } from './../services/inventory-service';
 
 export class EventController {
 
-    getAll(req, res, next) {
+    getAll(req: Request, res: Response, next: Next) {
         EventService.getAll((err, rows) => {
             if (err) return next(new InternalError());
             if (!rows.length) res.send([], ContentType.ApplicationJSON);
@@ -21,7 +21,7 @@ export class EventController {
         });
     };
 
-    addEvent(req, res, next) {
+    addEvent(req: Request, res: Response, next: Next) {
         EventService.countOpenEventsWithCountAllowed((err, rows) => {
             if (EventFactory.fromObj(req.body).eventType.countAllowed) {
                 if (err) return next(new InternalError());
@@ -39,7 +39,7 @@ export class EventController {
         });
     };
 
-    checkPermission(req, res, next) {
+    checkPermission(req: Request, res: Response, next: Next) {
         EventService.countOpenEventsWithCountAllowed((err, rows) => {
             if (err) return next(new InternalError());
             let permission = {
@@ -49,15 +49,15 @@ export class EventController {
         });
     }
 
-    deleteEvent(req, res, next) {
-        let eventId = parseInt(req.context.eventId, 0);
+    deleteEvent(req: Request, res: Response, next: Next) {
+        let eventId = parseInt(req['context'].eventId, 0);
         EventService.deleteEvent(eventId, (err, result) => {
             if (err || !result) return next(new ForbiddenError());
             res.send(204);
         });
     };
 
-    getById(req, res, next) {
+    getById(req: Request, res: Response, next: Next) {
         let eventId = parseInt(req.params.eventId, 0);
         let event: Event;
         EventService.getById(eventId, (err, row) => {
@@ -70,8 +70,8 @@ export class EventController {
         });
     };
 
-    updateEvent(req, res, next) {
-        let eventId = parseInt(req.context.eventId, 0);
+    updateEvent(req: Request, res: Response, next: Next) {
+        let eventId = parseInt(req['context'].eventId, 0);
         let updatedEvent: any = EventFactory.toDbObject(req.body);
         updatedEvent.eventId = eventId;
         delete updatedEvent.eventTS;
@@ -84,8 +84,8 @@ export class EventController {
         });
     };
 
-    closeEvent(req, res, next) {
-        let eventId = parseInt(req.context.eventId, 0);
+    closeEvent(req: Request, res: Response, next: Next) {
+        let eventId = parseInt(req['context'].eventId, 0);
         let event: Event;
         EventService.getById(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
@@ -100,14 +100,14 @@ export class EventController {
         });
     };
 
-    private computeParallelTransactions(event: Event, req, res, next) {
+    private computeParallelTransactions(event: Event, req: Request, res: Response, next: Next) {
         EventService.convertTransfersWithCountToTransactions(event.id, (err, transactionsParallel) => {
             if (err) return next(new InternalError());
             this.addTransactions(transactionsParallel, event, req, res, next);
         });
     }
 
-    private addTransactions(transactionsParallel: any[], event: Event, req, res, next) {
+    private addTransactions(transactionsParallel: any[], event: Event, req: Request, res: Response, next: Next) {
         EventService.convertTransfersToTransactions(event.id, (err, transactions) => {
             if (err) return next(new InternalError());
             if (!transactions.length) {
@@ -134,7 +134,7 @@ export class EventController {
         });
     }
 
-    private closeEventAndDeleteTransfers(event: Event, req, res, next) {
+    private closeEventAndDeleteTransfers(event: Event, req: Request, res: Response, next: Next) {
         let dbEvent = EventFactory.toDbObject(event);
         dbEvent.eventId = event.id;
         EventService.updateEvent(dbEvent, (err, result) => {
@@ -146,7 +146,7 @@ export class EventController {
         });
     }
 
-    getEventInventoryTransfers(req, res, next) {
+    getEventInventoryTransfers(req: Request, res: Response, next: Next) {
         let eventId = parseInt(req.params.eventId, 0);
         InventoryService.getCurrent((err, rows) => {
             if (err) return next(new InternalError());
@@ -170,7 +170,7 @@ export class EventController {
         });
     }
 
-    getEventTransfers(req, res, next) {
+    getEventTransfers(req: Request, res: Response, next: Next) {
         let eventId = parseInt(req.params.eventId, 0);
         EventService.getTransfersByEventId(eventId, (err, rows) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
@@ -180,26 +180,26 @@ export class EventController {
         });
     };
 
-    addTransferStorageOut(req, res, next) {
+    addTransferStorageOut(req: Request, res: Response, next: Next) {
         this.addTransfer(req, res, next, true, -1);
     };
 
-    addTransferStorageIn(req, res, next) {
+    addTransferStorageIn(req: Request, res: Response, next: Next) {
         this.addTransfer(req, res, next, true, 1);
     };
 
-    addTransferCounterOut(req, res, next) {
+    addTransferCounterOut(req: Request, res: Response, next: Next) {
         this.addTransfer(req, res, next, false, -1);
     };
 
-    private addTransfer(req, res, next, isStorageChange, sign) {
-        let eventId = parseInt(req.context.eventId, 0);
+    private addTransfer(req: Request, res: Response, next: Next, isStorageChange: boolean, sign: number) {
+        let eventId = parseInt(req['context'].eventId, 0);
         let transfers: any[] = [];
         req.body.forEach(obj => {
             if (obj.change != 0) transfers.push(TransferFactory.toDbObject(obj, eventId, isStorageChange, sign));
         });
         EventService.addTransfers(transfers, (err, result) => {
-            if (err) return next(new BadRequestError());
+            if (err) return next(new BadRequestError(err));
             if (result) {
                 EventService.getLastTransfers(eventId, result.insertId, (err, rows) => {
                     if (err) return next(new InternalError());
@@ -210,16 +210,16 @@ export class EventController {
         });
     };
 
-    countStorage(req, res, next) {
+    countStorage(req: Request, res: Response, next: Next) {
             this.deleteTransfers(req, res, next, true);
     }
 
-    countCounter(req, res, next) {
+    countCounter(req: Request, res: Response, next: Next) {
             this.deleteTransfers(req, res, next, false);
     }
 
-    private deleteTransfers(req, res, next, isStorageChange) {
-        let eventId = parseInt(req.context.eventId, 0);
+    private deleteTransfers(req: Request, res: Response, next: Next, isStorageChange: boolean) {
+        let eventId = parseInt(req['context'].eventId, 0);
         EventService.getById(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
             if (!EventFactory.fromObj(row).eventType.countAllowed) return next(new ForbiddenError());
@@ -237,7 +237,7 @@ export class EventController {
         });
     }
 
-    private countInventory(req, res, next, isStorageChange, eventId) {
+    private countInventory(req: Request, res: Response, next: Next, isStorageChange: boolean, eventId: number) {
         let transfers: any[] = [];
         transfers = req.body.map(obj => TransferFactory.toDbObject(obj, eventId, isStorageChange, 1));
         if (!transfers.length) {
@@ -282,7 +282,7 @@ export class EventController {
         });
     }
 
-    getEventTransactions(req, res, next) {
+    getEventTransactions(req: Request, res: Response, next: Next) {
         let eventId = parseInt(req.params.eventId, 0);
         EventService.getTransactionsByEventId(eventId, (err, rows) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
@@ -292,7 +292,7 @@ export class EventController {
         });
     };
 
-    getCalculation(req, res, next) {
+    getCalculation(req: Request, res: Response, next: Next) {
         let eventId = parseInt(req.params.eventId, 0);
         EventService.getCalculation(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));
@@ -302,7 +302,7 @@ export class EventController {
         });
     };
 
-    getTransferCosts(req, res, next) {
+    getTransferCosts(req: Request, res: Response, next: Next) {
         let eventId = parseInt(req.params.eventId, 0);
         EventService.getTransferCosts(eventId, (err, row) => {
             if (err) return next(new BadRequestError('Invalid eventId'));

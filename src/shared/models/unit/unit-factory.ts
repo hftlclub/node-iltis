@@ -4,7 +4,7 @@ import { Unit } from './unit';
 export class UnitFactory {
 
     static empty(): Unit {
-        return new Unit(0, '', '');
+        return new Unit(0, '', '', false);
     }
 
     static fromObj(obj: any): Unit {
@@ -26,7 +26,21 @@ export class UnitFactory {
             unit.full = obj.unitFull.trim();
         }
 
+        if (obj.deleted) unit.deleted = obj.deleted;
+        else unit.deleted = !!ValueChecker.validBooleanNumber(obj.unitDeleted);
+
         return unit;
+    }
+
+    static toDbObject(obj: Unit): any {
+        let dbEntry: any = {};
+
+        if (obj.short) dbEntry.unitShort = obj.short;
+        if (obj.full) dbEntry.unitFull = obj.full;
+
+        dbEntry.unitDeleted = false;
+
+        return dbEntry;
     }
 
 }
