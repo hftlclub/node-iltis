@@ -1,3 +1,4 @@
+import { LogService } from './../services/log-service';
 import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
@@ -38,6 +39,7 @@ export class UnitController {
             if (result) {
                 UnitService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
+                    LogService.addLogEntry(req, result);
                     res.send(201, UnitFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -51,6 +53,7 @@ export class UnitController {
         updatedUnit.unitId = unitId;
         UnitService.updateUnit(updatedUnit, (err, result) => {
             if (err || !result) return next(new BadRequestError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };
@@ -60,6 +63,7 @@ export class UnitController {
         let unitId = parseInt(req.params.unitId, 0);
         UnitService.deleteUnit(unitId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };

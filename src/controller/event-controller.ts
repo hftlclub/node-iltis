@@ -1,3 +1,4 @@
+import { LogService } from './../services/log-service';
 import { NotFoundError, BadRequestError, InternalError, ForbiddenError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
@@ -8,6 +9,7 @@ import { CalculationFactory, Calculation } from '../shared/models/calculation';
 import { EventService } from '../services/event-service';
 import { Inventory, InventoryFactory} from './../shared/models/inventory';
 import { InventoryService } from './../services/inventory-service';
+import { Log } from '../shared/models/log';
 
 
 export class EventController {
@@ -32,6 +34,7 @@ export class EventController {
                 if (result) {
                     EventService.getById(result.insertId, (err, row) => {
                         if (err) return next(new InternalError());
+                        LogService.addLogEntry(req, result);
                         res.send(201, EventFactory.fromObj(row), ContentType.ApplicationJSON);
                     });
                 } else next(new InternalError());
@@ -53,6 +56,7 @@ export class EventController {
         let eventId = parseInt(req['context'].eventId, 0);
         EventService.deleteEvent(eventId, (err, result) => {
             if (err || !result) return next(new ForbiddenError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };
@@ -80,6 +84,7 @@ export class EventController {
         delete updatedEvent.eventCountedStorage;
         EventService.updateEvent(updatedEvent, (err, result) => {
             if (err || !result) return next(new BadRequestError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };
@@ -115,6 +120,7 @@ export class EventController {
                 dbEvent.eventId = event.id;
                 EventService.updateEvent(dbEvent, (err, result) => {
                     if (err || !result) return next(new InternalError());
+                    LogService.addLogEntry(req, result);
                     res.send(204);
                 });
             } else {
@@ -139,6 +145,7 @@ export class EventController {
         dbEvent.eventId = event.id;
         EventService.updateEvent(dbEvent, (err, result) => {
             if (err || !result) return next(new InternalError());
+            LogService.addLogEntry(req, result);
             EventService.deleteTransfersByEventId(event.id, (err, result) => {
                 if (err || !result) return next(new InternalError());
                 res.send(204);

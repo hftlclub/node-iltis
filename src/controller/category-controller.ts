@@ -1,3 +1,4 @@
+import { LogService } from './../services/log-service';
 import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
@@ -39,6 +40,7 @@ export class CategoryController {
             if (result) {
                 CategoryService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
+                    LogService.addLogEntry(req, result);
                     res.send(201, CategoryFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -52,6 +54,7 @@ export class CategoryController {
         updatedCategory.categoryId = categoryId;
         CategoryService.updateCategory(updatedCategory, (err, result) => {
             if (err || !result) return next(new BadRequestError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };
@@ -61,6 +64,7 @@ export class CategoryController {
         let categoryId = parseInt(req.params.categoryId, 0);
         CategoryService.deleteCategory(categoryId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };

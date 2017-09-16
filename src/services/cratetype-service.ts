@@ -79,6 +79,8 @@ export class CrateTypeService {
             if (err) {
                 return callback(err);
             }
+            crateType.crateTypeId = result.insertId;
+            result.payload = CrateTypeFactory.fromObj(crateType);
             return callback(null, result);
         });
     };
@@ -90,17 +92,19 @@ export class CrateTypeService {
             if (err) {
                 return callback(err);
             }
+            result.payload = CrateTypeFactory.fromObj(crateType);
             return callback(null, result);
         });
     };
 
-    static deleteCrateType(unitId: number, callback: (err: any, result?: any) => void) {
+    static deleteCrateType(crateTypeId: number, callback: (err: any, result?: any) => void) {
         let query = `DELETE FROM crate_types
                     WHERE crateTypeId = ?`;
-        mysql.conn.query(query, unitId, (err, result) => {
+        mysql.conn.query(query, crateTypeId, (err, result) => {
             if (err) {
                 return callback(err);
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };

@@ -1,3 +1,4 @@
+import { LogService } from './../services/log-service';
 import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
@@ -38,6 +39,7 @@ export class CrateTypeController {
             if (result) {
                 CrateTypeService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
+                    LogService.addLogEntry(req, result);
                     res.send(201, CrateTypeFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -51,6 +53,7 @@ export class CrateTypeController {
         updatedCrateType.crateTypeId = crateTypeId;
         CrateTypeService.updateCrateType(updatedCrateType, (err, result) => {
             if (err || !result) return next(new BadRequestError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };
@@ -60,6 +63,7 @@ export class CrateTypeController {
         let crateTypeId = parseInt(req.params.crateTypeId, 0);
         CrateTypeService.deleteCrateType(crateTypeId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };

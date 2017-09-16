@@ -66,3 +66,5 @@ DROP TABLE products;
 DROP TABLE size_types;
 
 DROP TABLE transactions;
+
+DROP TABLE logs;

@@ -1,3 +1,4 @@
+import { LogService } from './../services/log-service';
 import { NotFoundError, BadRequestError, InternalError, Request, Response, Next } from 'restify';
 
 import { ContentType } from '../contenttype';
@@ -38,6 +39,7 @@ export class SizeTypeController {
             if (result) {
                 SizeTypeService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
+                    LogService.addLogEntry(req, result);
                     res.send(201, SizeTypeFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -53,6 +55,7 @@ export class SizeTypeController {
         delete updatedSizeType.sizeTypeDeleted;
         SizeTypeService.updateSizeType(updatedSizeType, (err, result) => {
             if (err || !result) return next(new BadRequestError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };
@@ -62,6 +65,7 @@ export class SizeTypeController {
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         SizeTypeService.deleteSizeType(sizeTypeId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
+            LogService.addLogEntry(req, result);
             res.send(204);
         });
     };

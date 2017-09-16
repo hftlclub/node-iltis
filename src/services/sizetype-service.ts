@@ -81,17 +81,21 @@ export class SizeTypeService {
             if (err) {
                 return callback(err);
             }
+            sizeType.sizeTypeId = result.insertId;
+            result.payload = SizeTypeFactory.fromObj(sizeType);
             return callback(null, result);
         });
     };
 
     static updateSizeType(sizeType: any, callback: (err: any, result?: any) => void) {
+        delete sizeType.sizeTypeDeleted;
         let query = `UPDATE size_types SET ?
                     WHERE sizeTypeId = ?`;
         mysql.conn.query(query, [sizeType, sizeType.sizeTypeId], (err, result) => {
             if (err) {
                 return callback(err);
             }
+            result.payload = SizeTypeFactory.fromObj(sizeType);
             return callback(null, result);
         });
     };
@@ -107,9 +111,11 @@ export class SizeTypeService {
                     if (err) {
                         return callback(err);
                     }
+                    result.note = 'SET sizeTypeDeleted = true';
                     return callback(null, result);
                 });
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };

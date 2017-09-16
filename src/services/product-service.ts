@@ -55,6 +55,8 @@ export class ProductService {
             if (err) {
                 return callback(err);
             }
+            product.productId = result.insertId;
+            result.payload = ProductFactory.fromObj(product);
             return callback(null, result);
         });
     };
@@ -70,20 +72,24 @@ export class ProductService {
                     if (err) {
                         return callback(err);
                     }
+                    result.note = 'SET productDeleted = true';
                     return callback(null, result);
                 });
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
 
     static updateProduct(product: any, callback: (err: any, result?: any) => void) {
+        delete product.productDeleted;
         let query = `UPDATE products SET ?
                     WHERE productId = ?`;
         mysql.conn.query(query, [product, product.productId], (err, result) => {
             if (err) {
                 return callback(err);
             }
+            result.payload = ProductFactory.fromObj(product);
             return callback(null, result);
         });
     };
@@ -104,6 +110,7 @@ export class ProductService {
             if (err) {
                 return callback(err);
             }
+            result.payload = SizeFactory.fromObj(size);
             return callback(null, result);
         });
     };
@@ -128,9 +135,12 @@ export class ProductService {
                     if (err) {
                         return callback(err);
                     }
+                    result.payload = SizeFactory.fromObj(size);
+                    result.note = 'DELETED SQL ROWS IN product_crates PERMANENTLY';
                     return callback(null, result);
                 });
             }
+            result.payload = SizeFactory.fromObj(size);
             return callback(null, result);
         });
     };
@@ -160,6 +170,7 @@ export class ProductService {
             if (err) {
                 return callback(err);
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
@@ -189,6 +200,7 @@ export class ProductService {
             if (err) {
                 return callback(err);
             }
+            result.payload = {productId, crateTypeId};
             return callback(null, result);
         });
     };
@@ -200,6 +212,7 @@ export class ProductService {
             if (err) {
                 return callback(err);
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };

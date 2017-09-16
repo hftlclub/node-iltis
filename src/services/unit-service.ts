@@ -41,17 +41,21 @@ export class UnitService {
             if (err) {
                 return callback(err);
             }
+            unit.unitId = result.insertId;
+            result.payload = UnitFactory.fromObj(unit);
             return callback(null, result);
         });
     };
 
     static updateUnit(unit: any, callback: (err: any, result?: any) => void) {
+        delete unit.unitDeleted;
         let query = `UPDATE product_units SET ?
                     WHERE unitId = ?`;
         mysql.conn.query(query, [unit, unit.unitId], (err, result) => {
             if (err) {
                 return callback(err);
             }
+            result.payload = UnitFactory.fromObj(unit);
             return callback(null, result);
         });
     };
@@ -67,9 +71,11 @@ export class UnitService {
                     if (err) {
                         return callback(err);
                     }
+                    result.note = 'SET unitDeleted = true';
                     return callback(null, result);
                 });
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };

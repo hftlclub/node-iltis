@@ -47,17 +47,21 @@ export class CategoryService {
             if (err) {
                 return callback(err);
             }
+            category.categoryId = result.insertId;
+            result.payload = CategoryFactory.fromObj(category);
             return callback(null, result);
         });
     };
 
     static updateCategory(category: any, callback: (err: any, result?: any) => void) {
+        delete category.categoryDeleted;
         let query = `UPDATE product_categories SET ?
                     WHERE categoryId = ?`;
         mysql.conn.query(query, [category, category.categoryId], (err, result) => {
             if (err) {
                 return callback(err);
             }
+            result.payload = CategoryFactory.fromObj(category);
             return callback(null, result);
         });
     };
@@ -73,9 +77,11 @@ export class CategoryService {
                     if (err) {
                         return callback(err);
                     }
+                    result.note = 'SET categoryDeleted = true';
                     return callback(null, result);
                 });
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };

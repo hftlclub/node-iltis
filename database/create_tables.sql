@@ -121,6 +121,16 @@ CREATE TABLE transactions (
     CONSTRAINT transactions_pk PRIMARY KEY (transactionId)
 );
 
+CREATE TABLE logs (
+    logId int NOT NULL AUTO_INCREMENT,
+    logMethod varchar(16) NOT NULL,
+    logPath text NOT NULL,
+    logPayload text NOT NULL,
+    logUser varchar(32) NOT NULL DEFAULT 'Anonymous',
+    logTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT logs_pk PRIMARY KEY (logId)
+);
+
 ALTER TABLE crate_types ADD CONSTRAINT crate_types_size_types FOREIGN KEY crate_types_size_types (refSizeType)
     REFERENCES size_types (sizeTypeId)
     ON DELETE CASCADE;

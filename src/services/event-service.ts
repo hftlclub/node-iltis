@@ -1,4 +1,4 @@
-import { Event } from '../shared/models/event';
+import { Event, EventFactory} from '../shared/models/event';
 let mysql = require('../modules/mysql');
 
 export class EventService {
@@ -12,17 +12,21 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
+            event.eventId = result.insertId;
+            result.payload = EventFactory.fromObj(event);
             return callback(null, result);
         });
     };
 
     static updateEvent(event: any, callback: (err: any, result?: any) => void) {
-        let query = `UPDATE events SET ?
+        let query = `UPDATE events new SET ?
                     WHERE eventId = ?`;
         mysql.conn.query(query, [event, event.eventId], (err, result) => {
             if (err) {
+                console.log(err);
                 return callback(err);
             }
+            result.payload = EventFactory.fromObj(event);
             return callback(null, result);
         });
     };
@@ -34,6 +38,7 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
@@ -57,6 +62,7 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
@@ -80,6 +86,7 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
@@ -91,6 +98,7 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
+            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
