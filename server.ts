@@ -1,9 +1,9 @@
 import { createServer, bodyParser, CORS, queryParser, serveStatic, NotFoundError } from 'restify';
 
 const config = require('./config');
-import * as multer from 'multer';
+// import * as multer from 'multer';
 
-import { FileUploadService } from './src/services/file-upload-service';
+/*import { FileUploadService } from './src/services/file-upload-service';
 import { ProductController } from './src/controller/product-controller';
 import { ServerController } from './src/controller/server-controller';
 import { CategoryController } from './src/controller/category-controller';
@@ -12,10 +12,10 @@ import { SizeTypeController } from './src/controller/sizetype-controller';
 import { CrateTypeController } from './src/controller/cratetype-controller';
 import { EventController } from './src/controller/event-controller';
 import { EventTypeController } from './src/controller/eventtype-controller';
-import { InventoryController } from './src/controller/inventory-controller';
-import { TinyJson } from './src/shared/tinyjson';
+import { InventoryController } from './src/controller/inventory-controller';*/
+// import { TinyJson } from './src/shared/tinyjson';
 
-
+/*
 const serverController = new ServerController();
 const productController = new ProductController();
 const categoryController = new CategoryController();
@@ -25,20 +25,14 @@ const crateTypeController = new CrateTypeController();
 const eventController = new EventController();
 const eventTypeController = new EventTypeController();
 const inventoryController = new InventoryController();
-const inventoryTypeController = new InventoryController();
+const inventoryTypeController = new InventoryController();*/
 
-let server = createServer({
-    formatters: {
-        'application/json': function (req, res, body, cb) {
-            return cb(null, TinyJson.getJSON(body));
-        }
-    }
-});
+let server = createServer();
 
-server.use(bodyParser());
-server.use(CORS({}));
-server.use(queryParser());
-
+// server.use(bodyParser());
+// server.use(CORS({}));
+// server.use(queryParser());
+/*
 // other routes
 server.get('/info', serverController.info.bind(serverController));
 server.get('/healthcheck', serverController.healthcheck.bind(serverController));
@@ -107,6 +101,7 @@ server.del('/category/:categoryId', categoryController.deleteCategory.bind(categ
 server.del('/unit/:unitId', unitController.deleteUnit.bind(unitController));
 server.del('/cratetype/:crateTypeId', crateTypeController.deleteCrateType.bind(crateTypeController));
 server.del('/sizetype/:sizeTypeId', sizeTypeController.deleteSizeType.bind(sizeTypeController));
+*/
 
 // serve public folder
 server.get(/^\/*/, serveStatic({

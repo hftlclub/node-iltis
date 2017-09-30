@@ -5,7 +5,7 @@ const isProd = nodeEnv === "production";
 
 module.exports = {
   entry: {
-    server: './server.js'
+    server: './server.ts'
   },
   target: 'node',
   output: {
@@ -17,7 +17,7 @@ module.exports = {
     }
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js', '.ts']
   },
   module: {
     rules: [
@@ -25,12 +25,14 @@ module.exports = {
         enforce: 'pre',
         exclude: ['node_modules'],
         test: /\.ts$/,
-        use: ['ts-loader', 'source-map-loader']
+        use: ['ts-loader']
       }
     ]
   },
   devtool: isProd ? "hidden-source-map" : "source-map",
   plugins: [
+    new webpack.DefinePlugin({ "global.GENTLY": false })
     //new webpack.optimize.UglifyJsPlugin({ beautify: false, sourceMap: true })
   ]
+
 };
