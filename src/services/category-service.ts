@@ -8,9 +8,9 @@ export class CategoryService {
                     FROM product_categories
                     WHERE categoryDeleted = false
                     ORDER BY categoryId ASC`;
-        let queryCountTrue = `SELECT categoryId, categoryName, categoryDesc, categoryDeleted, COUNT(*) productCount
+        let queryCountTrue = `SELECT categoryId, categoryName, categoryDesc, categoryDeleted, COUNT(refCategory) productCount
                     FROM product_categories
-                    INNER JOIN products ON (categoryId = refCategory)
+                    LEFT JOIN products ON (categoryId = refCategory)
                     WHERE categoryDeleted = false
                     GROUP BY categoryId
                     ORDER BY categoryId ASC`;
