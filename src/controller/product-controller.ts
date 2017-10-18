@@ -27,13 +27,15 @@ export class ProductController {
             CrateTypeService.getProductsCrates((err, rows) => {
                 if (err) return next(new InternalError());
                 rows.forEach(row => {
-                    products.find(f => f.id === row.refProduct).crateTypes.push(CrateTypeFactory.fromObj(row));
+                    let product: Product = (products.find(f => f.id === row.refProduct));                    
+                    if (product) product.crateTypes.push(CrateTypeFactory.fromObj(row));
                 });
                 let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;
                 SizeTypeService.getProductsSizes(showInactiveSizes, (err, rows) => {
                     if (err) return next(new InternalError());
                     rows.forEach(row => {
-                        products.find(f => f.id === row.refProduct).sizes.push(SizeFactory.fromObj(row));
+                        let product: Product = (products.find(f => f.id === row.refProduct));
+                        if (product) product.sizes.push(SizeFactory.fromObj(row));
                     });
                     res.send(products, ContentType.ApplicationJSON);
                 });
