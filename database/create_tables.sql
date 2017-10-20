@@ -131,6 +131,12 @@ CREATE TABLE logs (
     CONSTRAINT logs_pk PRIMARY KEY (logId)
 );
 
+CREATE TABLE info (
+   id int NOT NULL AUTO_INCREMENT,
+   devMode bool NOT NULL,
+   CONSTRAINT info_pk PRIMARY KEY (id)
+);
+
 ALTER TABLE crate_types ADD CONSTRAINT crate_types_size_types FOREIGN KEY crate_types_size_types (refSizeType)
     REFERENCES size_types (sizeTypeId)
     ON DELETE CASCADE;

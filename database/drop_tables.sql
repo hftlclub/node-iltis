@@ -14,7 +14,7 @@ ALTER TABLE events
     DROP FOREIGN KEY events_event_types;
 
 ALTER TABLE event_notes
-    DROP FOREIGN KEYevent_notes_events;
+    DROP FOREIGN KEY event_notes_events;
 
 ALTER TABLE product_crates
     DROP FOREIGN KEY product_crates_crate_types;
@@ -68,3 +68,5 @@ DROP TABLE size_types;
 DROP TABLE transactions;
 
 DROP TABLE logs;
+
+DROP TABLE info;

@@ -1,4 +1,4 @@
-import { Request, Response, Next, ServiceUnavailableError } from 'restify';
+import { Request, Response, Next, ServiceUnavailableError, ForbiddenError, InternalError } from 'restify';
 import { HelperService } from './../services/helper-service';
 import { ContentType } from '../contenttype';
 
@@ -23,6 +23,28 @@ export class ServerController {
         HelperService.healthcheck(healthy => {
             if (!healthy) return next(new ServiceUnavailableError());
             res.send(200);
+        });
+    }
+
+    initDB(req: Request, res: Response, next: Next) {
+        let samples: boolean = req.query.samples == 'true' ? true : false;
+        HelperService.checkInitDB(success => {
+            if (!success) return next(new ForbiddenError());
+            HelperService.initDB(samples, success => {
+                if (!success) return next(new InternalError());
+                res.send(200);
+            });
+        });
+    }
+
+    resetDB(req: Request, res: Response, next: Next) {
+        let samples: boolean = req.query.samples == 'true' ? true : false;
+        HelperService.checkResetDB(success => {
+            if (!success) return next(new ForbiddenError());
+            HelperService.resetDB(samples, success => {
+                if (!success) return next(new InternalError());
+                res.send(200);
+            });
         });
     }
 }
