@@ -73,7 +73,6 @@ export class HelperService {
     private static batchQuery(queries: string[], callback: (success: boolean) => void) {
         if (queries.length && queries[0].replace(/(\r\n|\n|\r|\s)/gm, '').length > 0) {
             mysql.conn.query(queries[0], (err, rows, fields) => {
-                console.log(queries[0] + ';');
                 if (err) {
                     console.log(err);
                     return callback(false);
