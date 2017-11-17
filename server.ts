@@ -43,8 +43,8 @@ server.use(queryParser());
 // other routes
 server.get('/info', serverController.info.bind(serverController));
 server.get('/healthcheck', serverController.healthcheck.bind(serverController));
-server.put('/init', serverController.initDB.bind(serverController));
-server.put('/reset', serverController.resetDB.bind(serverController));
+server.get('/init', serverController.initDB.bind(serverController));
+server.get('/reset', serverController.resetDB.bind(serverController));
 
 // API routes (GET)
 server.get('/products', productController.getAll.bind(productController));
