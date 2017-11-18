@@ -78,11 +78,12 @@ export class CategoryService {
                         return callback(err);
                     }
                     result.note = 'SET categoryDeleted = true';
-                    return callback(null, result);
+                    return callback(null, 'result');
                 });
+            } else {
+                result.note = 'DELETED SQL ROW PERMANENTLY';
+                return callback(null, result);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
-            return callback(null, result);
         });
     };
 }

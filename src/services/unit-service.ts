@@ -74,9 +74,10 @@ export class UnitService {
                     result.note = 'SET unitDeleted = true';
                     return callback(null, result);
                 });
+            } else {
+                result.note = 'DELETED SQL ROW PERMANENTLY';
+                return callback(null, result);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
-            return callback(null, result);
         });
     };
 }

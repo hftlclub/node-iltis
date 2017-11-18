@@ -75,9 +75,10 @@ export class ProductService {
                     result.note = 'SET productDeleted = true';
                     return callback(null, result);
                 });
+            } else {
+                result.note = 'DELETED SQL ROW PERMANENTLY';
+                return callback(null, result);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
-            return callback(null, result);
         });
     };
 
@@ -139,9 +140,10 @@ export class ProductService {
                     result.note = 'DELETED SQL ROWS IN product_crates PERMANENTLY';
                     return callback(null, result);
                 });
+            } else {
+                result.payload = SizeFactory.fromObj(size);
+                return callback(null, result);
             }
-            result.payload = SizeFactory.fromObj(size);
-            return callback(null, result);
         });
     };
 
