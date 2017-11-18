@@ -7,13 +7,10 @@ import { SizeTypeFactory } from '../sizetype';
 export class InventoryFactory {
 
     static empty(): Inventory {
-        return new Inventory(ProductFactory.empty(), SizeTypeFactory.empty(), 0, 0);
+        return new Inventory(ProductFactory.empty(), SizeTypeFactory.empty(), 0, 0, 0);
     }
 
     static fromObj(obj: any): Inventory {
-
-        console.log(obj);
-
         let inventory = InventoryFactory.empty();
 
         if (obj.product) inventory.product = ProductFactory.fromObj(obj.product);
@@ -32,6 +29,10 @@ export class InventoryFactory {
 
         if (ValueChecker.validNumber(obj.counter)) {
             inventory.counter = obj.counter;
+        }
+
+        if (ValueChecker.validNumber(obj.sizeMinimumStock)) {
+            inventory.minStock = obj.sizeMinimumStock;
         }
 
         return inventory;

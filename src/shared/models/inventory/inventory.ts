@@ -6,6 +6,7 @@ export class Inventory {
     public product: Product,
     public sizeType: SizeType,
     public storage: number,
-    public counter: number
+    public counter: number,
+    public minStock: number
     ) {}
 }
