@@ -12,6 +12,8 @@ export class InventoryFactory {
 
     static fromObj(obj: any): Inventory {
 
+        console.log(obj);
+
         let inventory = InventoryFactory.empty();
 
         if (obj.product) inventory.product = ProductFactory.fromObj(obj.product);

@@ -33,12 +33,12 @@ export class ProductFactory {
         }
 
         if (obj.category) product.category = CategoryFactory.fromObj(obj.category);
-        else if (ValueChecker.validNumber(obj.refCategory)) {
+        else if (ValueChecker.validNumber(obj.refCategory) || ValueChecker.validNumber(obj.categoryId)) {
             product.category = CategoryFactory.fromObj(obj);
         }
 
         if (obj.unit) product.unit = UnitFactory.fromObj(obj.unit);
-        else if (ValueChecker.validNumber(obj.refUnit)) {
+        else if (ValueChecker.validNumber(obj.refUnit) || ValueChecker.validNumber(obj.unitId)) {
             product.unit = UnitFactory.fromObj(obj);
         }
 
