@@ -578,7 +578,7 @@ paths:
           type: number
           required: true
       responses:
-        '201':
+        '204':
           description: Event has been closed
         '400':
           description: Invalid Id
