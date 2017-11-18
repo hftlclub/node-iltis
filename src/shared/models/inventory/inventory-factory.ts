@@ -35,6 +35,10 @@ export class InventoryFactory {
             inventory.minStock = obj.sizeMinimumStock;
         }
 
+        if (ValueChecker.validNumber(obj.minStock)) {
+            inventory.minStock = obj.minStock;
+        }
+
         return inventory;
     }
 }
