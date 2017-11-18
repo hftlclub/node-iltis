@@ -11,7 +11,7 @@ export class ServerController {
         require('child_process').exec('git rev-parse HEAD', (err, stdout) => {
             let info = {
                 version: pjson.version,
-                commit: stdout,
+                commit: stdout.slice(0, -1),
                 time: process.uptime()
             };
             res.send(info, ContentType.ApplicationJSON);
