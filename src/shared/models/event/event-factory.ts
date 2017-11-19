@@ -78,9 +78,9 @@ export class EventFactory {
 
         if (obj.eventType) dbEntry.refEventType = obj.eventType.id;
         if (obj.description) dbEntry.eventDesc = obj.description;
-        if (ValueChecker.validNumber(obj.cashBefore)) dbEntry.eventCashBefore = obj.cashBefore;
-        if (ValueChecker.validNumber(obj.cashAfter)) dbEntry.eventCashAfter = obj.cashAfter;
-        if (ValueChecker.validNumber(obj.tip)) dbEntry.eventTip = obj.tip;
+        if (ValueChecker.validNumber(obj.cashBefore)) dbEntry.eventCashBefore = obj.cashBefore < 0 ? 0 : obj.cashBefore;
+        if (ValueChecker.validNumber(obj.cashAfter)) dbEntry.eventCashAfter = obj.cashAfter < 0 ? 0 : obj.cashAfter;
+        if (ValueChecker.validNumber(obj.tip)) dbEntry.eventTip = obj.tip < 0 ? 0 : obj.tip;
         if (obj.datetime) dbEntry.eventDT = obj.datetime;
 
         if (obj.active) dbEntry.eventActive = obj.active;

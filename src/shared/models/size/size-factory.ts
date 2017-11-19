@@ -39,8 +39,8 @@ export class SizeFactory {
         dbEntry.refProduct = refProduct;
 
         if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
-        if (ValueChecker.validNumber(obj.costs)) dbEntry.sizeDeliveryCosts = obj.costs;
-        if (ValueChecker.validNumber(obj.minStock)) dbEntry.sizeMinimumStock = obj.minStock;
+        if (ValueChecker.validNumber(obj.costs)) dbEntry.sizeDeliveryCosts = obj.costs < 0 ? 0 : obj.costs;
+        if (ValueChecker.validNumber(obj.minStock)) dbEntry.sizeMinimumStock = obj.minStock < 0 ? 0 : obj.minStock;
         if (obj.active) dbEntry.sizeActive = obj.active;
         else dbEntry.sizeActive = false;
 

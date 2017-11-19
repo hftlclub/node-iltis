@@ -40,7 +40,7 @@ export class CrateTypeFactory {
 
         if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
         if (obj.description) dbEntry.crateTypeDesc = obj.description;
-        if (ValueChecker.validNumber(obj.slots)) dbEntry.crateTypeSlots = obj.slots;
+        if (ValueChecker.validNumber(obj.slots)) dbEntry.crateTypeSlots = obj.slots < 0 ? 0 : obj.slots;
 
         return dbEntry;
     }
