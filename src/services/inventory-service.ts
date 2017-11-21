@@ -41,9 +41,9 @@ export class InventoryService {
                     FROM (
                         SELECT *
                         FROM (
-                            SELECT refEvent, refProduct, refSizeType, productId, refCategory, refUnit, productName,
+                            SELECT refEvent, productId, refCategory, refUnit, productName,
                             productDesc, productImgFilename, productActive, productDeleted,
-                            productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted ,
+                            productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted,
                             Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storage,
                             Sum(transactionChangeCounter) AS counter
                             FROM (
@@ -57,10 +57,11 @@ export class InventoryService {
                                 INNER JOIN size_types ON (refSizeType = sizeTypeId)
                                 INNER JOIN events ON (eventId = refEvent)) AS tpse
                             WHERE eventDT <= dateOfEvent
-                            GROUP BY refProduct, refSizeType) AS inventoryWithoutCosts
+                            GROUP BY productId, refSizeType) AS inventoryWithoutCosts
                         WHERE storage != 0 OR counter != 0) AS inventoryWithCosts
                     INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)`;
+                    INNER JOIN product_units ON (refUnit = unitId)
+                    INNER JOIN product_sizes ON (productId = refProduct AND sizeTypeId = refSizeType)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -87,7 +88,7 @@ export class InventoryService {
                                 FROM (
                                     SELECT productId, refCategory, refUnit, productName,
                                     productDesc, productImgFilename, productActive, productDeleted,
-                                    productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted ,
+                                    productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted,
                                     Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storageInventory,
                                     Sum(transactionChangeCounter) AS counterInventory
                                     FROM (
