@@ -43,6 +43,9 @@ ALTER TABLE transactions
 ALTER TABLE transactions
     DROP FOREIGN KEY transactions_size_types;
 
+ALTER TABLE size_types
+    DROP FOREIGN KEY size_types_product_units;
+
 DROP TABLE crate_types;
 
 DROP TABLE event_transfers;

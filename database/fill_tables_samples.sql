@@ -1,21 +1,21 @@
 -- Data of these insert-commands are just samples.
 -- Therefore products, prices and costs are not equal with the operational systems data of the organization.
 
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (0.2, 'Flasche', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (0.33, 'Flasche', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (0.5, 'Flasche', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (0.7, 'Flasche', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (1.0, 'Flasche', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (1.5, 'Flasche', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (1, 'Dose', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (1, 'Packung', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (1, 'Stück', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (5, 'Beutel', false);
-INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `sizeTypeDeleted`) VALUES (2, 'Beutel', false);
-
 INSERT INTO `product_units`(`unitShort`, `unitFull`, `unitDeleted`) VALUES (null, null, false);
 INSERT INTO `product_units`(`unitShort`, `unitFull`, `unitDeleted`) VALUES ('l', 'Liter', false);
 INSERT INTO `product_units`(`unitShort`, `unitFull`, `unitDeleted`) VALUES ('kg', 'Kilogramm', false);
+
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (0.2, 'Flasche', 2, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (0.33, 'Flasche', 2, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (0.5, 'Flasche', 2, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (0.7, 'Flasche', 2, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (1.0, 'Flasche', 2, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (1.5, 'Flasche', 2, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (1, 'Dose', 3, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (1, 'Packung', 3, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (1, 'Stück', 1, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (5, 'Beutel', 2, false);
+INSERT INTO `size_types`(`sizeTypeAmount`, `sizeTypeDesc`, `refUnit`, `sizeTypeDeleted`) VALUES (2, 'Beutel', 2, false);
 
 INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Afterwork', false, true, false, 'event', 'fa-beer', true);
 INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Privatparty', false, true, false, 'event' , 'fa-glass', true);

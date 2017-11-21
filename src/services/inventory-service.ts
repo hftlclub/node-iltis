@@ -15,7 +15,9 @@ export class InventoryService {
                                 Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storage,
                                 Sum(transactionChangeCounter) AS counter
                                 FROM (
-                                    SELECT *
+                                    SELECT transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
+                                        transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                                        productDesc, productImgFilename, productActive, productDeleted, productTS
                                     FROM transactions
                                     INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
                                 INNER JOIN size_types ON (refSizeType = sizeTypeId)
@@ -49,11 +51,15 @@ export class InventoryService {
                             FROM (
                                 SELECT *
                                 FROM (
-                                    SELECT eventDT as dateOfEvent
-                                    FROM events
-                                    WHERE eventId = ?) AS eventDate
-                                INNER JOIN transactions
-                                INNER JOIN products ON (refProduct = productId)
+                                    SELECT dateOfEvent, transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
+                                        transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                                        productDesc, productImgFilename, productActive, productDeleted, productTS
+                                    FROM (
+                                        SELECT eventDT as dateOfEvent
+                                        FROM events
+                                        WHERE eventId = ?) AS eventDate
+                                    INNER JOIN transactions
+                                    INNER JOIN products ON (refProduct = productId)) AS eventTransactions
                                 INNER JOIN size_types ON (refSizeType = sizeTypeId)
                                 INNER JOIN events ON (eventId = refEvent)) AS tpse
                             WHERE eventDT <= dateOfEvent
@@ -92,7 +98,9 @@ export class InventoryService {
                                     Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storageInventory,
                                     Sum(transactionChangeCounter) AS counterInventory
                                     FROM (
-                                        SELECT *
+                                        SELECT transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
+                                            transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                                            productDesc, productImgFilename, productActive, productDeleted, productTS
                                         FROM transactions
                                         INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
                                     INNER JOIN size_types ON (refSizeType = sizeTypeId)

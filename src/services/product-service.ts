@@ -27,7 +27,7 @@ export class ProductService {
         });
     }
 
-    static getById(productId: number, callback: (err: any, rows?: any) => void) {
+    static getById(productId: number, callback: (err: any, row?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -185,6 +185,7 @@ export class ProductService {
                         INNER JOIN crate_types ON (product_sizes.refSizeType = crate_types.refSizeType)
                         WHERE refProduct = ? AND sizeActive = true) AS possibleCrateTypes
                     INNER JOIN size_types ON (sizeTypeId = refSizeType)
+                    INNER JOIN product_units ON (unitId = refUnit)                    
                     WHERE (refProduct, crateTypeId) NOT IN (
                         SELECT *
                         FROM product_crates)`;

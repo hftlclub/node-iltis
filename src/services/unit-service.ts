@@ -20,7 +20,7 @@ export class UnitService {
         });
     };
 
-    static getById(unitId: number, callback: (err: any, rows?: any) => void) {
+    static getById(unitId: number, callback: (err: any, row?: any) => void) {
         let query = `SELECT *
                     FROM product_units
                     WHERE unitId = ?`;

@@ -141,7 +141,7 @@ export class EventService {
         });
     };
 
-    static getById(eventId: number, callback: (err: any, rows?: any) => void) {
+    static getById(eventId: number, callback: (err: any, row?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
@@ -220,7 +220,9 @@ export class EventService {
                     FROM (
                         SELECT *
                         FROM (
-                            SELECT *
+                            SELECT transferId, refEvent, refProduct, refSizeType, transferChangeStorage, 
+                                transferChangeCounter, transferTS, productId, refCategory, productName,
+                                productDesc, productImgFilename, productActive, productDeleted, productTS
                             FROM event_transfers
                             INNER JOIN products ON (refProduct = productId)) AS transfersProducts
                         INNER JOIN size_types ON (refSizeType = sizeTypeId)
@@ -242,11 +244,15 @@ export class EventService {
     static getTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
-                        SELECT transferId, refEvent, refProduct, refSizeType,
-                            (transferChangeStorage + transferChangeCounter) AS 'change'
-                        FROM event_transfers
-                        WHERE refEvent = ?) AS changes 
-                    INNER JOIN products ON (refProduct = productId)
+                        SELECT transferId, refEvent, refProduct, refSizeType, change,
+                            productId, refCategory, productName, productDesc,
+                            productImgFilename, productActive, productDeleted, productTS
+                        FROM (
+                            SELECT transferId, refEvent, refProduct, refSizeType,
+                                (transferChangeStorage + transferChangeCounter) AS 'change'
+                            FROM event_transfers
+                            WHERE refEvent = ?) AS changes 
+                        INNER JOIN products ON (refProduct = productId)) AS changesWithProduct
                     INNER JOIN size_types ON (refSizeType = sizeTypeId)
                     INNER JOIN product_categories ON (refCategory = categoryId)
                     INNER JOIN product_units ON (refUnit = unitId)
@@ -291,7 +297,9 @@ export class EventService {
                     FROM (
                         SELECT *
                         FROM (
-                            SELECT *
+                            SELECT transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
+                                transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                                productDesc, productImgFilename, productActive, productDeleted, productTS
                             FROM transactions
                             INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
                         INNER JOIN size_types ON (refSizeType = sizeTypeId)

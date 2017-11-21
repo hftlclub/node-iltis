@@ -17,7 +17,7 @@ export class EventTypeService {
         });
     };
 
-    static getById(eventTypeId: number, callback: (err: any, rows?: any) => void) {
+    static getById(eventTypeId: number, callback: (err: any, row?: any) => void) {
         let query = `SELECT *
                     FROM event_types
                     WHERE eventTypeId = ?`;

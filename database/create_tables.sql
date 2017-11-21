@@ -102,11 +102,12 @@ CREATE TABLE products (
 );
 
 CREATE TABLE size_types (
-    sizeTypeId int NOT NULL AUTO_INCREMENT,
-    sizeTypeAmount decimal(7,3) NOT NULL,
-    sizeTypeDesc varchar(64) NULL,
-    sizeTypeDeleted bool NOT NULL,
-    CONSTRAINT size_types_pk PRIMARY KEY (sizeTypeId)
+   sizeTypeId int NOT NULL AUTO_INCREMENT,
+   sizeTypeAmount decimal(7,3) NOT NULL,
+   sizeTypeDesc varchar(64) NULL,
+   sizeTypeDeleted bool NOT NULL,
+   refUnit int NOT NULL,
+   CONSTRAINT size_types_pk PRIMARY KEY (sizeTypeId)
 );
 
 CREATE TABLE transactions (
@@ -187,3 +188,6 @@ ALTER TABLE transactions ADD CONSTRAINT transactions_products FOREIGN KEY transa
 
 ALTER TABLE transactions ADD CONSTRAINT transactions_size_types FOREIGN KEY transactions_size_types (refSizeType)
     REFERENCES size_types (sizeTypeId);
+
+ALTER TABLE size_types ADD CONSTRAINT size_types_product_units FOREIGN KEY size_types_product_units (refUnit)
+   REFERENCES product_units (unitId);

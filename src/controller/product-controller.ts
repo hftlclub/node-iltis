@@ -12,6 +12,7 @@ import { CrateTypeService } from '../services/cratetype-service';
 import { SizeTypeService } from '../services/sizetype-service';
 import { SizeFactory } from '../shared/models/size';
 import { Inventory, InventoryFactory } from '../shared/models/inventory';
+import { SizeTypeFactory } from '../shared/models/sizetype/sizetype-factory';
 
 const config = require('../../config');
 
@@ -160,12 +161,23 @@ export class ProductController {
     // POST: Add new Size to Product
     addSizeToProduct(req: Request, res: Response, next: Next) {
         let productId = parseInt(req.params.productId, 0);
-        ProductService.addSizeToProduct(SizeFactory.toDbObject(req.body, productId), (err, result) => {
-            if (err) return next(new BadRequestError());
-            if (result) {
-                LogService.addLogEntry(req, result);
-                res.send(201);
-            } else next(new InternalError());
+        let sizeTypeId = SizeTypeFactory.fromObj(req.body).id;
+        ProductService.getById(productId, (err, productRow) => {
+            if (!err && productRow) {
+                SizeTypeService.getById(sizeTypeId, (err, sizeTypeRow) => {
+                    if (!err && sizeTypeRow) {
+                        if (productRow.unitId === sizeTypeRow.unitId) {
+                            ProductService.addSizeToProduct(SizeFactory.toDbObject(req.body, productId), (err, result) => {
+                                if (err) return next(new BadRequestError());
+                                if (result) {
+                                    LogService.addLogEntry(req, result);
+                                    res.send(201);
+                                } else next(new InternalError());
+                            });
+                        } else return next(new ForbiddenError());
+                    } else return next(new BadRequestError());
+                });
+            } else return next(new BadRequestError());
         });
     };
 
@@ -259,12 +271,22 @@ export class ProductController {
     addCrateTypeToProduct(req: Request, res: Response, next: Next) {
         let productId = parseInt(req.params.productId, 0);
         let crateTypeId = CrateTypeFactory.fromObj(req.body).id;
-        ProductService.addCrateTypeToProduct(productId, crateTypeId, (err, result) => {
-            if (err) return next(new BadRequestError());
-            if (result) {
-                LogService.addLogEntry(req, result);
-                res.send(201);
-            } else next(new InternalError());
+        ProductService.getById(productId, (err, productRow) => {
+            if (!err && productRow) {
+                CrateTypeService.getById(crateTypeId, (err, crateypeRow) => {
+                    if (!err && crateypeRow) {
+                        if (productRow.unitId === crateypeRow.unitId) {
+                            ProductService.addCrateTypeToProduct(productId, crateTypeId, (err, result) => {
+                                if (err) return next(new BadRequestError());
+                                if (result) {
+                                    LogService.addLogEntry(req, result);
+                                    res.send(201);
+                                } else next(new InternalError());
+                            });
+                        } else return next(new ForbiddenError());
+                    } else return next(new BadRequestError());
+                });
+            } else return next(new BadRequestError());
         });
     };
 

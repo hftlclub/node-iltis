@@ -249,6 +249,10 @@ paths:
           description: Invalid data
           schema:
             $ref: '#/definitions/RestError'
+        '403':
+          description: Size is not assignable to this product
+          schema:
+            $ref: '#/definitions/RestError'
         '409':
           description: Relation does already exist
           schema:
@@ -412,6 +416,10 @@ paths:
           description: Relation between product and crate-type has been created
         '400':
           description: Invalid data
+          schema:
+            $ref: '#/definitions/RestError'
+        '403':
+          description: CrateType is not assignable to this product (CrateType has got wrong SizeType)
           schema:
             $ref: '#/definitions/RestError'
         '409':
@@ -1765,6 +1773,8 @@ definitions:
       description:
         type: string
         example: Flasche
+      unit:
+        $ref: '#/definitions/Unit'
       deleted:
         type: boolean
         example: false

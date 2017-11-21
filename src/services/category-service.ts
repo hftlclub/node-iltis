@@ -25,7 +25,7 @@ export class CategoryService {
         });
     };
 
-    static getById(categoryId: number, callback: (err: any, rows?: any) => void) {
+    static getById(categoryId: number, callback: (err: any, row?: any) => void) {
         let query = `SELECT *
                     FROM product_categories
                     WHERE categoryId = ?`;
