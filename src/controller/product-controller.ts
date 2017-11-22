@@ -161,7 +161,7 @@ export class ProductController {
     // POST: Add new Size to Product
     addSizeToProduct(req: Request, res: Response, next: Next) {
         let productId = parseInt(req.params.productId, 0);
-        let sizeTypeId = SizeTypeFactory.fromObj(req.body).id;
+        let sizeTypeId = SizeFactory.fromObj(req.body).sizeType.id;
         ProductService.getById(productId, (err, productRow) => {
             if (!err && productRow) {
                 SizeTypeService.getById(sizeTypeId, (err, sizeTypeRow) => {

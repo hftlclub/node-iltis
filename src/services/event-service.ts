@@ -244,7 +244,7 @@ export class EventService {
     static getTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
-                        SELECT transferId, refEvent, refProduct, refSizeType, change,
+                        SELECT transferId, refEvent, refProduct, refSizeType, 'change',
                             productId, refCategory, productName, productDesc,
                             productImgFilename, productActive, productDeleted, productTS
                         FROM (
