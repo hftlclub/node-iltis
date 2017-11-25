@@ -36,6 +36,7 @@ export class CrateTypeController {
     addCrateType(req: Request, res: Response, next: Next) {
         CrateTypeService.addCrateType(CrateTypeFactory.toDbObject(req.body), (err, result) => {
             if (err) return next(new BadRequestError());
+            if (result.slots === 0) return next(new BadRequestError('Invalid slots'));
             if (result) {
                 CrateTypeService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
@@ -53,6 +54,7 @@ export class CrateTypeController {
         updatedCrateType.crateTypeId = crateTypeId;
         CrateTypeService.updateCrateType(updatedCrateType, (err, result) => {
             if (err || !result) return next(new BadRequestError());
+            if (result.slots === 0) return next(new BadRequestError('Invalid slots'));
             LogService.addLogEntry(req, result);
             res.send(204);
         });

@@ -36,6 +36,7 @@ export class SizeTypeController {
     addSizeType(req: Request, res: Response, next: Next) {
         SizeTypeService.addSizeType(SizeTypeFactory.toDbObject(req.body), (err, result) => {
             if (err) return next(new BadRequestError());
+            if (result.amount === 0) return next(new BadRequestError('Invalid amount'));
             if (result) {
                 SizeTypeService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
@@ -55,6 +56,7 @@ export class SizeTypeController {
         delete updatedSizeType.sizeTypeDeleted;
         SizeTypeService.updateSizeType(updatedSizeType, (err, result) => {
             if (err || !result) return next(new BadRequestError());
+            if (result.amount === 0) return next(new BadRequestError('Invalid amount'));
             LogService.addLogEntry(req, result);
             res.send(204);
         });
