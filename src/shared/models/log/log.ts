@@ -1,5 +1,3 @@
-import { Request } from 'restify';
-
 export class Log {
     constructor(
         public id: number,
