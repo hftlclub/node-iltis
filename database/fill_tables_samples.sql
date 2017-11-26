@@ -23,6 +23,7 @@ INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEven
 INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Spontanentnahme', true, false, false, 'private', 'fa-hand-paper-o', false);
 INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Einkauf', true, false, false, 'purchase', 'fa-shopping-cart', false);
 INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Auswärtiges Event', false, true, false, 'event', 'fa-users', false);
+INSERT INTO `event_types`(`eventTypeDesc`, `eventTypeIntern`, `eventTypeRealEvent`,`eventTypeDeleted`, `eventTypeUiMode`,`eventTypeIcon`, `eventTypeCountAllowed`) VALUES ('Inventur', true, false, false, 'stocktake', 'fa-database', true);
 
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('Bier', 'Bier, Mischbier, und alkoholfreies Bier', false);
 INSERT INTO `product_categories`(`categoryName`, `categoryDesc`, `categoryDeleted`) VALUES ('AFG', 'Alkoholfreie Getränke', false);
