@@ -166,7 +166,7 @@ export class EventService {
     };
 
     static convertTransfersToTransactions(eventId: number, callback: (err: any, rows?: any) => void) {
-        let query = `SELECT transferRefEvent, transferRefProduct, transferRefSizeType,
+        let query = `SELECT transferRefEvent AS transactionRefEvent, transferRefProduct AS transactionRefProduct, transferRefSizeType AS transactionRefSizeType,
                             SUM(transferChangeCounter) AS transferChangeCounter,
                             (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
                     FROM event_transfers
@@ -215,22 +215,17 @@ export class EventService {
         });
     }
 
-    // TODO: OPTIMIZE!
     static getLastTransfers(eventId: number, insertId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
-                        FROM (
-                            SELECT transferId, transferRefEvent, transferRefProduct, transferRefSizeType, transferChangeStorage, 
-                                transferChangeCounter, transferTS, productId, productRefCategory, productName,
-                                productDesc, productImgFilename, productActive, productDeleted, productTS
-                            FROM event_transfers
-                            INNER JOIN products ON (transferRefProduct = productId)) AS transfersProducts
-                        INNER JOIN size_types ON (productRefSizeType = sizeTypeId)
-                        WHERE transferRefEvent = ? AND transferId >= ?
-                        ORDER BY transferId ASC) AS transfers
+                        FROM event_transfers
+                        WHERE transferRefEvent = ? AND transferId >= ?) AS transfers
+                    INNER JOIN products ON (transferRefProduct = productId)
+                    INNER JOIN size_types ON (transferRefSizeType = sizeTypeId)
                     INNER JOIN product_categories ON (productRefCategory = categoryId)
-                    INNER JOIN product_units ON (productRefUnit = unitId)`;
+                    INNER JOIN product_units ON (sizeTypeRefUnit = unitId)
+                    ORDER BY transferId ASC`;
         mysql.conn.query(query, [eventId, insertId], (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -242,22 +237,17 @@ export class EventService {
         });
     };
 
-    // TODO: OPTIMIZE!
     static getTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
-                        SELECT transferId, transferRefEvent, transferRefProduct, transferRefSizeType, \`change\`,
-                            productId, productRefCategory, productName, productDesc,
-                            productImgFilename, productActive, productDeleted, productTS
-                        FROM (
-                            SELECT transferId, transferRefEvent, transferRefProduct, transferRefSizeType,
-                                (transferChangeStorage + transferChangeCounter) AS \`change\`
-                            FROM event_transfers
-                            WHERE transferRefEvent = ?) AS changes 
-                        INNER JOIN products ON (transferRefProduct = productId)) AS changesWithProduct
+                        SELECT transferId, transferRefEvent, transferRefProduct, transferRefSizeType,
+                            (transferChangeStorage + transferChangeCounter) AS \`change\`
+                        FROM event_transfers
+                        WHERE transferRefEvent = ?) AS changes 
+                    INNER JOIN products ON (transferRefProduct = productId)
                     INNER JOIN size_types ON (transferRefSizeType = sizeTypeId)
                     INNER JOIN product_categories ON (productRefCategory = categoryId)
-                    INNER JOIN product_units ON (productRefUnit = unitId)
+                    INNER JOIN product_units ON (sizeTypeRefUnit = unitId)
                     ORDER BY transferId ASC`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
@@ -294,22 +284,17 @@ export class EventService {
         });
     };
 
-    // TODO: OPTIMIZE!
     static getTransactionsByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
-                        FROM (
-                            SELECT transactionId, transactionRefEvent, transactionRefProduct, transactionRefSizeType, transactionChangeTotal,
-                                transactionChangeCounter, transactionTS, productId, productRefCategory, productName, 
-                                productDesc, productImgFilename, productActive, productDeleted, productTS
-                            FROM event_transactions
-                            INNER JOIN products ON (transactionRefProduct = productId)) AS transactionsProducts
-                        INNER JOIN size_types ON (transactionRefSizeType = sizeTypeId)
-                        WHERE transactionRefEvent = ?
-                        ORDER BY transactionId ASC) AS transactions
+                        FROM event_transactions
+                        WHERE transactionRefEvent = ?) AS transactions
+                    INNER JOIN products ON (transactionRefProduct = productId)
+                    INNER JOIN size_types ON (transactionRefSizeType = sizeTypeId)
                     INNER JOIN product_categories ON (productRefCategory = categoryId)
-                    INNER JOIN product_units ON (productRefUnit = unitId)`;
+                    INNER JOIN product_units ON (sizeTypeRefUnit = unitId)
+                    ORDER BY transactionId ASC`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
