@@ -1,6 +1,18 @@
 ALTER TABLE crate_types
     DROP FOREIGN KEY crate_types_size_types;
 
+ALTER TABLE event_notes
+    DROP FOREIGN KEY event_notes_events;
+
+ALTER TABLE event_transactions
+    DROP FOREIGN KEY event_transactions_events;
+
+ALTER TABLE event_transactions
+    DROP FOREIGN KEY event_transactions_products;
+
+ALTER TABLE event_transactions
+    DROP FOREIGN KEY event_transactions_size_types;
+
 ALTER TABLE event_transfers
     DROP FOREIGN KEY event_transfer_events;
 
@@ -12,9 +24,6 @@ ALTER TABLE event_transfers
 
 ALTER TABLE events
     DROP FOREIGN KEY events_event_types;
-
-ALTER TABLE event_notes
-    DROP FOREIGN KEY event_notes_events;
 
 ALTER TABLE product_crates
     DROP FOREIGN KEY product_crates_crate_types;
@@ -34,19 +43,14 @@ ALTER TABLE products
 ALTER TABLE products
     DROP FOREIGN KEY products_units;
 
-ALTER TABLE transactions
-    DROP FOREIGN KEY transactions_events;
-
-ALTER TABLE transactions
-    DROP FOREIGN KEY transactions_products;
-
-ALTER TABLE transactions
-    DROP FOREIGN KEY transactions_size_types;
-
 ALTER TABLE size_types
     DROP FOREIGN KEY size_types_product_units;
 
 DROP TABLE crate_types;
+
+DROP TABLE event_notes;
+
+DROP TABLE event_transactions;
 
 DROP TABLE event_transfers;
 
@@ -54,7 +58,9 @@ DROP TABLE event_types;
 
 DROP TABLE events;
 
-DROP TABLE event_notes;
+DROP TABLE info;
+
+DROP TABLE logs;
 
 DROP TABLE product_categories;
 
@@ -67,9 +73,3 @@ DROP TABLE product_units;
 DROP TABLE products;
 
 DROP TABLE size_types;
-
-DROP TABLE transactions;
-
-DROP TABLE logs;
-
-DROP TABLE info;

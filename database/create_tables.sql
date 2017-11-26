@@ -67,7 +67,7 @@ CREATE TABLE events (
 
 CREATE TABLE info (
     infoId int NOT NULL AUTO_INCREMENT,
-    infoProductiveModeOn bool NOT NULL,
+    devMode bool NOT NULL,
     CONSTRAINT info_pk PRIMARY KEY (infoId)
 );
 
