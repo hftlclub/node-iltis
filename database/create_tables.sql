@@ -1,16 +1,37 @@
 CREATE TABLE crate_types (
     crateTypeId int NOT NULL AUTO_INCREMENT,
-    refSizeType int NOT NULL,
+    crateTypeRefSizeType int NOT NULL,
     crateTypeDesc varchar(128) NOT NULL,
     crateTypeSlots int NOT NULL,
     CONSTRAINT crate_types_pk PRIMARY KEY (crateTypeId)
 );
 
+CREATE TABLE event_notes (
+    eventNoteId int NOT NULL AUTO_INCREMENT,
+    eventNoteRefEvent int NOT NULL,
+    eventNoteText text NOT NULL,
+    eventNoteTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    eventNoteUser varchar(64) NOT NULL DEFAULT 'Anonymous',
+    CONSTRAINT event_notes_pk PRIMARY KEY (eventNoteId)
+);
+
+CREATE TABLE event_transactions (
+    transactionId int NOT NULL AUTO_INCREMENT,
+    transactionRefEvent int NOT NULL,
+    transactionRefProduct int NOT NULL,
+    transactionRefSizeType int NOT NULL,
+    transactionChangeTotal int NOT NULL,
+    transactionChangeCounter int NOT NULL,
+    transactionTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE INDEX uniques (transactionRefEvent,transactionRefProduct,transactionRefSizeType),
+    CONSTRAINT event_transactions_pk PRIMARY KEY (transactionId)
+);
+
 CREATE TABLE event_transfers (
     transferId int NOT NULL AUTO_INCREMENT,
-    refEvent int NOT NULL,
-    refProduct int NOT NULL,
-    refSizeType int NOT NULL,
+    transferRefEvent int NOT NULL,
+    transferRefProduct int NOT NULL,
+    transferRefSizeType int NOT NULL,
     transferChangeStorage int NOT NULL,
     transferChangeCounter int NOT NULL,
     transferTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -31,7 +52,7 @@ CREATE TABLE event_types (
 
 CREATE TABLE events (
     eventId int NOT NULL AUTO_INCREMENT,
-    refEventType int NOT NULL,
+    eventRefEventType int NOT NULL,
     eventDesc varchar(255) NOT NULL,
     eventCashBefore decimal(8,2) NOT NULL,
     eventCashAfter decimal(8,2) NOT NULL,
@@ -44,13 +65,20 @@ CREATE TABLE events (
     CONSTRAINT events_pk PRIMARY KEY (eventId)
 );
 
-CREATE TABLE event_notes (
-   eventNoteId int NOT NULL AUTO_INCREMENT,
-   refEvent int NOT NULL,
-   eventNoteText text NOT NULL,
-   eventNoteTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   eventNoteUser varchar(64) NOT NULL DEFAULT 'Anonymous',
-   CONSTRAINT event_notes_pk PRIMARY KEY (eventNoteId)
+CREATE TABLE info (
+    infoId int NOT NULL AUTO_INCREMENT,
+    infoProductiveModeOn bool NOT NULL,
+    CONSTRAINT info_pk PRIMARY KEY (infoId)
+);
+
+CREATE TABLE logs (
+    logId int NOT NULL AUTO_INCREMENT,
+    logMethod varchar(16) NOT NULL,
+    logPath text NOT NULL,
+    logPayload text NOT NULL,
+    logUser varchar(32) NOT NULL DEFAULT 'Anonymous',
+    logTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT logs_pk PRIMARY KEY (logId)
 );
 
 CREATE TABLE product_categories (
@@ -63,18 +91,18 @@ CREATE TABLE product_categories (
 );
 
 CREATE TABLE product_crates (
-    refProduct int NOT NULL,
-    refCrateType int NOT NULL,
-    CONSTRAINT product_crates_pk PRIMARY KEY (refProduct,refCrateType)
+    crateRefProduct int NOT NULL,
+    crateRefCrateType int NOT NULL,
+    CONSTRAINT product_crates_pk PRIMARY KEY (crateRefProduct,crateRefCrateType)
 );
 
 CREATE TABLE product_sizes (
-    refProduct int NOT NULL,
-    refSizeType int NOT NULL,
+    sizeRefProduct int NOT NULL,
+    sizeRefSizeType int NOT NULL,
     sizeDeliveryCosts decimal(5,2) NOT NULL,
     sizeMinimumStock int NOT NULL,
     sizeActive bool NOT NULL,
-    CONSTRAINT product_sizes_pk PRIMARY KEY (refProduct,refSizeType)
+    CONSTRAINT product_sizes_pk PRIMARY KEY (sizeRefProduct,sizeRefSizeType)
 );
 
 CREATE TABLE product_units (
@@ -89,8 +117,8 @@ CREATE TABLE product_units (
 
 CREATE TABLE products (
     productId int NOT NULL AUTO_INCREMENT,
-    refCategory int NOT NULL,
-    refUnit int NOT NULL,
+    productRefCategory int NOT NULL,
+    productRefUnit int NOT NULL,
     productName varchar(128) NOT NULL,
     productDesc varchar(255) NULL,
     productImgFilename varchar(255) NOT NULL,
@@ -102,92 +130,64 @@ CREATE TABLE products (
 );
 
 CREATE TABLE size_types (
-   sizeTypeId int NOT NULL AUTO_INCREMENT,
-   sizeTypeAmount decimal(7,3) NOT NULL,
-   sizeTypeDesc varchar(64) NULL,
-   sizeTypeDeleted bool NOT NULL,
-   refUnit int NOT NULL,
-   CONSTRAINT size_types_pk PRIMARY KEY (sizeTypeId)
+    sizeTypeId int NOT NULL AUTO_INCREMENT,
+    sizeTypeAmount decimal(7,3) NOT NULL,
+    sizeTypeDesc varchar(64) NULL,
+    sizeTypeDeleted bool NOT NULL,
+    sizeTypeRefUnit int NOT NULL,
+    CONSTRAINT size_types_pk PRIMARY KEY (sizeTypeId)
 );
 
-CREATE TABLE transactions (
-    transactionId int NOT NULL AUTO_INCREMENT,
-    refEvent int NOT NULL,
-    refProduct int NOT NULL,
-    refSizeType int NOT NULL,
-    transactionChangeTotal int NOT NULL,
-    transactionChangeCounter int NOT NULL,
-    transactionTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE INDEX uniques (refEvent,refProduct,refSizeType),
-    CONSTRAINT transactions_pk PRIMARY KEY (transactionId)
-);
-
-CREATE TABLE logs (
-    logId int NOT NULL AUTO_INCREMENT,
-    logMethod varchar(16) NOT NULL,
-    logPath text NOT NULL,
-    logPayload text NOT NULL,
-    logUser varchar(32) NOT NULL DEFAULT 'Anonymous',
-    logTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT logs_pk PRIMARY KEY (logId)
-);
-
-CREATE TABLE info (
-   id int NOT NULL AUTO_INCREMENT,
-   devMode bool NOT NULL,
-   CONSTRAINT info_pk PRIMARY KEY (id)
-);
-
-ALTER TABLE crate_types ADD CONSTRAINT crate_types_size_types FOREIGN KEY crate_types_size_types (refSizeType)
+ALTER TABLE crate_types ADD CONSTRAINT crate_types_size_types FOREIGN KEY crate_types_size_types (crateTypeRefSizeType)
     REFERENCES size_types (sizeTypeId)
     ON DELETE CASCADE;
 
-ALTER TABLE event_transfers ADD CONSTRAINT event_transfer_events FOREIGN KEY event_transfer_events (refEvent)
+ALTER TABLE event_notes ADD CONSTRAINT event_notes_events FOREIGN KEY event_notes_events (eventNoteRefEvent)
     REFERENCES events (eventId)
     ON DELETE CASCADE;
 
-ALTER TABLE event_transfers ADD CONSTRAINT event_transfers_products FOREIGN KEY event_transfers_products (refProduct)
+ALTER TABLE event_transactions ADD CONSTRAINT event_transactions_events FOREIGN KEY event_transactions_events (transactionRefEvent)
+    REFERENCES events (eventId);
+
+ALTER TABLE event_transactions ADD CONSTRAINT event_transactions_products FOREIGN KEY event_transactions_products (transactionRefProduct)
     REFERENCES products (productId);
 
-ALTER TABLE event_transfers ADD CONSTRAINT event_transfers_size_types FOREIGN KEY event_transfers_size_types (refSizeType)
+ALTER TABLE event_transactions ADD CONSTRAINT event_transactions_size_types FOREIGN KEY event_transactions_size_types (transactionRefSizeType)
     REFERENCES size_types (sizeTypeId);
 
-ALTER TABLE events ADD CONSTRAINT events_event_types FOREIGN KEY events_event_types (refEventType)
+ALTER TABLE event_transfers ADD CONSTRAINT event_transfer_events FOREIGN KEY event_transfer_events (transferRefEvent)
+    REFERENCES events (eventId)
+    ON DELETE CASCADE;
+
+ALTER TABLE event_transfers ADD CONSTRAINT event_transfers_products FOREIGN KEY event_transfers_products (transferRefProduct)
+    REFERENCES products (productId);
+
+ALTER TABLE event_transfers ADD CONSTRAINT event_transfers_size_types FOREIGN KEY event_transfers_size_types (transferRefSizeType)
+    REFERENCES size_types (sizeTypeId);
+
+ALTER TABLE events ADD CONSTRAINT events_event_types FOREIGN KEY events_event_types (eventRefEventType)
     REFERENCES event_types (eventTypeId);
 
-ALTER TABLE event_notes ADD CONSTRAINT event_notes_events FOREIGN KEY event_notes_events (refEvent)
-   REFERENCES events (eventId)
-   ON DELETE CASCADE;
-
-ALTER TABLE product_crates ADD CONSTRAINT product_crates_crate_types FOREIGN KEY product_crates_crate_types (refCrateType)
+ALTER TABLE product_crates ADD CONSTRAINT product_crates_crate_types FOREIGN KEY product_crates_crate_types (crateRefCrateType)
     REFERENCES crate_types (crateTypeId)
     ON DELETE CASCADE;
 
-ALTER TABLE product_crates ADD CONSTRAINT product_crates_products FOREIGN KEY product_crates_products (refProduct)
+ALTER TABLE product_crates ADD CONSTRAINT product_crates_products FOREIGN KEY product_crates_products (crateRefProduct)
     REFERENCES products (productId)
     ON DELETE CASCADE;
 
-ALTER TABLE product_sizes ADD CONSTRAINT product_sizes_products FOREIGN KEY product_sizes_products (refProduct)
+ALTER TABLE product_sizes ADD CONSTRAINT product_sizes_products FOREIGN KEY product_sizes_products (sizeRefProduct)
     REFERENCES products (productId)
     ON DELETE CASCADE;
 
-ALTER TABLE product_sizes ADD CONSTRAINT product_sizes_size_types FOREIGN KEY product_sizes_size_types (refSizeType)
+ALTER TABLE product_sizes ADD CONSTRAINT product_sizes_size_types FOREIGN KEY product_sizes_size_types (sizeRefSizeType)
     REFERENCES size_types (sizeTypeId);
 
-ALTER TABLE products ADD CONSTRAINT products_product_categories FOREIGN KEY products_product_categories (refCategory)
+ALTER TABLE products ADD CONSTRAINT products_product_categories FOREIGN KEY products_product_categories (productRefCategory)
     REFERENCES product_categories (categoryId);
 
-ALTER TABLE products ADD CONSTRAINT products_units FOREIGN KEY products_units (refUnit)
+ALTER TABLE products ADD CONSTRAINT products_units FOREIGN KEY products_units (productRefUnit)
     REFERENCES product_units (unitId);
 
-ALTER TABLE transactions ADD CONSTRAINT transactions_events FOREIGN KEY transactions_events (refEvent)
-    REFERENCES events (eventId);
-
-ALTER TABLE transactions ADD CONSTRAINT transactions_products FOREIGN KEY transactions_products (refProduct)
-    REFERENCES products (productId);
-
-ALTER TABLE transactions ADD CONSTRAINT transactions_size_types FOREIGN KEY transactions_size_types (refSizeType)
-    REFERENCES size_types (sizeTypeId);
-
-ALTER TABLE size_types ADD CONSTRAINT size_types_product_units FOREIGN KEY size_types_product_units (refUnit)
-   REFERENCES product_units (unitId);
+ALTER TABLE size_types ADD CONSTRAINT size_types_product_units FOREIGN KEY size_types_product_units (sizeTypeRefUnit)
+    REFERENCES product_units (unitId);

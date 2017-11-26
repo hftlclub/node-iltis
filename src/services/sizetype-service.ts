@@ -7,7 +7,7 @@ export class SizeTypeService {
     static getAll(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM size_types
-                    INNER JOIN product_units ON (unitId = refUnit)
+                    INNER JOIN product_units ON (unitId = sizeTypeRefUnit)
                     WHERE sizeTypeDeleted = false                                        
                     ORDER BY sizeTypeDesc ASC`;
         mysql.conn.query(query, (err, rows, fields) => {
@@ -24,7 +24,7 @@ export class SizeTypeService {
     static getById(sizeTypeId: number, callback: (err: any, row?: any) => void) {
         let query = `SELECT *
                     FROM size_types
-                    INNER JOIN product_units ON (unitId = refUnit)
+                    INNER JOIN product_units ON (unitId = sizeTypeRefUnit)
                     WHERE sizeTypeId = ?`;
         mysql.conn.query(query, sizeTypeId, (err, rows, fields) => {
             if (err) {
@@ -42,9 +42,9 @@ export class SizeTypeService {
                     FROM (
                         SELECT *
                         FROM size_types
-                        INNER JOIN product_units ON (unitId = refUnit)
-                        INNER JOIN product_sizes ON (sizeTypeId = refSizeType)) AS innerTable
-                    WHERE refProduct = ?`;
+                        INNER JOIN product_units ON (unitId = sizeTypeRefUnit)
+                        INNER JOIN product_sizes ON (sizeTypeId = sizeRefSizeType)) AS innerTable
+                    WHERE sizeRefProduct = ?`;
         if (!showInactive) { query += ' AND sizeActive = true'; }
         query += ' ORDER BY sizeTypeAmount DESC';
 
@@ -62,8 +62,8 @@ export class SizeTypeService {
     static getProductsSizes(showInactive: boolean, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM size_types
-                    INNER JOIN product_units ON (unitId = refUnit)
-                    INNER JOIN product_sizes ON (sizeTypeId = refSizeType)`;
+                    INNER JOIN product_units ON (unitId = sizeTypeRefUnit)
+                    INNER JOIN product_sizes ON (sizeTypeId = sizeRefSizeType)`;
         if (!showInactive) { query += ' WHERE sizeActive = true'; }
         query += ' ORDER BY sizeTypeAmount DESC';
 

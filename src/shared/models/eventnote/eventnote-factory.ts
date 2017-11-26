@@ -34,10 +34,10 @@ export class EventNoteFactory {
         return eventNote;
     }
 
-    static toDbObject(obj: EventNote, refEvent: number, username?: string): any {
+    static toDbObject(obj: EventNote, eventNoteRefEvent: number, username?: string): any {
         let dbEntry: any = {};
 
-        dbEntry.refEvent = refEvent;
+        dbEntry.eventNoteRefEvent = eventNoteRefEvent;
 
         if (obj.text) dbEntry.eventNoteText = obj.text;
         if (username) dbEntry.eventNoteUser = username;

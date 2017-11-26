@@ -28,14 +28,14 @@ export class ProductController {
             CrateTypeService.getProductsCrates((err, rows) => {
                 if (err) return next(new InternalError());
                 rows.forEach(row => {
-                    let product: Product = (products.find(f => f.id === row.refProduct));                    
+                    let product: Product = (products.find(f => f.id === row.crateRefProduct));
                     if (product) product.crateTypes.push(CrateTypeFactory.fromObj(row));
                 });
                 let showInactiveSizes: boolean = req.query.showInactiveSizes == 'true' ? true : false;
                 SizeTypeService.getProductsSizes(showInactiveSizes, (err, rows) => {
                     if (err) return next(new InternalError());
                     rows.forEach(row => {
-                        let product: Product = (products.find(f => f.id === row.refProduct));
+                        let product: Product = (products.find(f => f.id === row.sizeRefProduct));
                         if (product) product.sizes.push(SizeFactory.fromObj(row));
                     });
                     res.send(products, ContentType.ApplicationJSON);
@@ -186,7 +186,7 @@ export class ProductController {
         let productId = parseInt(req.params.productId, 0);
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         let updatedSize: any = SizeFactory.toDbObject(req.body, productId);
-        updatedSize.refSizeType = sizeTypeId;
+        updatedSize.sizeRefSizeType = sizeTypeId;
         ProductService.updateSizeOfProduct(updatedSize, (err, result) => {
             if (err || !result) return next(new BadRequestError());
             LogService.addLogEntry(req, result);

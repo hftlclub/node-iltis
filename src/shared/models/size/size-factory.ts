@@ -13,7 +13,7 @@ export class SizeFactory {
         let size = SizeFactory.empty();
 
         if (obj.sizeType) size.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
-        else if (ValueChecker.validNumber(obj.refSizeType)) {
+        else if (ValueChecker.validNumber(obj.sizeRefSizeType)) {
             size.sizeType = SizeTypeFactory.fromObj(obj);
         }
 
@@ -33,12 +33,12 @@ export class SizeFactory {
         return size;
     }
 
-    static toDbObject(obj: Size, refProduct: number): any {
+    static toDbObject(obj: Size, sizeRefProduct: number): any {
         let dbEntry: any = {};
 
-        dbEntry.refProduct = refProduct;
+        dbEntry.sizeRefProduct = sizeRefProduct;
 
-        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
+        if (obj.sizeType) dbEntry.sizeRefSizeType = obj.sizeType.id;
         if (ValueChecker.validNumber(obj.costs)) dbEntry.sizeDeliveryCosts = obj.costs < 0 ? 0 : obj.costs;
         if (ValueChecker.validNumber(obj.minStock)) dbEntry.sizeMinimumStock = obj.minStock < 0 ? 0 : obj.minStock;
         if (obj.active) dbEntry.sizeActive = obj.active;

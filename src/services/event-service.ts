@@ -45,8 +45,8 @@ export class EventService {
 
     static addTransfers(transfers: any[], callback: (err: any, result?: any) => void) {
         let query = `INSERT INTO event_transfers
-                    (refEvent, refProduct, refSizeType, transferChangeStorage, transferChangeCounter)
-                    VALUES ` + transfers.map(t => `(${t.refEvent}, ${t.refProduct}, ${t.refSizeType}, ${t.transferChangeStorage}, ${t.transferChangeCounter})`).join(',');
+                    (transferRefEvent, transferRefProduct, transferRefSizeType, transferChangeStorage, transferChangeCounter)
+                    VALUES ` + transfers.map(t => `(${t.transferRefEvent}, ${t.transferRefProduct}, ${t.transferRefSizeType}, ${t.transferChangeStorage}, ${t.transferChangeCounter})`).join(',');
         mysql.conn.query(query, (err, result) => {
             if (err) {
                 return callback(err);
@@ -57,7 +57,7 @@ export class EventService {
 
     static deleteTransfersByEventId(eventId: number, callback: (err: any, result?: any) => void) {
         let query = `DELETE FROM event_transfers
-                    WHERE refEvent = ?`;
+                    WHERE transferRefEvent = ?`;
         mysql.conn.query(query, eventId, (err, result) => {
             if (err) {
                 return callback(err);
@@ -68,9 +68,9 @@ export class EventService {
     };
 
     static addTransactions(transactions: any[], callback: (err: any, result?: any) => void) {
-        let query = `INSERT INTO transactions
-                    (refEvent, refProduct, refSizeType, transactionChangeCounter, transactionChangeTotal)
-                    VALUES ` + transactions.map(t => `(${t.refEvent}, ${t.refProduct}, ${t.refSizeType}, ${t.transferChangeCounter}, ${t.transferChangeTotal})`).join(',');
+        let query = `INSERT INTO event_transactions
+                    (transactionRefEvent, transactionRefProduct, transactionRefSizeType, transactionChangeCounter, transactionChangeTotal)
+                    VALUES ` + transactions.map(t => `(${t.transactionRefEvent}, ${t.transactionRefProduct}, ${t.transactionRefSizeType}, ${t.transferChangeCounter}, ${t.transferChangeTotal})`).join(',');
         mysql.conn.query(query, (err, result) => {
             if (err) {
                 return callback(err);
@@ -81,7 +81,7 @@ export class EventService {
 
     static deleteStorageTransfers(eventId: number, callback: (err: any, result?: any) => void) {
         let query = `DELETE FROM event_transfers
-                    WHERE refEvent = ? AND transferChangeCounter = 0`;
+                    WHERE transferRefEvent = ? AND transferChangeCounter = 0`;
         mysql.conn.query(query, eventId, (err, result) => {
             if (err) {
                 return callback(err);
@@ -93,7 +93,7 @@ export class EventService {
 
     static deleteCounterTransfers(eventId: number, callback: (err: any, result?: any) => void) {
         let query = `DELETE FROM event_transfers
-                    WHERE refEvent = ? AND transferChangeStorage = 0`;
+                    WHERE transferRefEvent = ? AND transferChangeStorage = 0`;
         mysql.conn.query(query, eventId, (err, result) => {
             if (err) {
                 return callback(err);
@@ -108,12 +108,12 @@ export class EventService {
                     FROM (
                         SELECT *
                         FROM event_types
-                        INNER JOIN events ON(eventTypeId = refEventType)) AS event
+                        INNER JOIN events ON(eventTypeId = eventRefEventType)) AS event
                     LEFT JOIN (SELECT *
-                    FROM event_notes en1, (SELECT refEvent AS 'dummy', COUNT(*) AS 'noteCount'
+                    FROM event_notes en1, (SELECT eventNoteRefEvent AS 'dummy', COUNT(*) AS 'noteCount'
                         FROM event_notes
-                        GROUP BY refEvent) en3
-                    WHERE eventNoteTS = (SELECT MAX(eventNoteTS) FROM event_notes en2 WHERE en1.refEvent = en2.refEvent) AND dummy = refEvent) AS note ON (eventId = refEvent)`;
+                        GROUP BY eventNoteRefEvent) en3
+                    WHERE eventNoteTS = (SELECT MAX(eventNoteTS) FROM event_notes en2 WHERE en1.eventNoteRefEvent = en2.eventNoteRefEvent) AND dummy = eventNoteRefEvent) AS note ON (eventId = eventNoteRefEvent)`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -128,7 +128,7 @@ export class EventService {
     static countOpenEventsWithCountAllowed(callback: (err: any, rows?: any) => void) {
         let query = `SELECT COUNT(*) AS count
                     FROM event_types
-                    INNER JOIN events ON(eventTypeId = refEventType)
+                    INNER JOIN events ON(eventTypeId = eventRefEventType)
                     WHERE eventTypeCountAllowed = true AND eventActive = true`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
@@ -146,14 +146,14 @@ export class EventService {
                     FROM (
                         SELECT *
                         FROM event_types
-                        INNER JOIN events ON(eventTypeId = refEventType)
+                        INNER JOIN events ON(eventTypeId = eventRefEventType)
                         WHERE eventId = ? ) AS event
                     LEFT JOIN (SELECT *
                     FROM event_notes en1, (SELECT COUNT(*) AS 'noteCount'
                         FROM event_notes
-                        WHERE refEvent = ?
-                        GROUP BY refEvent) en3
-                    WHERE eventNoteTS = (SELECT MAX(eventNoteTS) FROM event_notes en2 WHERE en1.refEvent = en2.refEvent) AND refEvent = ?) AS note ON (eventId = refEvent)`;
+                        WHERE eventNoteRefEvent = ?
+                        GROUP BY eventNoteRefEvent) en3
+                    WHERE eventNoteTS = (SELECT MAX(eventNoteTS) FROM event_notes en2 WHERE en1.eventNoteRefEvent = en2.eventNoteRefEvent) AND eventNoteRefEvent = ?) AS note ON (eventId = eventNoteRefEvent)`;
         mysql.conn.query(query, [eventId, eventId, eventId], (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -166,12 +166,12 @@ export class EventService {
     };
 
     static convertTransfersToTransactions(eventId: number, callback: (err: any, rows?: any) => void) {
-        let query = `SELECT refEvent, refProduct, refSizeType,
+        let query = `SELECT transferRefEvent, transferRefProduct, transferRefSizeType,
                             SUM(transferChangeCounter) AS transferChangeCounter,
                             (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
                     FROM event_transfers
-                    WHERE refEvent = ?
-                    GROUP BY refProduct, refSizeType`;
+                    WHERE transferRefEvent = ?
+                    GROUP BY transferRefProduct, transferRefSizeType`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -184,26 +184,26 @@ export class EventService {
     }
 
     static convertTransfersWithCountToTransactions(eventId: number, callback: (err: any, rows?: any) => void) {
-        let query = `SELECT refEvent, refProduct, refSizeType, transferChangeCounter, (transferChangeTotal - tct) AS transferChangeTotal
+        let query = `SELECT transferRefEvent, transferRefProduct, transferRefSizeType, transferChangeCounter, (transferChangeTotal - tct) AS transferChangeTotal
                     FROM (
-                        SELECT refProduct AS rP, refSizeType AS rSZ,
+                        SELECT transferRefProduct AS rP, transferRefSizeType AS rSZ,
                             SUM(transferChangeCounter) AS tcc,
                             (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS tct
                         FROM (
                             SELECT MAX(transferTS) as maxTS
                             FROM event_transfers
-                            WHERE refEvent = ?) as timeOfLastTransfer
+                            WHERE transferRefEvent = ?) as timeOfLastTransfer
                         INNER JOIN event_transfers
-                        WHERE refEvent != ? AND transferTS < maxTS
-                        GROUP BY refProduct, refSizeType) parallelTransfers
+                        WHERE transferRefEvent != ? AND transferTS < maxTS
+                        GROUP BY transferRefProduct, transferRefSizeType) parallelTransfers
                     INNER JOIN (
-                        SELECT refEvent, refProduct, refSizeType,
+                        SELECT transferRefEvent, transferRefProduct, transferRefSizeType,
                                 SUM(transferChangeCounter) AS transferChangeCounter,
                                 (SUM(transferChangeStorage) + SUM(transferChangeCounter)) AS transferChangeTotal
                         FROM event_transfers
-                        WHERE refEvent = ?
-                        GROUP BY refProduct, refSizeType) eventTransfers
-                    ON (refProduct = rP AND refSizeType = rSZ)`;
+                        WHERE transferRefEvent = ?
+                        GROUP BY transferRefProduct, transferRefSizeType) eventTransfers
+                    ON (transferRefProduct = rP AND transferRefSizeType = rSZ)`;
         mysql.conn.query(query, [eventId, eventId, eventId], (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -215,21 +215,22 @@ export class EventService {
         });
     }
 
+    // TODO: OPTIMIZE!
     static getLastTransfers(eventId: number, insertId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
-                            SELECT transferId, refEvent, refProduct, refSizeType, transferChangeStorage, 
-                                transferChangeCounter, transferTS, productId, refCategory, productName,
+                            SELECT transferId, transferRefEvent, transferRefProduct, transferRefSizeType, transferChangeStorage, 
+                                transferChangeCounter, transferTS, productId, productRefCategory, productName,
                                 productDesc, productImgFilename, productActive, productDeleted, productTS
                             FROM event_transfers
-                            INNER JOIN products ON (refProduct = productId)) AS transfersProducts
-                        INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                        WHERE refEvent = ? AND transferId >= ?
+                            INNER JOIN products ON (transferRefProduct = productId)) AS transfersProducts
+                        INNER JOIN size_types ON (productRefSizeType = sizeTypeId)
+                        WHERE transferRefEvent = ? AND transferId >= ?
                         ORDER BY transferId ASC) AS transfers
-                    INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)`;
+                    INNER JOIN product_categories ON (productRefCategory = categoryId)
+                    INNER JOIN product_units ON (productRefUnit = unitId)`;
         mysql.conn.query(query, [eventId, insertId], (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -241,21 +242,22 @@ export class EventService {
         });
     };
 
+    // TODO: OPTIMIZE!
     static getTransfersByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
-                        SELECT transferId, refEvent, refProduct, refSizeType, \`change\`,
-                            productId, refCategory, productName, productDesc,
+                        SELECT transferId, transferRefEvent, transferRefProduct, transferRefSizeType, \`change\`,
+                            productId, productRefCategory, productName, productDesc,
                             productImgFilename, productActive, productDeleted, productTS
                         FROM (
-                            SELECT transferId, refEvent, refProduct, refSizeType,
+                            SELECT transferId, transferRefEvent, transferRefProduct, transferRefSizeType,
                                 (transferChangeStorage + transferChangeCounter) AS \`change\`
                             FROM event_transfers
-                            WHERE refEvent = ?) AS changes 
-                        INNER JOIN products ON (refProduct = productId)) AS changesWithProduct
-                    INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                    INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)
+                            WHERE transferRefEvent = ?) AS changes 
+                        INNER JOIN products ON (transferRefProduct = productId)) AS changesWithProduct
+                    INNER JOIN size_types ON (transferRefSizeType = sizeTypeId)
+                    INNER JOIN product_categories ON (productRefCategory = categoryId)
+                    INNER JOIN product_units ON (productRefUnit = unitId)
                     ORDER BY transferId ASC`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
@@ -271,7 +273,7 @@ export class EventService {
     static countCurrentTransfersByProductId(productId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT COUNT(*) AS counter
                     FROM event_transfers
-                    WHERE refProduct = ?`;
+                    WHERE transferRefProduct = ?`;
         mysql.conn.query(query, productId, (err, row, fields) => {
             if (err) {
                 return callback(err);
@@ -283,7 +285,7 @@ export class EventService {
     static countCurrentTransfersByProductAndSizeTypeId(productId: number, sizeTypeId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT COUNT(*) AS counter
                     FROM event_transfers
-                    WHERE refProduct = ? AND refSizeType = ?`;
+                    WHERE transferRefProduct = ? AND transferRefSizeType = ?`;
         mysql.conn.query(query, [productId, sizeTypeId], (err, row, fields) => {
             if (err) {
                 return callback(err);
@@ -292,21 +294,22 @@ export class EventService {
         });
     };
 
+    // TODO: OPTIMIZE!
     static getTransactionsByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
-                            SELECT transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
-                                transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                            SELECT transactionId, transactionRefEvent, transactionRefProduct, transactionRefSizeType, transactionChangeTotal,
+                                transactionChangeCounter, transactionTS, productId, productRefCategory, productName, 
                                 productDesc, productImgFilename, productActive, productDeleted, productTS
-                            FROM transactions
-                            INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
-                        INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                        WHERE refEvent = ?
+                            FROM event_transactions
+                            INNER JOIN products ON (transactionRefProduct = productId)) AS transactionsProducts
+                        INNER JOIN size_types ON (transactionRefSizeType = sizeTypeId)
+                        WHERE transactionRefEvent = ?
                         ORDER BY transactionId ASC) AS transactions
-                    INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)`;
+                    INNER JOIN product_categories ON (productRefCategory = categoryId)
+                    INNER JOIN product_units ON (productRefUnit = unitId)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -321,13 +324,13 @@ export class EventService {
     static getCalculation(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT (eventCashAfter - eventCashBefore) AS sales, costs, ((eventCashAfter - eventCashBefore) - costs) AS profit
                     FROM (
-                        SELECT refEvent, (SUM(transactionChangeTotal * sizeDeliveryCosts) * (-1)) AS costs
+                        SELECT transactionRefEvent, (SUM(transactionChangeTotal * sizeDeliveryCosts) * (-1)) AS costs
                         FROM (
-                            SELECT refEvent, refProduct AS productId, refSizeType AS sizeTypeId, transactionChangeTotal
-                            FROM transactions
-                            WHERE refEvent = ?) AS transactions
-                        INNER JOIN product_sizes ON (refProduct = productId AND refSizeType = sizeTypeId)) AS costsTable
-                    INNER JOIN events ON (refEvent = eventId)`;
+                            SELECT transactionRefEvent, transactionRefProduct, transactionRefSizeType, transactionChangeTotal
+                            FROM event_transactions
+                            WHERE transactionRefEvent = ?) AS transactions
+                        INNER JOIN product_sizes ON (sizeRefProduct = transactionRefProduct AND sizeRefSizeType = transactionRefSizeType)) AS costsTable
+                    INNER JOIN events ON (transactionRefEvent = eventId)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -342,10 +345,10 @@ export class EventService {
     static getTransferCosts(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT (SUM(changes * sizeDeliveryCosts) * (-1)) AS costs
                     FROM (
-                        SELECT refEvent, refProduct AS productId, refSizeType AS sizeTypeId, (transferChangeStorage + transferChangeCounter) AS changes
+                        SELECT transferRefEvent, transferRefProduct, transferRefSizeType, (transferChangeStorage + transferChangeCounter) AS changes
                         FROM event_transfers
-                        WHERE refEvent = ?) AS transfers
-                    INNER JOIN product_sizes ON (refProduct = productId AND refSizeType = sizeTypeId)`;
+                        WHERE transferRefEvent = ?) AS transfers
+                    INNER JOIN product_sizes ON (sizeRefProduct = transferRefProduct AND sizeRefSizeType = transferRefSizeType)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);

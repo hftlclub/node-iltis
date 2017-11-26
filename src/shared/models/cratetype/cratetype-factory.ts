@@ -18,7 +18,7 @@ export class CrateTypeFactory {
         }
 
         if (obj.sizeType) crateType.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
-        else if (ValueChecker.validNumber(obj.refSizeType)) {
+        else if (ValueChecker.validNumber(obj.crateTypeRefSizeType)) {
             crateType.sizeType = SizeTypeFactory.fromObj(obj);
         }
 
@@ -38,7 +38,7 @@ export class CrateTypeFactory {
     static toDbObject(obj: CrateType): any {
         let dbEntry: any = {};
 
-        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
+        if (obj.sizeType) dbEntry.crateTypeRefSizeType = obj.sizeType.id;
         if (obj.description) dbEntry.crateTypeDesc = obj.description;
         if (ValueChecker.validNumber(obj.slots)) dbEntry.crateTypeSlots = obj.slots < 0 ? 0 : obj.slots;
 

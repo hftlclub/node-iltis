@@ -5,7 +5,7 @@ export class EventNoteService {
     static getEventNoteHistory(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM event_notes
-                    WHERE refEvent = ?
+                    WHERE eventNoteRefEvent = ?
                     ORDER BY eventNoteTS DESC`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {

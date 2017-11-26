@@ -21,12 +21,12 @@ export class TransferFactory {
         }
 
         if (obj.product) transfer.product = ProductFactory.fromObj(obj.product);
-        else if (ValueChecker.validNumber(obj.refProduct)) {
+        else if (ValueChecker.validNumber(obj.transferRefProduct)) {
             transfer.product = ProductFactory.fromObj(obj);
         }
 
         if (obj.sizeType) transfer.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
-        else if (ValueChecker.validNumber(obj.refSizeType)) {
+        else if (ValueChecker.validNumber(obj.transferRefSizeType)) {
             transfer.sizeType = SizeTypeFactory.fromObj(obj);
         }
 
@@ -47,11 +47,11 @@ export class TransferFactory {
 
         let  dbEntry: any = {};
 
-        dbEntry.refEvent = eventId;
+        dbEntry.transferRefEvent = eventId;
 
-        if (obj.product) dbEntry.refProduct = obj.product.id;
+        if (obj.product) dbEntry.transferRefProduct = obj.product.id;
 
-        if (obj.sizeType) dbEntry.refSizeType = obj.sizeType.id;
+        if (obj.sizeType) dbEntry.transferRefSizeType = obj.sizeType.id;
 
         if (isStorageChange) {
             dbEntry.transferChangeStorage = obj.change * sign;

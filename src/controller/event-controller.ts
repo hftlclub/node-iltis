@@ -127,7 +127,7 @@ export class EventController {
                 if (transactionsParallel.length) {
                     let tNew;
                     transactions.forEach(t => {
-                        if (tNew = transactionsParallel.find(tP => tP.refProduct === t.refProduct && tP.refSizeType === t.refSizeType)) {
+                        if (tNew = transactionsParallel.find(tP => tP.transactionRefProduct === t.transactionRefProduct && tP.transactionRefSizeType === t.transactionRefSizeType)) {
                             t = tNew;
                         }
                     });
@@ -263,7 +263,7 @@ export class EventController {
                 iKey = 'counter';
             }
             transfers = transfers.map(t => {
-                let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.refProduct && inv.sizeType.id === t.refSizeType));
+                let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.transferRefProduct && inv.sizeType.id === t.transferRefSizeType));
                 if (inventoryForTransfer) t[tKey] -= inventoryForTransfer[iKey];
                 return t;
             });

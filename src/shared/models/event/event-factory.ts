@@ -19,7 +19,7 @@ export class EventFactory {
         }
 
         if (obj.eventType) event.eventType = EventTypeFactory.fromObj(obj.eventType);
-        else if (ValueChecker.validNumber(obj.refEventType)) {
+        else if (ValueChecker.validNumber(obj.eventRefEventType)) {
             event.eventType = EventTypeFactory.fromObj(obj);
         }
 
@@ -76,7 +76,7 @@ export class EventFactory {
 
         let dbEntry: any = {};
 
-        if (obj.eventType) dbEntry.refEventType = obj.eventType.id;
+        if (obj.eventType) dbEntry.eventRefEventType = obj.eventType.id;
         if (obj.description) dbEntry.eventDesc = obj.description;
         if (ValueChecker.validNumber(obj.cashBefore)) dbEntry.eventCashBefore = obj.cashBefore < 0 ? 0 : obj.cashBefore;
         if (ValueChecker.validNumber(obj.cashAfter)) dbEntry.eventCashAfter = obj.cashAfter < 0 ? 0 : obj.cashAfter;

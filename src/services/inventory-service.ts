@@ -2,6 +2,7 @@ let mysql = require('../modules/mysql');
 
 export class InventoryService {
 
+    // TODO: OPTIMIZE!
     static getCurrent(callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
@@ -9,23 +10,23 @@ export class InventoryService {
                         FROM (
                             SELECT *
                             FROM (
-                                SELECT productId, refCategory, refUnit, productName,
+                                SELECT productId, productRefCategory, productRefUnit, productName,
                                 productDesc, productImgFilename, productActive, productDeleted,
                                 productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted,
                                 Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storage,
                                 Sum(transactionChangeCounter) AS counter
                                 FROM (
-                                    SELECT transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
-                                        transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                                    SELECT transactionId, transactionRefEvent, transactionRefProduct, transactionRefSizeType, transactionChangeTotal,
+                                        transactionChangeCounter, transactionTS, productId, productRefCategory, productName, 
                                         productDesc, productImgFilename, productActive, productDeleted, productTS
-                                    FROM transactions
-                                    INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
-                                INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                                GROUP BY refProduct, refSizeType) AS inventoryWithoutCosts
+                                    FROM event_transactions
+                                    INNER JOIN products ON (transactionRefProduct = productId)) AS transactionsProducts
+                                INNER JOIN size_types ON (transactionRefSizeType = sizeTypeId)
+                                GROUP BY transactionRefProduct, transactionRefSizeType) AS inventoryWithoutCosts
                             WHERE productActive = true) AS inventoryWithCosts
-                        INNER JOIN product_categories ON (refCategory = categoryId)
-                        INNER JOIN product_units ON (refUnit = unitId)) AS inventoryAll
-                    INNER JOIN product_sizes ON (productId = refProduct AND sizeTypeId = refSizeType)
+                        INNER JOIN product_categories ON (productRefCategory = categoryId)
+                        INNER JOIN product_units ON (productRefUnit = unitId)) AS inventoryAll
+                    INNER JOIN product_sizes ON (productId = sizeRefProduct AND sizeTypeId = sizeRefSizeType)
                     WHERE sizeActive = true OR storage > 0 OR counter > 0`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) {
@@ -38,12 +39,13 @@ export class InventoryService {
         });
     };
 
+    // TODO: OPTIMIZE!
     static getByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM (
                         SELECT *
                         FROM (
-                            SELECT refEvent, productId, refCategory, refUnit, productName,
+                            SELECT transactionRefEvent, productId, productRefCategory, productRefUnit, productName,
                             productDesc, productImgFilename, productActive, productDeleted,
                             productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted,
                             Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storage,
@@ -51,23 +53,23 @@ export class InventoryService {
                             FROM (
                                 SELECT *
                                 FROM (
-                                    SELECT dateOfEvent, transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
-                                        transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                                    SELECT dateOfEvent, transactionId, transactionRefEvent, transactionRefProduct, transactionRefSizeType, transactionChangeTotal,
+                                        transactionChangeCounter, transactionTS, productId, productRefCategory, productName, 
                                         productDesc, productImgFilename, productActive, productDeleted, productTS
                                     FROM (
                                         SELECT eventDT as dateOfEvent
                                         FROM events
                                         WHERE eventId = ?) AS eventDate
-                                    INNER JOIN transactions
-                                    INNER JOIN products ON (refProduct = productId)) AS eventTransactions
-                                INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                                INNER JOIN events ON (eventId = refEvent)) AS tpse
+                                    INNER JOIN event_transactions
+                                    INNER JOIN products ON (transactionRefProduct = productId)) AS eventTransactions
+                                INNER JOIN size_types ON (transactionRefSizeType = sizeTypeId)
+                                INNER JOIN events ON (eventId = transactionRefEvent)) AS tpse
                             WHERE eventDT <= dateOfEvent
-                            GROUP BY productId, refSizeType) AS inventoryWithoutCosts
+                            GROUP BY productId, transactionRefSizeType) AS inventoryWithoutCosts
                         WHERE storage != 0 OR counter != 0) AS inventoryWithCosts
-                    INNER JOIN product_categories ON (refCategory = categoryId)
-                    INNER JOIN product_units ON (refUnit = unitId)
-                    INNER JOIN product_sizes ON (productId = refProduct AND sizeTypeId = refSizeType)`;
+                    INNER JOIN product_categories ON (productRefCategory = categoryId)
+                    INNER JOIN product_units ON (productRefUnit = unitId)
+                    INNER JOIN product_sizes ON (productId = sizeRefProduct AND sizeTypeId = sizeRefSizeType)`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {
                 return callback(err);
@@ -79,6 +81,7 @@ export class InventoryService {
         });
     };
 
+    // TODO: OPTIMIZE!
     static getTransferInventoryByEventId(eventId: number, callback: (err: any, rows?: any) => void) {
         let query = `SELECT *
                     FROM ( 
@@ -92,26 +95,26 @@ export class InventoryService {
                             FROM (
                                 SELECT *
                                 FROM (
-                                    SELECT productId, refCategory, refUnit, productName,
+                                    SELECT productId, productRefCategory, productRefUnit, productName,
                                     productDesc, productImgFilename, productActive, productDeleted,
                                     productTS, sizeTypeId, sizeTypeAmount, sizeTypeDesc, sizeTypeDeleted,
                                     Sum(transactionChangeTotal)-Sum(transactionChangeCounter) AS storageInventory,
                                     Sum(transactionChangeCounter) AS counterInventory
                                     FROM (
-                                        SELECT transactionId, refEvent, refProduct, refSizeType, transactionChangeTotal,
-                                            transactionChangeCounter, transactionTS, productId, refCategory, productName, 
+                                        SELECT transactionId, transactionRefEvent, transactionRefProduct, transactionRefSizeType, transactionChangeTotal,
+                                            transactionChangeCounter, transactionTS, productId, productRefCategory, productName, 
                                             productDesc, productImgFilename, productActive, productDeleted, productTS
-                                        FROM transactions
-                                        INNER JOIN products ON (refProduct = productId)) AS transactionsProducts
-                                    INNER JOIN size_types ON (refSizeType = sizeTypeId)
-                                    GROUP BY refProduct, refSizeType) AS inventoryWithoutCosts
+                                        FROM event_transactions
+                                        INNER JOIN products ON (transactionRefProduct = productId)) AS transactionsProducts
+                                    INNER JOIN size_types ON (transactionRefSizeType = sizeTypeId)
+                                    GROUP BY transactionRefProduct, transactionRefSizeType) AS inventoryWithoutCosts
                                 WHERE productActive = true) AS inventoryWithCosts
-                            INNER JOIN product_categories ON (refCategory = categoryId)
-                            INNER JOIN product_units ON (refUnit = unitId)) AS inventory
-                        INNER JOIN event_transfers ON (refSizeType = sizeTypeId AND refProduct = productId)
-                        WHERE refEvent = ?
-                        GROUP BY refProduct, refSizeType) AS transferInventoryAll
-                    INNER JOIN product_sizes ON (productId = refProduct AND sizeTypeId = refSizeType)
+                            INNER JOIN product_categories ON (productRefCategory = categoryId)
+                            INNER JOIN product_units ON (productRefUnit = unitId)) AS inventory
+                        INNER JOIN event_transfers ON (transferRefSizeType = sizeTypeId AND transferRefProduct = productId)
+                        WHERE transferRefEvent = ?
+                        GROUP BY transferRefProduct, transferRefSizeType) AS transferInventoryAll
+                    INNER JOIN product_sizes ON (productId = sizeRefProduct AND sizeTypeId = sizeRefSizeType)
                     WHERE sizeActive = true OR storage > 0 OR counter > 0`;
         mysql.conn.query(query, eventId, (err, rows, fields) => {
             if (err) {

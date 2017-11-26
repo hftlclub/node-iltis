@@ -14,12 +14,12 @@ export class InventoryFactory {
         let inventory = InventoryFactory.empty();
 
         if (obj.product) inventory.product = ProductFactory.fromObj(obj.product);
-        else if (ValueChecker.validNumber(obj.refProduct)) {
+        else if (ValueChecker.validNumber(obj.productId)) {
             inventory.product = ProductFactory.fromObj(obj);
         }
 
         if (obj.sizeType) inventory.sizeType = SizeTypeFactory.fromObj(obj.sizeType);
-        else if (ValueChecker.validNumber(obj.refSizeType)) {
+        else if (ValueChecker.validNumber(obj.sizeTypeId)) {
             inventory.sizeType = SizeTypeFactory.fromObj(obj);
         }
 

@@ -28,7 +28,7 @@ export class SizeTypeFactory {
         }
 
         if (obj.unit) sizeType.unit = UnitFactory.fromObj(obj.unit);
-        else if (ValueChecker.validNumber(obj.refUnit) || ValueChecker.validNumber(obj.unitId)) {
+        else if (ValueChecker.validNumber(obj.sizeTypeRefUnit) || ValueChecker.validNumber(obj.unitId)) {
             sizeType.unit = UnitFactory.fromObj(obj);
         }
 
@@ -43,7 +43,7 @@ export class SizeTypeFactory {
 
         if (ValueChecker.validNumber(obj.amount)) dbEntry.sizeTypeAmount = obj.amount < 0 ? 0 : obj.amount;
         if (obj.description) dbEntry.sizeTypeDesc = obj.description;
-        if (obj.unit) dbEntry.refUnit = obj.unit.id;
+        if (obj.unit) dbEntry.sizeTypeRefUnit = obj.unit.id;
 
         dbEntry.sizeTypeDeleted = false;
 

@@ -33,12 +33,12 @@ export class ProductFactory {
         }
 
         if (obj.category) product.category = CategoryFactory.fromObj(obj.category);
-        else if (ValueChecker.validNumber(obj.refCategory) || ValueChecker.validNumber(obj.categoryId)) {
+        else if (ValueChecker.validNumber(obj.productRefCategory) || ValueChecker.validNumber(obj.categoryId)) {
             product.category = CategoryFactory.fromObj(obj);
         }
 
         if (obj.unit) product.unit = UnitFactory.fromObj(obj.unit);
-        else if (ValueChecker.validNumber(obj.refUnit) || ValueChecker.validNumber(obj.unitId)) {
+        else if (ValueChecker.validNumber(obj.productRefUnit) || ValueChecker.validNumber(obj.unitId)) {
             product.unit = UnitFactory.fromObj(obj);
         }
 
@@ -69,8 +69,8 @@ export class ProductFactory {
     static toDbObject(obj: Product): any {
         let dbEntry: any = {};
 
-        if (obj.category) dbEntry.refCategory = obj.category.id;
-        if (obj.unit) dbEntry.refUnit = obj.unit.id;
+        if (obj.category) dbEntry.productRefCategory = obj.category.id;
+        if (obj.unit) dbEntry.productRefUnit = obj.unit.id;
         if (obj.name) dbEntry.productName = obj.name;
         if (obj.description) dbEntry.productDesc = obj.description;
 
