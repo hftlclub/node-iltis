@@ -27,7 +27,7 @@ export class ServerController {
     }
 
     initDB(req: Request, res: Response, next: Next) {
-        let samples: boolean = req.query.samples == 'true' ? true : false;
+        let samples: string = req.query.samples ? req.query.samples : '';
         HelperService.checkInitDB(success => {
             if (!success) return next(new ForbiddenError());
             HelperService.initDB(samples, success => {
@@ -38,7 +38,7 @@ export class ServerController {
     }
 
     resetDB(req: Request, res: Response, next: Next) {
-        let samples: boolean = req.query.samples == 'true' ? true : false;
+        let samples: string = req.query.samples ? req.query.samples : '';
         HelperService.checkResetDB(success => {
             if (!success) return next(new ForbiddenError());
             HelperService.resetDB(samples, success => {

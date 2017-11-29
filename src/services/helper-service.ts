@@ -1,4 +1,6 @@
 import * as fs from 'fs';
+import * as util from 'util';
+import * as path from 'path';
 
 let mysql = require('../modules/mysql');
 
@@ -30,43 +32,58 @@ export class HelperService {
         });
     }
 
-    static initDB(samples: boolean, callback: (success: boolean) => void) {
-        fs.readFile('database/create_tables.sql', (err, data) => {
-            if (err) {
-                console.log(err);
-                return callback(false);
-            }
-            this.batchQuery(data.toString().split(';'), (success: boolean) => {
-                if (!success) return callback(false);
-                if (samples) {
-                    fs.readFile('database/fill_tables_samples.sql', (err, data) => {
-                        if (err) {
-                            console.log(err);
-                            return callback(false);
-                        }
-                        this.batchQuery(data.toString().split(';'), (success: boolean) => {
+    static initDB(samples: string, callback: (success: boolean) => void) {
+        let createFile = path.resolve('database', 'create_tables.sql');
+        fs.exists(createFile, (exists: boolean) => {
+            if (exists) {
+                fs.readFile(createFile, (err, data) => {
+                    if (err) {
+                        console.log(err);
+                        return callback(false);
+                    }
+                    this.batchQuery(data.toString().split(';'), (success: boolean) => {
+                        if (!success) return callback(false);
+                        if (samples.length) {
+                            let insertFile = path.resolve('database', path.parse(samples).name + '.sql');
+                            fs.exists(insertFile, (exists: boolean) => {
+                                if (exists) {
+                                    fs.readFile(insertFile, (err, data) => {
+                                        if (err) {
+                                            console.log(err);
+                                            return callback(false);
+                                        }
+                                        this.batchQuery(data.toString().split(';'), (success: boolean) => {
+                                            if (!success) return callback(false);
+                                            return callback(true);
+                                        });
+                                    });
+                                } else return callback(false);
+                            });
+                        } else return callback(true);
+                    });
+                });
+            } else callback(false);
+        });
+    }
+
+    static resetDB(samples: string, callback: (success: boolean) => void) {
+        let dropFile = path.resolve('database', 'drop_tables.sql');
+        fs.exists(dropFile, (exists: boolean) => {
+            if (exists) {
+                fs.readFile(dropFile, (err, data) => {
+                    if (err) {
+                        console.log(err);
+                        return callback(false);
+                    }
+                    this.batchQuery(data.toString().split(';'), (success: boolean) => {
+                        if (!success) return callback(false);
+                        this.initDB(samples, (success: boolean) => {
                             if (!success) return callback(false);
                             return callback(true);
                         });
                     });
-                } else return callback(true);
-            });
-        });
-    }
-
-    static resetDB(samples: boolean, callback: (success: boolean) => void) {
-        fs.readFile('database/drop_tables.sql', (err, data) => {
-            if (err) {
-                console.log(err);
-                return callback(false);
-            }
-            this.batchQuery(data.toString().split(';'), (success: boolean) => {
-                if (!success) return callback(false);
-                this.initDB(samples, (success: boolean) => {
-                    if (!success) return callback(false);
-                    return callback(true);
                 });
-            });
+            } else callback(false);
         });
     }
 
