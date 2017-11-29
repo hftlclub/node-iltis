@@ -66,9 +66,9 @@ CREATE TABLE events (
 );
 
 CREATE TABLE info (
-    infoId int NOT NULL AUTO_INCREMENT,
-    devMode bool NOT NULL,
-    CONSTRAINT info_pk PRIMARY KEY (infoId)
+   infoKey varchar(64) NOT NULL,
+   infoValue text NOT NULL,
+   CONSTRAINT info_pk PRIMARY KEY (infoKey)
 );
 
 CREATE TABLE logs (

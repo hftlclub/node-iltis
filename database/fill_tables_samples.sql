@@ -86,4 +86,4 @@ INSERT INTO `event_transactions`(`transactionRefEvent`, `transactionRefProduct`,
 INSERT INTO `event_transactions`(`transactionRefEvent`, `transactionRefProduct`, `transactionRefSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (1, 10, 9, 1, 0);
 INSERT INTO `event_transactions`(`transactionRefEvent`, `transactionRefProduct`, `transactionRefSizeType`, `transactionChangeTotal`, `transactionChangeCounter`) VALUES (1, 11, 10, 4, 0);
 
-INSERT INTO `info`(`devMode`) VALUES (true);
+INSERT INTO `info`(`infoKey`, `infoValue`) VALUES ('resettable', 'true');

@@ -21,11 +21,11 @@ export class HelperService {
     }
 
     static checkResetDB(callback: (success: boolean) => void) {
-        let query = `SELECT * FROM info`;
+        let query = `SELECT * FROM info WHERE infoKey = 'resettable'`;
         mysql.conn.query(query, (err, rows, fields) => {
             if (err) return callback(false);
             if (!rows.length) return callback(true);
-            if (rows[0].devMode) return callback(true);
+            if (rows[0].infoValue == 'true') return callback(true);
             return callback(false);
         });
     }
