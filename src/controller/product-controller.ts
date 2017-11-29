@@ -96,7 +96,7 @@ export class ProductController {
             if (result) {
                 ProductService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(200, result, ProductFactory.fromObj(row));
+                    LogService.addLogEntry(200, result.insertId, ProductFactory.fromObj(row));
                     res.send(201, ProductFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -150,7 +150,7 @@ export class ProductController {
                     if (result.counter !== 0) return next(new LockedError());
                     ProductService.deleteProduct(productId, (err, result) => {
                         if (err || !result) return next(new NotFoundError());
-                        LogService.addLogEntry(202, productId, null);
+                        LogService.addLogEntry(202, productId);
                         res.send(204);
                     });
                 });

@@ -40,7 +40,7 @@ export class CategoryController {
             if (result) {
                 CategoryService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(360, result, CategoryFactory.fromObj(row));
+                    LogService.addLogEntry(360, result.insertId, CategoryFactory.fromObj(row));
                     res.send(201, CategoryFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -64,7 +64,7 @@ export class CategoryController {
         let categoryId = parseInt(req.params.categoryId, 0);
         CategoryService.deleteCategory(categoryId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
-            LogService.addLogEntry(362, categoryId, null);
+            LogService.addLogEntry(362, categoryId);
             res.send(204);
         });
     };

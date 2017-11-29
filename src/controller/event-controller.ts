@@ -34,7 +34,7 @@ export class EventController {
                 if (result) {
                     EventService.getById(result.insertId, (err, row) => {
                         if (err) return next(new InternalError());
-                        LogService.addLogEntry(100, result, EventFactory.fromObj(row));
+                        LogService.addLogEntry(100, result.insertId, EventFactory.fromObj(row));
                         res.send(201, EventFactory.fromObj(row), ContentType.ApplicationJSON);
                     });
                 } else next(new InternalError());
@@ -56,7 +56,7 @@ export class EventController {
         let eventId = parseInt(req['context'].eventId, 0);
         EventService.deleteEvent(eventId, (err, result) => {
             if (err || !result) return next(new ForbiddenError());
-            LogService.addLogEntry(102, eventId, null);
+            LogService.addLogEntry(102, eventId);
             res.send(204);
         });
     };

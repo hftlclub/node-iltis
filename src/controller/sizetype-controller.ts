@@ -40,7 +40,7 @@ export class SizeTypeController {
             if (result) {
                 SizeTypeService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(300, result, SizeTypeFactory.fromObj(row));
+                    LogService.addLogEntry(300, result.insertId, SizeTypeFactory.fromObj(row));
                     res.send(201, SizeTypeFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -67,7 +67,7 @@ export class SizeTypeController {
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         SizeTypeService.deleteSizeType(sizeTypeId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
-            LogService.addLogEntry(302, sizeTypeId, null);
+            LogService.addLogEntry(302, sizeTypeId);
             res.send(204);
         });
     };

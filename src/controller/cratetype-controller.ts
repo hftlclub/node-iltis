@@ -40,7 +40,7 @@ export class CrateTypeController {
             if (result) {
                 CrateTypeService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(320, result, CrateTypeFactory.fromObj(row));
+                    LogService.addLogEntry(320, result.insertId, CrateTypeFactory.fromObj(row));
                     res.send(201, CrateTypeFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -65,7 +65,7 @@ export class CrateTypeController {
         let crateTypeId = parseInt(req.params.crateTypeId, 0);
         CrateTypeService.deleteCrateType(crateTypeId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
-            LogService.addLogEntry(322, crateTypeId, null);
+            LogService.addLogEntry(322, crateTypeId);
             res.send(204);
         });
     };

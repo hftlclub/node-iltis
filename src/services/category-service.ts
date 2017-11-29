@@ -47,7 +47,7 @@ export class CategoryService {
             if (err) {
                 return callback(err);
             }
-            return callback(null, result.insertId);
+            return callback(null, result);
         });
     };
 

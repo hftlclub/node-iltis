@@ -45,7 +45,7 @@ export class LogFactory {
         return log;
     }
 
-    static toDbObject(code: number, refId: number, payload: any, user?: string): any {
+    static toDbObject(code: number, refId: number, payload?: any): any {
         let dbEntry: any = {};
 
         dbEntry.logCode = code;
@@ -57,7 +57,6 @@ export class LogFactory {
                 dbEntry.logPayload = payload;
             }
         }
-        if (user) dbEntry.logUser = user;
 
         return dbEntry;
     }
