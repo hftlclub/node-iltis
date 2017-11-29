@@ -17,14 +17,14 @@ export class LogFactory {
             log.id = obj.logId;
         }
 
-        if (obj.method) log.method = obj.method;
-        else if (ValueChecker.validString(obj.logMethod)) {
-            log.method = obj.logMethod.trim();
+        if (obj.code) log.code = obj.code;
+        else if (ValueChecker.validNumber(obj.logCode)) {
+            log.code = obj.logCode;
         }
 
-        if (obj.path) log.path = obj.path;
-        else if (ValueChecker.validString(obj.logPath)) {
-            log.path = obj.logPath.trim();
+        if (obj.refId) log.refId = obj.refId;
+        else if (ValueChecker.validNumber(obj.logRefId)) {
+            log.refId = obj.logRefId;
         }
 
         if (obj.payload) log.payload = obj.payload;
@@ -45,14 +45,18 @@ export class LogFactory {
         return log;
     }
 
-    static toDbObject(req: Request, result: any, user?: string): any {
+    static toDbObject(code: number, refId: number, payload: any, user?: string): any {
         let dbEntry: any = {};
 
-        dbEntry.logMethod = req.method;
-        dbEntry.logPath = req.getPath();
-        dbEntry.logPayload = '';
-        if (result.payload) dbEntry.logPayload += JSON.stringify(result.payload);
-        if (result.note) dbEntry.logPayload += dbEntry.logPayload.length > 0 ? ' + ' + result.note : result.note;
+        dbEntry.logCode = code;
+        dbEntry.logRefId = refId;
+        if (payload) {
+            try {
+                dbEntry.logPayload = JSON.stringify(payload);
+            } catch {
+                dbEntry.logPayload = payload;
+            }
+        }
         if (user) dbEntry.logUser = user;
 
         return dbEntry;

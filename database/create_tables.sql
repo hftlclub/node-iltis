@@ -66,17 +66,17 @@ CREATE TABLE events (
 );
 
 CREATE TABLE info (
-   infoKey varchar(64) NOT NULL,
-   infoValue text NOT NULL,
-   CONSTRAINT info_pk PRIMARY KEY (infoKey)
+    infoKey varchar(64) NOT NULL,
+    infoValue text NOT NULL,
+    CONSTRAINT info_pk PRIMARY KEY (infoKey)
 );
 
 CREATE TABLE logs (
     logId int NOT NULL AUTO_INCREMENT,
-    logMethod varchar(16) NOT NULL,
-    logPath text NOT NULL,
-    logPayload text NOT NULL,
-    logUser varchar(32) NOT NULL DEFAULT 'Anonymous',
+    logCode int NOT NULL,
+    logRefId int NULL,
+    logPayload text NULL,
+    logUser varchar(255) NOT NULL DEFAULT 'Anonymous',
     logTS timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT logs_pk PRIMARY KEY (logId)
 );

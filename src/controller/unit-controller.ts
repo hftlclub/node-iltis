@@ -39,7 +39,7 @@ export class UnitController {
             if (result) {
                 UnitService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(req, result);
+                    LogService.addLogEntry(340, result, UnitFactory.fromObj(row));
                     res.send(201, UnitFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -53,7 +53,7 @@ export class UnitController {
         updatedUnit.unitId = unitId;
         UnitService.updateUnit(updatedUnit, (err, result) => {
             if (err || !result) return next(new BadRequestError());
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(341, unitId, req.body);
             res.send(204);
         });
     };
@@ -63,7 +63,7 @@ export class UnitController {
         let unitId = parseInt(req.params.unitId, 0);
         UnitService.deleteUnit(unitId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(342, unitId, null);
             res.send(204);
         });
     };

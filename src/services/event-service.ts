@@ -12,9 +12,7 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
-            event.eventId = result.insertId;
-            result.payload = EventFactory.fromObj(event);
-            return callback(null, result);
+            return callback(null, result.insertId);
         });
     };
 
@@ -26,7 +24,6 @@ export class EventService {
                 console.log(err);
                 return callback(err);
             }
-            result.payload = EventFactory.fromObj(event);
             return callback(null, result);
         });
     };
@@ -38,7 +35,6 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
@@ -62,7 +58,6 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
@@ -86,7 +81,6 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };
@@ -98,7 +92,6 @@ export class EventService {
             if (err) {
                 return callback(err);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };

@@ -47,9 +47,7 @@ export class CategoryService {
             if (err) {
                 return callback(err);
             }
-            category.categoryId = result.insertId;
-            result.payload = CategoryFactory.fromObj(category);
-            return callback(null, result);
+            return callback(null, result.insertId);
         });
     };
 
@@ -61,7 +59,6 @@ export class CategoryService {
             if (err) {
                 return callback(err);
             }
-            result.payload = CategoryFactory.fromObj(category);
             return callback(null, result);
         });
     };
@@ -77,11 +74,9 @@ export class CategoryService {
                     if (err) {
                         return callback(err);
                     }
-                    result.note = 'SET categoryDeleted = true';
-                    return callback(null, 'result');
+                    return callback(null, result);
                 });
             } else {
-                result.note = 'DELETED SQL ROW PERMANENTLY';
                 return callback(null, result);
             }
         });

@@ -1,8 +1,8 @@
 export class Log {
     constructor(
         public id: number,
-        public method: string,
-        public path: string,
+        public code: number,
+        public refId: number,
         public payload: string,
         public user: string,
         public timestamp: Date

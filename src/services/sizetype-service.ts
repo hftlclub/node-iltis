@@ -85,9 +85,7 @@ export class SizeTypeService {
             if (err) {
                 return callback(err);
             }
-            sizeType.sizeTypeId = result.insertId;
-            result.payload = SizeTypeFactory.fromObj(sizeType);
-            return callback(null, result);
+            return callback(null, result.insertId);
         });
     };
 
@@ -99,7 +97,6 @@ export class SizeTypeService {
             if (err) {
                 return callback(err);
             }
-            result.payload = SizeTypeFactory.fromObj(sizeType);
             return callback(null, result);
         });
     };
@@ -115,11 +112,9 @@ export class SizeTypeService {
                     if (err) {
                         return callback(err);
                     }
-                    result.note = 'SET sizeTypeDeleted = true';
                     return callback(null, result);
                 });
             } else {
-                result.note = 'DELETED SQL ROW PERMANENTLY';
                 return callback(null, result);
             }
         });

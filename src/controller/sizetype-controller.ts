@@ -40,7 +40,7 @@ export class SizeTypeController {
             if (result) {
                 SizeTypeService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(req, result);
+                    LogService.addLogEntry(300, result, SizeTypeFactory.fromObj(row));
                     res.send(201, SizeTypeFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -57,7 +57,7 @@ export class SizeTypeController {
         SizeTypeService.updateSizeType(updatedSizeType, (err, result) => {
             if (err || !result) return next(new BadRequestError());
             if (result.amount === 0) return next(new BadRequestError('Invalid amount'));
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(301, sizeTypeId, req.body);
             res.send(204);
         });
     };
@@ -67,7 +67,7 @@ export class SizeTypeController {
         let sizeTypeId = parseInt(req.params.sizeTypeId, 0);
         SizeTypeService.deleteSizeType(sizeTypeId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(302, sizeTypeId, null);
             res.send(204);
         });
     };

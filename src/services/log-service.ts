@@ -4,9 +4,9 @@ let mysql = require('../modules/mysql');
 
 export class LogService {
 
-    static addLogEntry(req: Request, result: any) {
+    static addLogEntry(code: number, refId: number, payload: any, user?: string) {
         let query = `INSERT INTO logs SET ?`;
-        let log = LogFactory.toDbObject(req, result);
+        let log = user ? LogFactory.toDbObject(code, refId, payload, user) : LogFactory.toDbObject(code, refId, payload);
         mysql.conn.query(query, log, (err, result) => {
             if (err) { console.log(err); }
         });

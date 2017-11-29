@@ -40,7 +40,7 @@ export class CategoryController {
             if (result) {
                 CategoryService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(req, result);
+                    LogService.addLogEntry(360, result, CategoryFactory.fromObj(row));
                     res.send(201, CategoryFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -54,7 +54,7 @@ export class CategoryController {
         updatedCategory.categoryId = categoryId;
         CategoryService.updateCategory(updatedCategory, (err, result) => {
             if (err || !result) return next(new BadRequestError());
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(361, categoryId, req.body);
             res.send(204);
         });
     };
@@ -64,7 +64,7 @@ export class CategoryController {
         let categoryId = parseInt(req.params.categoryId, 0);
         CategoryService.deleteCategory(categoryId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(362, categoryId, null);
             res.send(204);
         });
     };

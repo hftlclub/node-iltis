@@ -83,9 +83,7 @@ export class CrateTypeService {
             if (err) {
                 return callback(err);
             }
-            crateType.crateTypeId = result.insertId;
-            result.payload = CrateTypeFactory.fromObj(crateType);
-            return callback(null, result);
+            return callback(null, result.insertId);
         });
     };
 
@@ -96,7 +94,6 @@ export class CrateTypeService {
             if (err) {
                 return callback(err);
             }
-            result.payload = CrateTypeFactory.fromObj(crateType);
             return callback(null, result);
         });
     };
@@ -108,7 +105,6 @@ export class CrateTypeService {
             if (err) {
                 return callback(err);
             }
-            result.note = 'DELETED SQL ROW PERMANENTLY';
             return callback(null, result);
         });
     };

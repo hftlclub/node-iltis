@@ -41,9 +41,7 @@ export class UnitService {
             if (err) {
                 return callback(err);
             }
-            unit.unitId = result.insertId;
-            result.payload = UnitFactory.fromObj(unit);
-            return callback(null, result);
+            return callback(null, result.insertId);
         });
     };
 
@@ -55,7 +53,6 @@ export class UnitService {
             if (err) {
                 return callback(err);
             }
-            result.payload = UnitFactory.fromObj(unit);
             return callback(null, result);
         });
     };
@@ -71,11 +68,9 @@ export class UnitService {
                     if (err) {
                         return callback(err);
                     }
-                    result.note = 'SET unitDeleted = true';
                     return callback(null, result);
                 });
             } else {
-                result.note = 'DELETED SQL ROW PERMANENTLY';
                 return callback(null, result);
             }
         });

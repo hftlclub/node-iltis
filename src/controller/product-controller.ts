@@ -78,7 +78,7 @@ export class ProductController {
             await ProductService.setProductImage(productId, uploadedImage.fullUrl);
 
             let newProductImg = uploadedImage.fullUrl;
-            LogService.addLogEntry(req, { payload: { productId, newProductImg }, note: 'UPDATED PRODUCT IMAGE' });
+            LogService.addLogEntry(203, productId, newProductImg);
 
             res.send(204);
         } catch (e) {
@@ -96,7 +96,7 @@ export class ProductController {
             if (result) {
                 ProductService.getById(result.insertId, (err, row) => {
                     if (err) return next(new InternalError());
-                    LogService.addLogEntry(req, result);
+                    LogService.addLogEntry(200, result, ProductFactory.fromObj(row));
                     res.send(201, ProductFactory.fromObj(row), ContentType.ApplicationJSON);
                 });
             } else next(new InternalError());
@@ -114,7 +114,7 @@ export class ProductController {
         if (updatedProduct.productActive) {
             ProductService.updateProduct(updatedProduct, (err, result) => {
                 if (err || !result) return next(new BadRequestError());
-                LogService.addLogEntry(req, result);
+                LogService.addLogEntry(201, productId, req.body);
                 res.send(204);
             });
         } else {
@@ -128,7 +128,7 @@ export class ProductController {
                         if (result.counter !== 0) return next(new LockedError());
                         ProductService.updateProduct(updatedProduct, (err, result) => {
                             if (err || !result) return next(new BadRequestError());
-                            LogService.addLogEntry(req, result);
+                            LogService.addLogEntry(201, productId, req.body);
                             res.send(204);
                         });
                     });
@@ -150,7 +150,7 @@ export class ProductController {
                     if (result.counter !== 0) return next(new LockedError());
                     ProductService.deleteProduct(productId, (err, result) => {
                         if (err || !result) return next(new NotFoundError());
-                        LogService.addLogEntry(req, result);
+                        LogService.addLogEntry(202, productId, null);
                         res.send(204);
                     });
                 });
@@ -170,7 +170,7 @@ export class ProductController {
                             ProductService.addSizeToProduct(SizeFactory.toDbObject(req.body, productId), (err, result) => {
                                 if (err) return next(new BadRequestError());
                                 if (result) {
-                                    LogService.addLogEntry(req, result);
+                                    LogService.addLogEntry(204, productId, sizeTypeId);
                                     res.send(201);
                                 } else next(new InternalError());
                             });
@@ -189,7 +189,7 @@ export class ProductController {
         updatedSize.sizeRefSizeType = sizeTypeId;
         ProductService.updateSizeOfProduct(updatedSize, (err, result) => {
             if (err || !result) return next(new BadRequestError());
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(206, productId, req.body);
             res.send(204);
         });
     };
@@ -250,7 +250,7 @@ export class ProductController {
             if (result.counter !== 0) return next(new ForbiddenError());
             ProductService.deleteSizeOfProduct(productId, sizeTypeId, (err, result) => {
                 if (err || !result) return next(new NotFoundError());
-                LogService.addLogEntry(req, result);
+                LogService.addLogEntry(205, productId, sizeTypeId);
                 res.send(204);
             });
         });
@@ -279,7 +279,7 @@ export class ProductController {
                             ProductService.addCrateTypeToProduct(productId, crateTypeId, (err, result) => {
                                 if (err) return next(new BadRequestError());
                                 if (result) {
-                                    LogService.addLogEntry(req, result);
+                                    LogService.addLogEntry(207, productId, crateTypeId);
                                     res.send(201);
                                 } else next(new InternalError());
                             });
@@ -296,7 +296,7 @@ export class ProductController {
         let crateTypeId = parseInt(req.params.crateTypeId, 0);
         ProductService.deleteCrateTypeOfProduct(productId, crateTypeId, (err, result) => {
             if (err || !result) return next(new NotFoundError());
-            LogService.addLogEntry(req, result);
+            LogService.addLogEntry(208, productId, crateTypeId);
             res.send(204);
         });
     };
