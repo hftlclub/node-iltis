@@ -24,12 +24,18 @@ Open [http://localhost:3000](http://localhost:3000) in your brower.
 
 ## Database
 ### Initiate Database
-CREATE TABLES: `http://[::]:3000/init`
-CREATE TABLES, INSERT SAMPLES: `http://[::]:3000/init?samples=<samplefile>`
+CREATE TABLES:
+* `http://[::]:3000/init`
+
+CREATE TABLES, INSERT SAMPLES:
+* `http://[::]:3000/init?samples=<samplefile>`
 
 ### Reset Database
-DROP, CREATE TABLES: `http://[::]:3000/reset`
-DROP, CREATE TABLES, INSERT SAMPLES: `http://[::]:3000/reset?samples=<samplefile>`
+DROP, CREATE TABLES:
+* `http://[::]:3000/reset`
+
+DROP, CREATE TABLES, INSERT SAMPLES:
+* `http://[::]:3000/reset?samples=<samplefile>`
 
 ### Sample files: Terms of use
 * Sample files should be located in the repositories `database`-folder and have the file-extension `.sql`
