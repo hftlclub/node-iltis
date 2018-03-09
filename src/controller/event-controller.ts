@@ -253,20 +253,22 @@ export class EventController {
         let inventory: Inventory[] = [];
         InventoryService.getCurrent((err, rows) => {
             if (err) return next(new InternalError());
-            inventory = rows.map(row => InventoryFactory.fromObj(row));
-            let tKey, iKey;
-            if (isStorageChange) {
-                tKey = 'transferChangeStorage';
-                iKey = 'storage';
-            } else {
-                tKey = 'transferChangeCounter';
-                iKey = 'counter';
+            if (rows.length) {
+                inventory = rows.map(row => InventoryFactory.fromObj(row));
+                let tKey, iKey;
+                if (isStorageChange) {
+                    tKey = 'transferChangeStorage';
+                    iKey = 'storage';
+                } else {
+                    tKey = 'transferChangeCounter';
+                    iKey = 'counter';
+                }
+                transfers = transfers.map(t => {
+                    let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.transferRefProduct && inv.sizeType.id === t.transferRefSizeType));
+                    if (inventoryForTransfer) t[tKey] -= inventoryForTransfer[iKey];
+                    return t;
+                });
             }
-            transfers = transfers.map(t => {
-                let inventoryForTransfer = inventory.find(inv => (inv.product.id === t.transferRefProduct && inv.sizeType.id === t.transferRefSizeType));
-                if (inventoryForTransfer) t[tKey] -= inventoryForTransfer[iKey];
-                return t;
-            });
             transfers = transfers.filter(t => t.transferChangeStorage || t.transferChangeCounter);
             EventService.addTransfers(transfers, (err, result) => {
                 if ((err || !result) && transfers.length) return next(new BadRequestError());
