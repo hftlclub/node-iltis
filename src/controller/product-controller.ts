@@ -230,7 +230,7 @@ export class ProductController {
         InventoryService.getCurrent((err, rows) => {
             if (err) return next(new InternalError());
             let inventory: Inventory[] = !rows.length ? [] : rows.map(row => InventoryFactory.fromObj(row));
-            if (inventory.find(i => i.product.id == productId)) return next(new ForbiddenError());
+            if (inventory.find(i => i.product.id == productId && (i.storage > 0 || i.counter > 0))) return next(new ForbiddenError());
             else {
                 EventService.countCurrentTransfersByProductId(productId, (err, result) => {
                     if (err || !result) return next(new InternalError());
