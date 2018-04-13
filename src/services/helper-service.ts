@@ -32,6 +32,15 @@ export class HelperService {
         });
     }
 
+    static checkProductionDB(callback: (success: boolean) => void) {
+        let query = `SELECT * FROM info WHERE infoKey = 'production'`;
+        mysql.conn.query(query, (err, rows, fields) => {
+            if (err) return callback(false);
+            if (rows.length && rows[0].infoValue == 'true') return callback(true);
+            return callback(false);
+        });
+    }
+
     static initDB(samples: string, callback: (success: boolean) => void) {
         let createFile = path.resolve('database', 'create_tables.sql');
         fs.exists(createFile, (exists: boolean) => {

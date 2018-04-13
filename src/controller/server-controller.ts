@@ -9,13 +9,16 @@ export class ServerController {
 
     info(req: Request, res: Response, next: Next) {
         require('child_process').exec('git rev-parse HEAD', (err, stdout) => {
-            let info = {
-                version: pjson.version,
-                commit: stdout.slice(0, -1),
-                time: process.uptime()
-            };
-            res.send(info, ContentType.ApplicationJSON);
-            next();
+            HelperService.checkProductionDB(success => {
+                let info = {
+                    version: pjson.version,
+                    commit: stdout.slice(0, -1),
+                    time: process.uptime(),
+                    production: success
+                };
+                res.send(info, ContentType.ApplicationJSON);
+                next();
+            });
         });
     }
 
